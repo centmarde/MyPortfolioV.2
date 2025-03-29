@@ -1,0 +1,91 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@layer base {
+  :root {
+    --background: 65 25% 93%;
+    --foreground: 60 5% 23%;
+
+    --card: 120 25% 86%;
+    --card-foreground: 60 5% 23%;
+
+    --popover: 65 25% 93%;
+    --popover-foreground: 60 5% 23%;
+
+    --primary: 180 20% 82%;
+    --primary-foreground: 60 5% 23%;
+
+    --secondary: 250 20% 76%;
+    --secondary-foreground: 60 5% 23%;
+
+    --muted: 120 25% 86%;
+    --muted-foreground: 60 5% 40%;
+
+    --accent: 120 25% 86%;
+    --accent-foreground: 60 5% 23%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 120 25% 86%;
+    --input: 120 25% 86%;
+    --ring: 60 5% 23%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 90 10% 9%;
+    --foreground: 35 20% 87%;
+
+    --card: 80 7% 42%;
+    --card-foreground: 35 20% 87%;
+
+    --popover: 90 10% 9%;
+    --popover-foreground: 35 20% 87%;
+
+    --primary: 80 7% 42%;
+    --primary-foreground: 35 20% 87%;
+
+    --secondary: 60 5% 23%;
+    --secondary-foreground: 35 20% 87%;
+
+    --muted: 60 5% 23%;
+    --muted-foreground: 35 20% 70%;
+
+    --accent: 60 5% 23%;
+    --accent-foreground: 35 20% 87%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 80 7% 42%;
+    --input: 80 7% 42%;
+    --ring: 35 20% 87%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .animate-spin-slow {
+    animation: spin 8s linear infinite;
+  }
+
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+}
+
