@@ -1,6 +1,14 @@
+import { useEffect, useRef, useState } from 'react';
 import { ThemeProvider } from './components/theme-provider';
 import Navbar from './components/navbar';
 import { useTheme } from './components/theme-provider';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import Welcome from './pages/Welcome';
+import TechStack from './pages/TechStack';
+import Github from './components/common/Github';
+// Register ScrollTrigger plugin
+gsap.registerPlugin(ScrollTrigger);
 
 // Section component for consistent styling
 const Section = ({ 
@@ -9,7 +17,7 @@ const Section = ({
   children 
 }: { 
   id: string; 
-  title: string; 
+  title?: string; // Make title optional
   children: React.ReactNode 
 }) => {
   const { theme } = useTheme();
@@ -22,11 +30,13 @@ const Section = ({
       }`}
     >
       <div className="container mx-auto">
-        <h2 className={`text-3xl font-bold mb-8 ${
-          theme === "light" ? "text-[#3C3D37]" : "text-[#ECDFCC]"
-        }`}>
-          {title}
-        </h2>
+        {title && ( // Only render title if provided
+          <h2 className={`text-3xl font-bold mb-8 ${
+            theme === "light" ? "text-[#3C3D37]" : "text-[#ECDFCC]"
+          }`}>
+            {title}
+          </h2>
+        )}
         {children}
       </div>
     </section>
@@ -34,80 +44,79 @@ const Section = ({
 };
 
 function App() {
+  const [activeTab, setActiveTab] = useState("home");
+  const sectionsRef = useRef<HTMLElement[]>([]);
+  const sectionIds = ["home", "background", "stack", "certificates", "projects", "skills", "contacts"];
+
+  useEffect(() => {
+    // Collect all section elements
+    sectionsRef.current = sectionIds.map(id => document.getElementById(id)).filter(Boolean) as HTMLElement[];
+    
+    // Create scroll triggers for each section
+    const triggers = sectionsRef.current.map((section) => {
+      return ScrollTrigger.create({
+        trigger: section,
+        start: "top center",
+        end: "bottom center",
+        onEnter: () => setActiveTab(section.id),
+        onEnterBack: () => setActiveTab(section.id),
+      });
+    });
+    
+    // Cleanup function to kill all scroll triggers when component unmounts
+    return () => {
+      triggers.forEach(trigger => trigger.kill());
+    };
+  }, []);
+
   return (
     <ThemeProvider>
       <div className="App">
-        <Navbar />
+        <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
 
         {/* Home Section */}
         <section 
           id="home" 
           className="h-screen flex items-center justify-center"
         >
-          <HomeContent />
+         
         </section>
 
         {/* Background Section */}
-        <Section id="background" title="Background">
-          <p>Your background information goes here.</p>
+        <Section id="background">
+          <Welcome/>
         </Section>
 
         {/* Stack Section */}
-        <Section id="stack" title="Tech Stack">
-          <p>Your tech stack information goes here.</p>
+        <Section id="stack">
+          <TechStack/>
+          <div className="mt-12 w-full">
+            <Github username="centmarde" />
+          </div>
         </Section>
 
         {/* Certificates Section */}
-        <Section id="certificates" title="Certificates">
+        <Section id="certificates">
           <p>Your certificates information goes here.</p>
         </Section>
 
         {/* Projects Section */}
-        <Section id="projects" title="Projects">
+        <Section id="projects">
           <p>Your projects information goes here.</p>
         </Section>
 
         {/* Other Skills Section */}
-        <Section id="skills" title="Other Skills">
+        <Section id="skills">
           <p>Your other skills information goes here.</p>
         </Section>
 
         {/* Contacts Section */}
-        <Section id="contacts" title="Contact Me">
+        <Section id="contacts">
           <p>Your contact information goes here.</p>
         </Section>
       </div>
     </ThemeProvider>
   );
 }
-
-// Home content component with hero section styling
-const HomeContent = () => {
-  const { theme } = useTheme();
-  
-  return (
-    <div className={`w-full ${
-      theme === "light" ? "bg-[#EEF1DA] text-[#3C3D37]" : "bg-[#181C14] text-[#ECDFCC]"
-    }`}>
-      <div className="container mx-auto px-4 flex flex-col items-center justify-center h-full">
-        <h1 className={`text-5xl md:text-6xl font-bold mb-6 text-center ${
-          theme === "light" ? "text-[#3C3D37]" : "text-[#ECDFCC]"
-        }`}>
-          My Portfolio
-        </h1>
-        <p className="text-xl text-center max-w-2xl mb-8">
-          Welcome to my professional portfolio. I'm a developer passionate about creating beautiful and functional applications.
-        </p>
-        <button className={`px-6 py-3 rounded-lg font-medium transition-colors ${
-          theme === "light" 
-            ? "bg-[#ADB2D4] text-white hover:bg-[#8C91C2]" 
-            : "bg-[#697565] text-[#ECDFCC] hover:bg-[#515A4F]"
-        }`}>
-          View My Work
-        </button>
-      </div>
-    </div>
-  );
-};
 
 export default App;
