@@ -4,23 +4,23 @@ import { createContext, useContext, useState, useEffect } from "react"
 
 interface ThemeContextProps {
   theme: "light" | "dark"
-  setTheme: (theme: "light" | "dark") => void
+  setTheme: (theme: "dark" | "light") => void
 }
 
 const ThemeContext = createContext<ThemeContextProps>({
-  theme: "light",
+  theme: "dark", // Changed from "light" to "dark"
   setTheme: () => {},
 })
 
 export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
-  const [theme, setTheme] = useState<"light" | "dark">("light")
+  const [theme, setTheme] = useState<"light" | "dark">("dark") // Changed from "light" to "dark"
 
   useEffect(() => {
     const storedTheme = localStorage.getItem("theme")
     if (storedTheme === "light" || storedTheme === "dark") {
       setTheme(storedTheme)
     } else {
-      window.matchMedia("(prefers-color-scheme: dark)").matches ? setTheme("dark") : setTheme("light")
+      setTheme("dark") // Changed to always default to dark instead of checking system preference
     }
   }, [])
 

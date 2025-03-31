@@ -1,13 +1,19 @@
-"use client"
-
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Moon, Sun } from "lucide-react"
 import { useTheme } from "@/components/theme-provider"
 import { cn } from "@/lib/utils"
+import { gsap } from "gsap"
 
-export default function Navbar() {
+interface NavbarProps {
+  activeTab: string;
+  setActiveTab: (id: string) => void;
+}
+
+export default function Navbar({ activeTab, setActiveTab }: NavbarProps) {
   const { theme, setTheme } = useTheme()
   const [scrolled, setScrolled] = useState(false)
+  const tabsRef = useRef<(HTMLButtonElement | null)[]>([])
+  const indicatorRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -18,10 +24,27 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
+  useEffect(() => {
+    // Move indicator to active tab
+    const activeTabElement = tabsRef.current.find(
+      (_, index) => ["home", "background", "stack", "certificates", "projects", "skills", "contacts"][index] === activeTab
+    )
+    
+    if (activeTabElement && indicatorRef.current) {
+      gsap.to(indicatorRef.current, {
+        left: activeTabElement.offsetLeft,
+        width: activeTabElement.offsetWidth,
+        duration: 0.5,
+        ease: "power2.out"
+      })
+    }
+  }, [activeTab])
+
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id)
     if (element) {
       element.scrollIntoView({ behavior: "smooth" })
+      setActiveTab(id)
     }
   }
 
@@ -38,7 +61,16 @@ export default function Navbar() {
           <Logo />
         </div>
 
-        <nav className="hidden md:flex space-x-6">
+        <nav className="hidden md:flex space-x-6 relative">
+          {/* Tab indicator */}
+          <div 
+            ref={indicatorRef} 
+            className={cn(
+              "absolute bottom-0 h-0.5 transition-colors",
+              theme === "light" ? "bg-[#ADB2D4]" : "bg-[#697565]"
+            )}
+          />
+          
           {[
             { name: "Home", id: "home" },
             { name: "Background", id: "background" },
@@ -47,13 +79,17 @@ export default function Navbar() {
             { name: "Projects", id: "projects" },
             { name: "Other Skills", id: "skills" },
             { name: "Contacts", id: "contacts" },
-          ].map((item) => (
+          ].map((item, index) => (
             <button
               key={item.id}
+              ref={(el) => {
+                tabsRef.current[index] = el;
+              }}
               onClick={() => scrollToSection(item.id)}
               className={cn(
-                "text-sm font-medium transition-colors hover:underline",
+                "text-sm font-medium transition-colors pb-1",
                 theme === "light" ? "hover:text-[#ADB2D4]" : "hover:text-[#697565]",
+                activeTab === item.id ? (theme === "light" ? "text-[#ADB2D4]" : "text-[#697565]") : ""
               )}
             >
               {item.name}
@@ -61,7 +97,8 @@ export default function Navbar() {
           ))}
         </nav>
 
-        <div className="flex items-center">
+        {/* Theme toggle button - visible only on desktop */}
+        <div className="hidden md:flex items-center">
           <button
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
             className={cn(
@@ -78,7 +115,13 @@ export default function Navbar() {
         </div>
 
         {/* Mobile menu button */}
-        <MobileMenu theme={theme} scrollToSection={scrollToSection} />
+        <MobileMenu 
+          theme={theme} 
+          setTheme={setTheme}
+          scrollToSection={scrollToSection} 
+          activeTab={activeTab} 
+          setActiveTab={setActiveTab} 
+        />
       </div>
     </header>
   )
@@ -86,10 +129,27 @@ export default function Navbar() {
 
 function Logo() {
   const { theme } = useTheme()
+  const logoRef = useRef(null)
+
+  useEffect(() => {
+    // Create a rotation animation that repeats infinitely
+    gsap.to(logoRef.current, {
+      rotation: 360,
+      duration: 10,
+      ease: "linear",
+      repeat: -1,
+      transformOrigin: "center center",
+    })
+
+    // Cleanup function to kill animation when component unmounts
+    return () => {
+      gsap.killTweensOf(logoRef.current)
+    }
+  }, []) // Empty dependency array means this runs once on mount
 
   return (
-    <div className="w-8 h-8 animate-spin-slow">
-      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <div className="w-8 h-8">
+      <svg ref={logoRef} width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
         <circle cx="16" cy="16" r="12" stroke={theme === "light" ? "#ADB2D4" : "#697565"} strokeWidth="2" />
         <path
           d="M16 4L16 28"
@@ -108,7 +168,19 @@ function Logo() {
   )
 }
 
-function MobileMenu({ theme, scrollToSection }: { theme: string; scrollToSection: (id: string) => void }) {
+function MobileMenu({
+  theme,
+  setTheme,
+  scrollToSection,
+  activeTab,
+  setActiveTab,
+}: { 
+  theme: string; 
+  setTheme: (theme: "dark" | "light") => void;
+  scrollToSection: (id: string) => void; 
+  activeTab: string; 
+  setActiveTab: (id: string) => void 
+}) {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
@@ -167,11 +239,29 @@ function MobileMenu({ theme, scrollToSection }: { theme: string; scrollToSection
                 className={cn(
                   "text-sm font-medium transition-colors hover:underline py-2",
                   theme === "light" ? "hover:text-[#ADB2D4]" : "hover:text-[#697565]",
+                  activeTab === item.id ? "underline" : "",
                 )}
               >
                 {item.name}
               </button>
             ))}
+            
+            {/* Theme toggle button inside mobile menu */}
+            <div className="flex items-center justify-center pt-2">
+  <button
+    onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+    className={cn(
+      "flex items-center gap-2 p-2 rounded transition-colors",
+      theme === "light" 
+        ? "bg-[#D5E5D5] hover:bg-[#C7D9DD]" 
+        : "bg-[#3C3D37] hover:bg-[#697565]"
+    )}
+    aria-label="Toggle theme"
+  >
+    {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+    <span>{theme === "dark" ? "Light Mode" : "Dark Mode"}</span>
+  </button>
+</div>
           </nav>
         </div>
       )}
