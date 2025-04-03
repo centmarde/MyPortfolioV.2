@@ -1,4 +1,3 @@
-import React from "react";
 import { BackgroundLines } from "@/components/ui/background-lines";
 
 export default function Apex() {

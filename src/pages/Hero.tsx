@@ -66,7 +66,7 @@ const Model = ({ path, scale = 1, position = [0, 0, 0], rotation = [0, 0, 0], is
   }, [position]);
 
   // Use useFrame to ensure the mixer updates even when paused
-  useFrame((state, delta) => {
+  useFrame((_, delta) => {
     if (mixer) {
       mixer.update(delta);
     }

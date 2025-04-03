@@ -173,7 +173,6 @@ function MobileMenu({
   setTheme,
   scrollToSection,
   activeTab,
-  setActiveTab,
 }: { 
   theme: string; 
   setTheme: (theme: "dark" | "light") => void;
