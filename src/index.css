@@ -3,6 +3,13 @@
 
 @custom-variant dark (&:is(.dark *));
 
+
+.metal-mania-regular {
+  font-family: "Metal Mania", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+
 :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);
