@@ -92,9 +92,28 @@ const ScrollText = styled(motion.div)<{ color: string }>`
   font-family: sans-serif;
 `;
 
+const Title = styled(motion.div)<{ color: string }>`
+  color: ${props => props.color};
+  font-size: 50px;
+  margin-left: 20px;
+  text-align: center;
+  margin-bottom: 12px;
+  font-family: "Metal Mania", system-ui;
+  font-weight: 400;
+  font-style: normal;
+`;
+
 const ScrollDown: React.FC<ScrollDownProps> = ({ color = 'skyblue', onClick, size = 30, showText = true }) => {
   return (
     <div className="flex flex-col items-center">
+      <Title 
+        color={color}
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3, duration: 0.7 }}
+      >
+        THE APEX PREDATOR
+      </Title>
       <ScrollDownContainer color={color} size={size} onClick={onClick}>
         <Chevrons size={size}>
           <ChevronDown 
@@ -127,7 +146,6 @@ const ScrollDown: React.FC<ScrollDownProps> = ({ color = 'skyblue', onClick, siz
       
       {showText && (
         <ScrollText 
-          
           color={color}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
