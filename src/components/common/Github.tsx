@@ -166,17 +166,17 @@ export default function Github({ username = "centmarde" }: GithubProps) {
           </div>
           
           {/* GitHub Trophies - With better mobile handling */}
-          <div className={`col-span-2 lg:col-span-4 ${bgColor} p-2 sm:p-3 rounded-lg shadow-sm border ${borderColor} overflow-hidden mt-3`}>
-            <div className="w-full overflow-x-auto pb-1 -mx-1 px-1">
-              <div className="min-w-[640px]">
-                <img 
-                  src={`https://github-profile-trophy.vercel.app/?username=${username}&row=1&column=6&theme=${isDark ? 'darkhub' : 'flat'}&margin-w=8&no-frame=true`}
-                  alt="GitHub Trophies" 
-                  className="max-w-full mx-auto"
-                />
-              </div>
-            </div>
-          </div>
+          <div className={`col-span-2 lg:col-span-4 ${bgColor} p-2 sm:p-3  ${borderColor} overflow-hidden mt-3 flex justify-center`}>
+  <div className="w-full overflow-x-auto pb-1 -mx-1 px-1">
+    <div className="min-w-[640px]">
+      <img 
+        src={`https://github-profile-trophy.vercel.app/?username=${username}&row=1&column=8&theme=${isDark ? 'darkhub' : 'flat'}&margin-w=8&no-frame=true`}
+        alt="GitHub Trophies" 
+        className="max-w-full mx-auto"
+      />
+    </div>
+  </div>
+</div>
         </div>
 
         {/* Bottom link */}
