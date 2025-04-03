@@ -47,8 +47,6 @@ const Section = ({
 
 function App() {
   const [activeTab, setActiveTab] = useState("home");
-  const sectionsRef = useRef<HTMLElement[]>([]);
-  const sectionIds = ["home", "background", "stack", "certificates", "projects", "skills", "contacts"];
   
   return (
     <ThemeProvider>
