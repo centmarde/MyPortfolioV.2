@@ -1,0 +1,55 @@
+{
+  "topAwards": [
+    {
+      "id": 1,
+      "title": "Innovation Excellence Award",
+      "issuer": "Tech Industry Association",
+      "date": "December 2023",
+      "image": "/images/awards/innovation-award.jpg"
+    },
+    {
+      "id": 2,
+      "title": "Leadership Achievement Award",
+      "issuer": "Leadership Foundation",
+      "date": "September 2023",
+      "image": "/images/awards/leadership-award.jpg"
+    },
+    {
+      "id": 3,
+      "title": "Rising Star Award",
+      "issuer": "Industry Conference 2022",
+      "date": "May 2022",
+      "image": "/images/awards/rising-star-award.jpg"
+    }
+  ],
+  "certificates": [
+    {
+      "id": 1,
+      "title": "Full Stack Web Development",
+      "issuer": "Coding Academy",
+      "date": "June 2023",
+      "image": "/images/certificates/fullstack-cert.jpg"
+    },
+    {
+      "id": 2,
+      "title": "UX/UI Design Fundamentals",
+      "issuer": "Design Institute",
+      "date": "March 2023",
+      "image": "/images/certificates/uxui-cert.jpg"
+    },
+    {
+      "id": 3,
+      "title": "Project Management Professional (PMP)",
+      "issuer": "Project Management Institute",
+      "date": "November 2022",
+      "image": "/images/certificates/pmp-cert.jpg"
+    },
+    {
+      "id": 4,
+      "title": "Data Science Specialization",
+      "issuer": "Tech University",
+      "date": "July 2022",
+      "image": "/images/certificates/datascience-cert.jpg"
+    }
+  ]
+}

@@ -1,69 +1,38 @@
-import { useTheme } from "@/components/theme-provider"
-import { Certs, CertificateItem } from "@/components/common/Certs"
+import { useEffect, useState } from "react";
+import { useTheme } from "@/components/theme-provider";
+import { Certs, CertificateItem } from "@/components/common/Certs";
+import { getAchievements } from "@/services/api";
+import { Loader2 } from "lucide-react";
 
 export default function Awards() {
-  const { theme } = useTheme()
+  const { theme } = useTheme();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [topAwards, setTopAwards] = useState<CertificateItem[]>([]);
+  const [certificates, setCertificates] = useState<CertificateItem[]>([]);
 
-  // Top 3 awards
-  const topAwards: CertificateItem[] = [
-    {
-      id: 1,
-      title: "Innovation Excellence Award",
-      issuer: "Tech Industry Association",
-      date: "December 2023",
-      image: "/images/awards/innovation-award.jpg" // Add placeholder image path
-    },
-    {
-      id: 2,
-      title: "Leadership Achievement Award",
-      issuer: "Leadership Foundation",
-      date: "September 2023",
-      image: "/images/awards/leadership-award.jpg" // Add placeholder image path
-    },
-    {
-      id: 3,
-      title: "Rising Star Award",
-      issuer: "Industry Conference 2022",
-      date: "May 2022",
-      image: "/images/awards/rising-star-award.jpg" // Add placeholder image path
-    },
-  ]
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const data = await getAchievements();
+        setTopAwards(data.topAwards);
+        setCertificates(data.certificates);
+        setError(null);
+      } catch (err) {
+        console.error('Failed to fetch achievements:', err);
+        setError('Failed to load achievements data. Please try again later.');
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  // Certificates
-  const certificates: CertificateItem[] = [
-    {
-      id: 1,
-      title: "Full Stack Web Development",
-      issuer: "Coding Academy",
-      date: "June 2023",
-      image: "/images/certificates/fullstack-cert.jpg" // Add placeholder image path
-    },
-    {
-      id: 2,
-      title: "UX/UI Design Fundamentals",
-      issuer: "Design Institute",
-      date: "March 2023",
-      image: "/images/certificates/uxui-cert.jpg" // Add placeholder image path
-    },
-    {
-      id: 3,
-      title: "Project Management Professional (PMP)",
-      issuer: "Project Management Institute",
-      date: "November 2022",
-      image: "/images/certificates/pmp-cert.jpg" // Add placeholder image path
-    },
-    {
-      id: 4,
-      title: "Data Science Specialization",
-      issuer: "Tech University",
-      date: "July 2022",
-      image: "/images/certificates/datascience-cert.jpg" // Add placeholder image path
-    },
-  ]
+    fetchData();
+  }, []);
 
   // Award and certificate background image paths
-  const awardBgPath = "/misc/awards.svg"
-  const certificateBgPath = "/misc/awards.svg"
+  const awardBgPath = "/misc/awards.svg";
+  const certificateBgPath = "/misc/awards.svg";
 
   // SVG styling based on theme
   const getSvgStyle = (isAward = true) => {
@@ -80,6 +49,31 @@ export default function Awards() {
         mixBlendMode: 'soft-light' as const
       }
     }
+  };
+
+  if (loading) {
+    return (
+      <div className="container mx-auto py-20 flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        <span className="ml-2">Loading achievements...</span>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="container mx-auto py-20 text-center">
+        <div className="bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-200 p-4 rounded-lg">
+          <p>{error}</p>
+          <button 
+            onClick={() => window.location.reload()} 
+            className="mt-2 bg-red-100 dark:bg-red-800/30 px-4 py-2 rounded hover:bg-red-200 dark:hover:bg-red-800/50"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -115,6 +109,6 @@ export default function Awards() {
         />
       </section>
     </div>
-  )
+  );
 }
 

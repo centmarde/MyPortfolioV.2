@@ -10,6 +10,7 @@ import Github from './components/common/Github';
 import Hero from './pages/Hero';
 import Apex from './pages/Apex';
 import Loading from './components/Loader';
+import Awards from './pages/Awards';
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
 
@@ -163,7 +164,7 @@ function AppContent({
 
       {/* Certificates Section */}
       <Section id="certificates">
-        <p>Your certificates information goes here.</p>
+        <Awards/>
       </Section>
 
       {/* Projects Section */}
