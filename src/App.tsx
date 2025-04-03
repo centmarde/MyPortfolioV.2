@@ -134,7 +134,7 @@ function AppContent({
       {/* Home Section - Adjusted height to match Hero and Apex components */}
       <section 
         id="home" 
-        className="h-[1100vh]" // Increased height to accommodate both Hero and Apex
+        className="h-[1030vh] lg:h-[1100vh]" // Responsive heights for different screen sizes
       >
         <Hero onFullyLoaded={handleHeroLoaded} />
         <Apex />
