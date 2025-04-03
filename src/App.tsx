@@ -9,6 +9,7 @@ import TechStack from './pages/TechStack';
 import Github from './components/common/Github';
 import Hero from './pages/Hero';
 import Apex from './pages/Apex';
+import Loading from './components/Loader';
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
 
@@ -47,21 +48,49 @@ const Section = ({
 
 function App() {
   const [activeTab, setActiveTab] = useState("home");
+  const [loading, setLoading] = useState(true);
   
   return (
     <ThemeProvider>
-      <AppContent activeTab={activeTab} setActiveTab={setActiveTab} />
+      {loading && <Loading onLoadingComplete={() => {/* No auto completion */}} />}
+      <AppContent 
+        activeTab={activeTab} 
+        setActiveTab={setActiveTab} 
+        loading={loading}
+        setLoading={setLoading}
+      />
     </ThemeProvider>
   );
 }
 
 // Create a separate component that will use the theme hook inside the ThemeProvider context
-function AppContent({ activeTab, setActiveTab }: { activeTab: string; setActiveTab: (tab: string) => void }) {
+function AppContent({ 
+  activeTab, 
+  setActiveTab,
+  loading,
+  setLoading
+}: { 
+  activeTab: string; 
+  setActiveTab: (tab: string) => void;
+  loading: boolean;
+  setLoading: (loading: boolean) => void;
+}) {
   const { theme } = useTheme();
   const sectionsRef = useRef<HTMLElement[]>([]);
   const sectionIds = ["home", "background", "stack", "certificates", "projects", "skills", "contacts"];
   
+  // Handle hero content loaded
+  const handleHeroLoaded = () => {
+    // Allow a small delay to ensure everything is ready before hiding loader
+    setTimeout(() => {
+      setLoading(false);
+    }, 500);
+  };
+  
   useEffect(() => {
+    // Only set up scroll triggers when content is loaded
+    if (loading) return;
+    
     // Collect all section elements
     sectionsRef.current = sectionIds.map(id => document.getElementById(id)).filter(Boolean) as HTMLElement[];
     
@@ -80,18 +109,34 @@ function AppContent({ activeTab, setActiveTab }: { activeTab: string; setActiveT
     return () => {
       triggers.forEach(trigger => trigger.kill());
     };
-  }, []);
+  }, [loading]); // Re-run when loading state changes
+  
+  // Prevent body scrolling while loading
+  useEffect(() => {
+    if (loading) {
+      document.body.style.overflow = 'hidden';
+      document.body.style.height = '100vh';
+    } else {
+      document.body.style.overflow = '';
+      document.body.style.height = '';
+    }
+    
+    return () => {
+      document.body.style.overflow = '';
+      document.body.style.height = '';
+    };
+  }, [loading]);
   
   return (
     <div className="App">
-      <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
+      {!loading && <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />}
 
       {/* Home Section - Adjusted height to match Hero and Apex components */}
       <section 
         id="home" 
         className="h-[1100vh]" // Increased height to accommodate both Hero and Apex
       >
-        <Hero />
+        <Hero onFullyLoaded={handleHeroLoaded} />
         <Apex />
         {/* Theme-responsive wave SVG */}
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
