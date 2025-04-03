@@ -4,6 +4,7 @@ import { OrbitControls, Environment, useGLTF, useAnimations, Html, useProgress }
 import * as THREE from 'three';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ScrollReminder } from '../components/common/Dropdown'; // Import is now correctly referenced
 
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
@@ -115,6 +116,7 @@ export default function Hero() {
   const [modelRotation, setModelRotation] = useState<[number, number, number]>([5.3, 3, 0]);
   const [isScrolling, setIsScrolling] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [showScrollReminder, setShowScrollReminder] = useState(true);
   const containerRef = useRef<HTMLDivElement>(null);
   const quoteRef = useRef<HTMLDivElement>(null);
   
@@ -233,6 +235,23 @@ gsap.fromTo(
     setIsLoaded(true);
   };
 
+  // Add an effect to handle visibility when returning to the Hero section
+  useEffect(() => {
+    const handleVisibilityOnIntersect = () => {
+      // Check if we're at the top of the page
+      if (window.scrollY < 100 && isLoaded) {
+        setShowScrollReminder(true);
+      }
+    };
+
+    // Add scroll event listener for returning to top
+    window.addEventListener("scroll", handleVisibilityOnIntersect);
+    
+    return () => {
+      window.removeEventListener("scroll", handleVisibilityOnIntersect);
+    };
+  }, [isLoaded]);
+
   return (
     <div 
       ref={containerRef} 
@@ -248,14 +267,14 @@ gsap.fromTo(
       {/* Quote container - updated with theme colors */}
       <div 
         ref={quoteRef}
-        className="fixed top-1/2 right-12 transform -translate-y-1/2 max-w-xl p-8  z-10 text-dark-tertiary dark:text-light-primary"
+        className="fixed md:top-1/2 md:right-12 top-1/3 left-1/2 transform -translate-x-1/2 md:-translate-x-0 -translate-y-1/2 max-w-xl w-[85%] md:w-auto p-4 md:p-8 z-10 text-dark-tertiary dark:text-light-primary"
         style={{ opacity: 0 }}
       >
-        <blockquote className="border-l-4 border-light-accent dark:border-dark-primary pl-6">
-          <p className="text-3xl font-serif italic mb-5 leading-relaxed">
+        <blockquote className="border-l-4 border-light-accent dark:border-dark-primary pl-4 md:pl-6">
+          <p className="text-xl md:text-3xl font-serif italic mb-3 md:mb-5 leading-relaxed">
             "The <span className="text-light-accent dark:text-dark-accent font-bold">whale</span> rules the ocean, not by speed or stealth, but by sheer <span className="text-light-accent dark:text-dark-accent font-bold">presence</span> and <span className="text-light-accent dark:text-dark-accent font-bold">mastery</span> of its domain."
           </p>
-          <p className="text-xl mb-3 leading-relaxed">
+          <p className="text-sm md:text-xl mb-2 md:mb-3 leading-relaxed">
             As a developer, be like the whale—<span className="text-light-accent dark:text-dark-accent font-bold">dominate</span> your field not by rushing through tasks or cutting corners, but by <span className="text-light-accent dark:text-dark-accent font-bold">deeply understanding</span> your craft, making <span className="text-light-accent dark:text-dark-accent font-bold">deliberate choices</span>, and building <span className="text-light-accent dark:text-dark-accent font-bold">robust</span>, <span className="text-light-accent dark:text-dark-accent font-bold">scalable solutions</span> that stand the test of time.
           </p>
         </blockquote>
@@ -287,6 +306,21 @@ gsap.fromTo(
             <OrbitControls enableZoom={false} enablePan={false} enableRotate={true} />
           </Suspense>
         </Canvas>
+        
+        {/* Position the enhanced ScrollReminder in the middle of the scene */}
+        {isLoaded && showScrollReminder && (
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <div className="transform translate-y-[30vh] dark:text-light-primary text-dark-secondary">
+              <ScrollReminder 
+                threshold={150}
+                color="currentColor"
+                size={40}
+                hideAfter={10000} // Show for longer (10 seconds)
+                onReturn={true} // Enable reappearing when returning to top
+              />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
