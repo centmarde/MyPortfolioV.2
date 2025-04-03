@@ -8,6 +8,7 @@ import Welcome from './pages/Welcome';
 import TechStack from './pages/TechStack';
 import Github from './components/common/Github';
 import Hero from './pages/Hero';
+import Apex from './pages/Apex';
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
 
@@ -75,12 +76,13 @@ function App() {
       <div className="App">
         <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
 
-        {/* Home Section - Adjusted height to match Hero component */}
+        {/* Home Section - Adjusted height to match Hero and Apex components */}
         <section 
           id="home" 
-          className="h-[1000vh]" // Changed to 500vh to match Hero's internal height
+          className="h-[1100vh]" // Increased height to accommodate both Hero and Apex
         >
           <Hero />
+          <Apex />
         </section>
 
         {/* Background Section */}
