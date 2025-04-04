@@ -31,52 +31,52 @@ export default function TechStackShowcase() {
     {
       name: "Docker",
       icon: <Container className="h-8 w-8" />,
-      image: "/placeholder.svg?text=Docker&height=40&width=40",
+      image: "/logo/docker.png?text=Docker&height=40&width=40",
     },
     {
       name: "TensorFlow",
       icon: <Brain className="h-8 w-8" />,
-      image: "/placeholder.svg?text=TF&height=40&width=40",
+      image: "/logo/TensorFlow.png?text=TF&height=40&width=40",
     },
     {
       name: "Anaconda",
       icon: <Code className="h-8 w-8" />,
-      image: "/placeholder.svg?text=Anaconda&height=40&width=40",
+      image: "/logo/Anaconda.png?text=Anaconda&height=40&width=40",
     },
     {
       name: "Django",
       icon: <Server className="h-8 w-8" />,
-      image: "/placeholder.svg?text=Django&height=40&width=40",
+      image: "/logo/Django.png?text=Django&height=40&width=40",
     },
     {
       name: "Flask",
       icon: <Flask className="h-8 w-8" />,
-      image: "/placeholder.svg?text=Flask&height=40&width=40",
+      image: "/logo/Flask.png?text=Flask&height=40&width=40",
     },
     {
       name: "Laravel",
       icon: <FileCode className="h-8 w-8" />,
-      image: "/placeholder.svg?text=Laravel&height=40&width=40",
+      image: "/logo/Laravel.png?text=Laravel&height=40&width=40",
     },
     {
       name: "Postman",
       icon: <Send className="h-8 w-8" />,
-      image: "/placeholder.svg?text=Postman&height=40&width=40",
+      image: "/logo/Postman.png?text=Postman&height=40&width=40",
     },
     {
       name: "Supabase",
       icon: <Database className="h-8 w-8" />,
-      image: "/placeholder.svg?text=Supabase&height=40&width=40",
+      image: "/logo/supabase.svg?text=Supabase&height=40&width=40",
     },
     {
       name: "Firebase",
       icon: <Flame className="h-8 w-8" />,
-      image: "/placeholder.svg?text=Firebase&height=40&width=40",
+      image: "/logo/Firebase.png?text=Firebase&height=40&width=40",
     },
     {
       name: "Svelte",
       icon: <FileCode2 className="h-8 w-8" />,
-      image: "/placeholder.svg?text=Svelte&height=40&width=40",
+      image: "/logo/Svelte.png?text=Svelte&height=40&width=40",
     },
   ]
 
@@ -84,52 +84,52 @@ export default function TechStackShowcase() {
     {
       name: "React.js",
       icon: <Atom className="h-8 w-8" />,
-      image: "/placeholder.svg?text=React&height=40&width=40",
+      image: "/logo/React.png?text=React&height=40&width=40",
     },
     {
       name: "Vue 3",
       icon: <Code2 className="h-8 w-8" />,
-      image: "/placeholder.svg?text=Vue&height=40&width=40",
+      image: "/logo/Vue.js.png?text=Vue&height=40&width=40",
     },
     {
       name: "TypeScript",
       icon: <Layers className="h-8 w-8" />,
-      image: "/placeholder.svg?text=TS&height=40&width=40",
+      image: "/logo/typescript.png?text=TS&height=40&width=40",
     },
     {
-      name: "Pinia Store",
+      name: "Three Js",
       icon: <Store className="h-8 w-8" />,
-      image: "/placeholder.svg?text=Pinia&height=40&width=40",
+      image: "/logo/Three.js.png?text=Pinia&height=40&width=40",
     },
     {
       name: "Vuetify",
       icon: <PanelLeft className="h-8 w-8" />,
-      image: "/placeholder.svg?text=Vuetify&height=40&width=40",
+      image: "/logo/Veutify.png?text=Vuetify&height=40&width=40",
     },
     {
       name: "Material UI",
       icon: <Palette className="h-8 w-8" />,
-      image: "/placeholder.svg?text=MUI&height=40&width=40",
+      image: "/logo/Material UI.png?text=MUI&height=40&width=40",
     },
     {
       name: "Bootstrap",
       icon: <Box className="h-8 w-8" />,
-      image: "/placeholder.svg?text=Bootstrap&height=40&width=40",
+      image: "/logo/Bootstrap.png?text=Bootstrap&height=40&width=40",
     },
     {
       name: "Tailwind",
       icon: <LayoutGrid className="h-8 w-8" />,
-      image: "/placeholder.svg?text=Tailwind&height=40&width=40",
+      image: "/logo/Tailwind CSS.png?text=Tailwind&height=40&width=40",
     },
     {
       name: "Flutter",
       icon: <Smartphone className="h-8 w-8" />,
-      image: "/placeholder.svg?text=Flutter&height=40&width=40",
+      image: "/logo/Flutter.png?text=Flutter&height=40&width=40",
     },
     {
       name: "Git",
       icon: <Code2 className="h-8 w-8" />,
-      image: "/placeholder.svg?text=Git&height=40&width=40",
+      image: "/logo/Git.png?text=Git&height=40&width=40",
     },
   ]
 
@@ -186,33 +186,6 @@ export default function TechStackShowcase() {
       )
     }
 
-    // Set up hover animations
-    const setupHoverAnimations = () => {
-      const techItems = document.querySelectorAll(".tech-item")
-
-      techItems.forEach((item) => {
-        item.addEventListener("mouseenter", () => {
-          gsap.to(item, {
-            y: -5,
-            scale: 1.05,
-            duration: 0.2,
-            ease: "power2.out",
-          })
-        })
-
-        item.addEventListener("mouseleave", () => {
-          gsap.to(item, {
-            y: 0,
-            scale: 1,
-            duration: 0.2,
-            ease: "power2.out",
-          })
-        })
-      })
-    }
-
-    setupHoverAnimations()
-
     // Handle resize events to adjust animations
     const handleResize = () => {
       // Reset and re-run animations when screen size changes
@@ -224,11 +197,6 @@ export default function TechStackShowcase() {
 
     // Cleanup
     return () => {
-      const techItems = document.querySelectorAll(".tech-item")
-      techItems.forEach((item) => {
-        item.removeEventListener("mouseenter", () => {})
-        item.removeEventListener("mouseleave", () => {})
-      })
       window.removeEventListener("resize", handleResize)
     }
   }, [])
@@ -236,6 +204,10 @@ export default function TechStackShowcase() {
   return (
     <div className="w-full max-w-6xl mx-auto py-1 px-4">
       <h2 className="text-2xl font-normal mb-8 text-center">Tech Stack</h2>
+      <p className="text-center max-w-3xl mx-auto mb-10">
+        Equipped with modern technologies and frameworks that enable me to build robust, scalable, and user-friendly applications.
+        From front-end development to back-end solutions and containerization, these tools form the foundation of my technical expertise.
+      </p>
 
       <div className="space-y-12" ref={techStackRef}>
         {/* Mobile view - single grid with 2 columns */}
@@ -248,17 +220,7 @@ export default function TechStackShowcase() {
                     src={tech.image || "/placeholder.svg"}
                     alt={tech.name}
                     className="object-contain w-full h-full"
-                    onError={(e) => {
-                      // If image fails to load, show the icon
-                      const target = e.currentTarget as HTMLImageElement
-                      target.style.display = "none"
-                      const nextSibling = target.parentElement?.querySelector(".icon-fallback")
-                      if (nextSibling) {
-                        nextSibling.classList.remove("hidden")
-                      }
-                    }}
                   />
-                  <div className="hidden icon-fallback text-gray-700 dark:text-gray-300">{tech.icon}</div>
                 </div>
               </div>
               <span className="text-xs text-center text-gray-600 dark:text-gray-400">{tech.name}</span>
@@ -276,17 +238,7 @@ export default function TechStackShowcase() {
                     src={tech.image || "/placeholder.svg"}
                     alt={tech.name}
                     className="object-contain w-full h-full"
-                    onError={(e) => {
-                      // If image fails to load, show the icon
-                      const target = e.currentTarget as HTMLImageElement
-                      target.style.display = "none"
-                      const nextSibling = target.parentElement?.querySelector(".icon-fallback")
-                      if (nextSibling) {
-                        nextSibling.classList.remove("hidden")
-                      }
-                    }}
                   />
-                  <div className="hidden icon-fallback text-gray-700 dark:text-gray-300">{tech.icon}</div>
                 </div>
               </div>
               <span className="text-[10px] sm:text-xs text-center text-gray-600 dark:text-gray-400">{tech.name}</span>
@@ -304,17 +256,7 @@ export default function TechStackShowcase() {
                     src={tech.image || "/placeholder.svg"}
                     alt={tech.name}
                     className="object-contain w-full h-full"
-                    onError={(e) => {
-                      // If image fails to load, show the icon
-                      const target = e.currentTarget as HTMLImageElement
-                      target.style.display = "none"
-                      const nextSibling = target.parentElement?.querySelector(".icon-fallback")
-                      if (nextSibling) {
-                        nextSibling.classList.remove("hidden")
-                      }
-                    }}
                   />
-                  <div className="hidden icon-fallback text-gray-700 dark:text-gray-300">{tech.icon}</div>
                 </div>
               </div>
               <span className="text-[10px] sm:text-xs text-center text-gray-600 dark:text-gray-400">{tech.name}</span>

@@ -368,7 +368,7 @@ export default function Hero({ onFullyLoaded }: HeroProps) {
               isScrolling={isScrolling}
               scrollProgress={scrollProgress}
             />
-            <Environment preset="sunset" background={false} />
+            <Environment  files="/ambients/venice.hdr" background={false} />
             <OrbitControls enableZoom={false} enablePan={false} enableRotate={true} />
           </Suspense>
         </Canvas>
