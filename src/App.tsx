@@ -11,6 +11,7 @@ import Hero from './pages/Hero';
 import Apex from './pages/Apex';
 import Loading from './components/Loader';
 import Awards from './pages/Awards';
+import Works from './pages/Works';
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
 
@@ -169,17 +170,17 @@ function AppContent({
 
       {/* Projects Section */}
       <Section id="projects">
-        <p>Your projects information goes here.</p>
+       <Works/>
       </Section>
 
       {/* Other Skills Section */}
       <Section id="skills">
-        <p>Your other skills information goes here.</p>
+        <p>skills information</p>
       </Section>
 
       {/* Contacts Section */}
       <Section id="contacts">
-        <p>Your contact information goes here.</p>
+        <p>contact information</p>
       </Section>
     </div>
   );
