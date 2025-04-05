@@ -3,7 +3,7 @@ import { ArrowRight, Github, Linkedin, Mail, Twitter } from "lucide-react"
 import { useEffect, useRef } from "react"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
-
+import PortfolioSections from "@/components/common/Portfolio"
 // Ensure ScrollTrigger is registered
 gsap.registerPlugin(ScrollTrigger)
 
@@ -147,6 +147,7 @@ export default function Home() {
             </div>
           </div>
         </section>
+        <PortfolioSections />
       </main>
     
     </div>

@@ -1,0 +1,137 @@
+{
+  "keySkills": [
+    "Project Management",
+    "Leadership",
+    "Strategic Planning",
+    "Problem Solving",
+    "Communication",
+    "Team Building",
+    "Data Analysis",
+    "Negotiation",
+    "Preserverance",
+    "Agile Methodologies",
+    "Creative Thinking",
+    "Digital Transformation"
+  ],
+  "notableAchievements": [
+    "Thesis published in leading academic journal",
+    "Led a team of 2+ in a successful Student Thesis project",
+    "Led a team of 1+ in a successful Game Dev project",
+    "Fullstack Developer for 1+ years",
+    "Advance Frontend Developer with animation techniques for 1+ years",
+    "Backend Developer for 1+ years",
+    "Mobile Developer for 1+ years",
+    "Web Developer for 1+ years"
+  ],
+  "professionalSummary": "Seasoned professional with over 1+ years of experience driving organizational success through strategic leadership, innovative problem-solving, and effective team management. Proven track record of delivering results in fast-paced, complex environments while maintaining a focus on quality and continuous improvement.",
+  "experience": [
+   
+    {
+      "title": "Project Manager",
+      "company": "Strongest Algorithm Corp.",
+      "location": "Freelance",
+      "period": "2024 - present",
+      "responsibilities": [
+        "Managed cross-functional teams of 1-3 members for client-facing projects",
+        "Delivered 2+ successful projects with 100% client satisfaction rate",
+        "Developed and implemented standardized project documentation templates",
+        "Fast phased environment, managing multiple projects simultaneously"
+      ]
+    },
+    {
+        "title": "Lead Developer",
+        "company": "CSU game developers",
+        "location": "Philippines, Butuan",
+        "period": "2023 - Present",
+        "responsibilities": [
+          "Brains of the team, leading the development of innovative game solutions",
+          "Collaborated with cross-functional developers to design and implement game features",
+          "Plans the game design and development process",    
+          "Conducted quality assurance testing and ensured code quality standards"
+        ]
+      },
+    {
+      "title": "Jr. Developer",
+      "company": "Real D2D",
+      "location": "freelace",
+      "period": "2024",
+      "responsibilities": [
+        "Code maintenance and bug fixing for existing applications",
+        "Assisted in the development of new features and enhancements",
+        "Collaborated with senior developers to learn best practices and coding standards",
+        "Participated in code reviews and provided constructive feedback to peers"
+      ]
+    },
+    {
+        "title": "Digital Artist/Graphic Designer",
+        "company": "HOLO LIVE",
+        "location": "freelace",
+        "period": "2020 - 2021",
+        "responsibilities": [
+          "Created fan arts and graphic designs in JPEG and PNG formats for use on stickers, tarpaulins, and canvases for HoloLive artists living overseas.",
+          "accepting freelance commissions."
+        ]
+      }
+  ],
+  "education": [
+    {
+      "degree": "Bachelor of Science in Information Technology",
+      "school": "Caraga State University (Main Campus)",
+      "period": "2021 - present",
+      "details": "Broad understanding of information technology principles and practices, with a focus on software development, data management, and Artificial Intelligence.",
+      "achievements": ["GPA: 2.5", "Normal Student"],
+      "thesis": "Enhancing Game Strategy with AI: The Development of Sinawali Showdown"
+    }
+  ],
+  "training": {
+    "recentTraining": [
+      {
+        "title": "11th ICT Student Congress and Skills Competition",
+        "provider": "PSITE Caraga",
+        "date": "March 2023",
+        "description": "intensive program focused on AI and code development, including hands-on workshops and team projects. Helped learn how to use AI to develop innovative solutions for real-world problems."
+      },
+      {
+        "title": "Level up DOST Esports game development",
+        "provider": "DOST Philippines",
+        "date": "November 2024",
+        "description": "Three-day program focused on game development."
+      }
+    ],
+    "conferences": [
+      { "name": "11th ICT Student Congress and Skills Competition", "location": "Philippines, Butuan", "year": "2023" },
+      { "name": "Level up DOST Esports game development", "location": "Philippines, Cagayan", "year": "2024" }
+    ],
+    "speaking": [
+     
+    ]
+  },
+  "organizations": {
+    "professional": [
+      {
+        "name": "Society of Information Technology Students (SITES)",
+        "role": "MEMBER",
+        "period": "2021 - 2022",
+        "description": "A school organization that promotes the interests and development of information technology students. Participated in various events and activities, including workshops, seminars, and community service projects."
+      },
+      {
+        "name": "CSU game developers",
+        "role": "Lead Developer",
+        "period": "2024 - Present",
+        "description": "Leads the development of innovative game solutions, collaborating with cross-functional teams to design and implement game features. Plans the game design and development process, ensuring quality assurance testing and code quality standards."
+      }
+    ],
+    "volunteer": [
+      {
+       
+      }
+    ],
+    "alumni": [
+      {
+        "name": "Agusan National High-School",
+        "role": "Member",
+        "period": "2013"
+      }
+    ]
+  }
+}
