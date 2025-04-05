@@ -45,7 +45,7 @@ export default function Awards() {
     } else {
       return {
         filter: isAward ? 'hue-rotate(15deg) saturate(1.2)' : 'hue-rotate(-15deg) saturate(1.1)',
-        opacity: isAward ? 0.85 : 0.75,
+        opacity: isAward ? 0.6 : 0.75,
         mixBlendMode: 'soft-light' as const
       }
     }

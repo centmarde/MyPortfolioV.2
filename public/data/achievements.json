@@ -1,54 +1,180 @@
 {
   "topAwards": [
     {
-      "id": 1,
-      "title": "Innovation Excellence Award",
-      "issuer": "Tech Industry Association",
-      "date": "December 2023",
-      "image": "/images/awards/innovation-award.jpg"
+      "id": 1
+     
     },
     {
       "id": 2,
-      "title": "Leadership Achievement Award",
-      "issuer": "Leadership Foundation",
-      "date": "September 2023",
+      "title": "Nationals 3rd Placer Game Dev Challenge",
+      "issuer": "DOST PHILIPPINES E-SPORTS",
+      "date": "December 2024",
       "image": "/images/awards/leadership-award.jpg"
     },
     {
-      "id": 3,
-      "title": "Rising Star Award",
-      "issuer": "Industry Conference 2022",
-      "date": "May 2022",
-      "image": "/images/awards/rising-star-award.jpg"
+      "id": 3
     }
   ],
   "certificates": [
     {
       "id": 1,
-      "title": "Full Stack Web Development",
-      "issuer": "Coding Academy",
-      "date": "June 2023",
+      "title": "Basic Level of Software Engineering",
+      "issuer": "DICT",
+      "date": "June 2024",
       "image": "/images/certificates/fullstack-cert.jpg"
     },
     {
       "id": 2,
-      "title": "UX/UI Design Fundamentals",
-      "issuer": "Design Institute",
-      "date": "March 2023",
+      "title": "Intermediate Level of Software Engineering",
+      "issuer": "DICT",
+      "date": "April 2024",
       "image": "/images/certificates/uxui-cert.jpg"
     },
     {
       "id": 3,
-      "title": "Project Management Professional (PMP)",
-      "issuer": "Project Management Institute",
-      "date": "November 2022",
+      "title": "Advanced Level of Software Engineering",
+      "issuer": "DICT",
+      "date": "April 2024",
       "image": "/images/certificates/pmp-cert.jpg"
     },
     {
       "id": 4,
-      "title": "Data Science Specialization",
-      "issuer": "Tech University",
-      "date": "July 2022",
+      "title": "Fundamentals of Marketing",
+      "issuer": "DICT",
+      "date": "July 2024",
+      "image": "/images/certificates/datascience-cert.jpg"
+    },
+    {
+      "id": 5,
+      "title": "Digital Innovation in Government",
+      "issuer": "DICT",
+      "date": "July 2024",
+      "image": "/images/certificates/datascience-cert.jpg"
+    },
+    {
+      "id": 6,
+      "title": "Basic Building Blocks of the User Interface",
+      "issuer": "DICT",
+      "date": "May 2024",
+      "image": "/images/certificates/datascience-cert.jpg"
+    },
+    {
+      "id": 7,
+      "title": "Functional Composition",
+      "issuer": "DICT",
+      "date": "April 2024",
+      "image": "/images/certificates/datascience-cert.jpg"
+    },
+    {
+      "id": 8,
+      "title": "Basic Level of Cloud Computing",
+      "issuer": "DICT",
+      "date": "March 2024",
+      "image": "/images/certificates/datascience-cert.jpg"
+    },
+    {
+      "id": 9,
+      "title": "Canva for Graphic Design",
+      "issuer": "DICT",
+      "date": "April 2024",
+      "image": "/certs/Canva.png"
+    },
+    {
+      "id": 10,
+      "title": "Principles of Design",
+      "issuer": "DICT",
+      "date": "July 2024",
+      "image": "/images/certificates/datascience-cert.jpg"
+    },
+    {
+      "id": 11,
+      "title": "Basic Level of Digital Transformation",
+      "issuer": "DICT",
+      "date": "July 2024",
+      "image": "/images/certificates/datascience-cert.jpg"
+    },
+    {
+      "id": 12,
+      "title": "Developing a Static Website",
+      "issuer": "DICT",
+      "date": "April 2024",
+      "image": "/images/certificates/datascience-cert.jpg"
+    },
+    {
+      "id": 13,
+      "title": "Digital Transformation",
+      "issuer": "DICT",
+      "date": "May 2024",
+      "image": "/images/certificates/datascience-cert.jpg"
+    },
+    {
+      "id": 14,
+      "title": "Basic Javascript for Web Development",
+      "issuer": "DICT",
+      "date": "March 2024",
+      "image": "/images/certificates/datascience-cert.jpg"
+    },
+    {
+      "id": 15,
+      "title": "Using HTML and CSS to Design a Website",
+      "issuer": "DICT",
+      "date": "March 2024",
+      "image": "/images/certificates/datascience-cert.jpg"
+    },
+    {
+      "id": 16,
+      "title": "Principles of Web Development and Introduction to HTML",
+      "issuer": "DICT",
+      "date": "March 2024",
+      "image": "/images/certificates/datascience-cert.jpg"
+    },
+    {
+      "id": 17,
+      "title": "Introduction to Android Application Development",
+      "issuer": "DICT",
+      "date": "March 2024",
+      "image": "/images/certificates/datascience-cert.jpg"
+    },
+    {
+      "id": 18,
+      "title": "Introduction to HTML course",
+      "issuer": "SOLO LEARN",
+      "date": "January 2024",
+      "image": "/images/certificates/datascience-cert.jpg"
+    },
+    {
+      "id": 19,
+      "title": "Online Art Competition",
+      "issuer": "SOLO LEARN",
+      "date": "Dec 2020",
+      "image": "/images/certificates/datascience-cert.jpg"
+    },
+    {
+      "id": 20,
+      "title": "Introduction to CSS course",
+      "issuer": "SOLO LEARN",
+      "date": "January 2024",
+      "image": "/images/certificates/datascience-cert.jpg"
+    },
+    {
+      "id": 21,
+      "title": "Introduction to JavaScript course",
+      "issuer": "SOLO LEARN",
+      "date": "March 2024",
+      "image": "/images/certificates/datascience-cert.jpg"
+    },
+    {
+      "id": 22,
+      "title": "Introduction to Java course",
+      "issuer": "SOLO LEARN",
+      "date": "April 2024",
+      "image": "/images/certificates/datascience-cert.jpg"
+    },
+    {
+      "id": 23,
+      "title": "Java Intermediate course",
+      "issuer": "SOLO LEARN",
+      "date": "April 2024",
       "image": "/images/certificates/datascience-cert.jpg"
     }
   ]
