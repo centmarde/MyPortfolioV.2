@@ -11,6 +11,7 @@ interface Project {
   images: string[];
   demoLink: string;
   codeLink: string;
+  techStack: string[]; // Add techStack property to Project interface
 }
 
 const Works: React.FC = () => {
@@ -80,6 +81,7 @@ const Works: React.FC = () => {
               images={project.images || [project.image]}
               demoLink={project.demoLink}
               codeLink={project.codeLink}
+              techStack={project.techStack} // Pass the techStack to the component
               onClick={() => openImageDialog(project)}
             />
           </div>

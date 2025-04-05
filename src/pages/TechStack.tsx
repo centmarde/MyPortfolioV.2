@@ -99,7 +99,7 @@ export default function TechStackShowcase() {
     {
       name: "Three Js",
       icon: <Store className="h-8 w-8" />,
-      image: "/logo/Three.js.png?text=Pinia&height=40&width=40",
+      image: "/logo/three.png?text=Pinia&height=40&width=40",
     },
     {
       name: "Vuetify",
