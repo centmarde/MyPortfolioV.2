@@ -18,7 +18,8 @@
     "techStack": [
       "/logo/Vue.js.png",
       "/logo/Veutify.png",
-      "/logo/supabase.svg"
+      "/logo/supabase.svg",
+      "/logo/pinia.png"
     ]
   },
   {
@@ -36,8 +37,10 @@
     "techStack": [
       "/logo/Vue.js.png",
       "/logo/Veutify.png",
+        "/logo/pinia.png",
       "/logo/supabase.svg",
       "/logo/three.png",
+      "/logo/paymongo.jpg",
       "/logo/Bootstrap.png"
     ]
   },
@@ -55,8 +58,33 @@
     "codeLink": "NDA",
     "techStack": [
       "/logo/Vue.js.png",
+      "/logo/pinia.png",
       "/logo/Veutify.png",
       "/logo/Laravel.png"
+    ]
+  },
+  {
+    "id": 3,
+    "title": "Idustrial Painter",
+    "description": "A School Project for HCI subject. A web application that Revolutionize your industrial painting workflow with our state-of-the-art solution. Manage projects, optimize resources, and deliver perfection on every surface.",
+    "image": "/works/IndustrialPainter/A1.png",
+    "images": [
+      "/works/IndustrialPainter/A2.png",
+     "/works/IndustrialPainter/A3.png",
+     "/works/IndustrialPainter/A4.png",
+      "/works/IndustrialPainter/A5.png",
+       "/works/IndustrialPainter/A6.png",
+        "/works/IndustrialPainter/A7.png",
+         "/works/IndustrialPainter/A8.png"
+    ],
+    "demoLink": "https://industrial-painter.vercel.app/",
+    "codeLink": "https://github.com/centmarde/Industrial-Painter-HCI-revise",
+    "techStack": [
+      "/logo/React.png",
+      "/logo/Material UI.png",
+      "/logo/zustand.svg",
+      "/logo/Firebase.png",
+      "/logo/supabase.svg"
     ]
   }
 ]
