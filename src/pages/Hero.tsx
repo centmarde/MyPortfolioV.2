@@ -317,7 +317,7 @@ export default function Hero({ onFullyLoaded }: HeroProps) {
     >
       {!isLoaded && (
         <div className="fixed inset-0 bg-light-primary dark:bg-dark-background z-50 flex items-center justify-center">
-          <div className="text-2xl font-bold">Loading...</div>
+          <div className="text-2xl font-bold">Loading assets...</div>
         </div>
       )}
       
