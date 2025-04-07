@@ -73,19 +73,26 @@ export function ThreeDCardDemo({ title, description, image, demoLink, codeLink, 
         <CardItem
           translateZ="80"
           className="flex gap-4 mt-4 w-full"
-          onClick={(e: React.MouseEvent) => e.stopPropagation()} // Fixed: properly typed event parameter
+          onClick={(e: React.MouseEvent) => e.stopPropagation()}
         >
-          {demoLink && (
-            <a 
-              href={demoLink} 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-blue-500 hover:text-blue-700 text-sm font-medium transition-colors"
-              onClick={(e: React.MouseEvent) => e.stopPropagation()} // Fixed: properly typed event parameter
-            >
-              Live Demo →
-            </a>
-          )}
+          {demoLink ? (
+            demoLink === "N/A" ? (
+              <span className="text-gray-500 dark:text-gray-400 text-sm font-medium">
+                Archive code only
+              </span>
+            ) : (
+              <a 
+                href={demoLink} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-blue-500 hover:text-blue-700 text-sm font-medium transition-colors"
+                onClick={(e: React.MouseEvent) => e.stopPropagation()}
+              >
+                Live Demo →
+              </a>
+            )
+          ) : null}
+          
           {codeLink && (
             codeLink === "NDA" ? (
               <span className="text-gray-500 dark:text-gray-400 text-sm font-medium">
@@ -97,7 +104,7 @@ export function ThreeDCardDemo({ title, description, image, demoLink, codeLink, 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white text-sm font-medium transition-colors"
-                onClick={(e: React.MouseEvent) => e.stopPropagation()} // Fixed: properly typed event parameter
+                onClick={(e: React.MouseEvent) => e.stopPropagation()}
               >
                 Source Code →
               </a>
