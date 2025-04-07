@@ -45,7 +45,7 @@
     ]
   },
   {
-    "id": 2,
+    "id": 3,
     "title": "Reald D2D",
     "description": "serves as a comprehensive platform tailored to the needs of real estate professionals, offering a range of features designed to streamline various aspects of their workflow.",
     "image": "/works/Reald2d/B1.png",
@@ -64,7 +64,7 @@
     ]
   },
   {
-    "id": 3,
+    "id": 4,
     "title": "Idustrial Painter",
     "description": "A School Project for HCI subject. A web application that Revolutionize your industrial painting workflow with our state-of-the-art solution. Manage projects, optimize resources, and deliver perfection on every surface.",
     "image": "/works/IndustrialPainter/A1.png",
@@ -85,6 +85,24 @@
       "/logo/zustand.svg",
       "/logo/Firebase.png",
       "/logo/supabase.svg"
+    ]
+  },
+   {
+    "id": 5,
+    "title": "Daily Bite",
+    "description": "A mobile meal planning app that helps you plan your meals for the week. It allows you to create a meal plan, generate a shopping list, and track your progress.",
+    "image": "/works/DailyBite/A1.png",
+    "images": [
+     "/works/DailyBite/A2.jpg",
+      "/works/DailyBite/A3.jpg",
+      "/works/DailyBite/A4.jpg",
+      "/works/DailyBite/A5.jpg"
+    ],
+    "demoLink": "N/A",
+    "codeLink": "https://github.com/centmarde/NutriPlan",
+    "techStack": [
+      "/logo/Flutter.png",
+      "/logo/Firebase.png"
     ]
   }
 ]
