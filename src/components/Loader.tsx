@@ -67,7 +67,7 @@ export default function Loading({ onLoadingComplete }: LoadingProps) {
 
   return (
     <div 
-      className={`fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-gradient-to-br from-light-primary via-light-secondary to-light-tertiary dark:from-dark-background dark:via-dark-tertiary dark:to-dark-secondary transition-opacity duration-600 ${fadeOut ? 'opacity-0' : 'opacity-100'}`}
+      className={`fixed inset-0 z-[99999] flex flex-col items-center justify-center bg-gradient-to-br from-light-primary via-light-secondary to-light-tertiary dark:from-dark-background dark:via-dark-tertiary dark:to-dark-secondary transition-opacity duration-600 ${fadeOut ? 'opacity-0' : 'opacity-100'}`}
       style={{ 
         pointerEvents: fadeOut ? "none" : "all",
         width: "100vw",
