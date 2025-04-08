@@ -139,7 +139,7 @@ const LoadingFallback = () => {
   return (
     <Html center>
       <div className="flex flex-col items-center justify-center">
-        <div className="text-2xl font-bold mb-2">Loading</div>
+        <div className="text-2xl font-bold mb-2">Loading Models</div>
         <div className="text-lg">{progress.toFixed(0)}%</div>
       </div>
     </Html>
@@ -248,10 +248,12 @@ export default function Hero({ onFullyLoaded }: HeroProps) {
       {
         opacity: 0,
         y: 20,
+        zIndex: 0,
       },
       {
         opacity: 1,
         y: 0,
+        zIndex: 10,
         scrollTrigger: {
           trigger: containerRef.current,
           start: "top top",
@@ -262,6 +264,7 @@ export default function Hero({ onFullyLoaded }: HeroProps) {
           gsap.to(quoteRef.current, {
             opacity: 0,
             y: -20,
+            zIndex: 0,
             scrollTrigger: {
               trigger: containerRef.current,
               start: "50% top",
