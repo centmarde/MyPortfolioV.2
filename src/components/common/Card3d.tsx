@@ -23,7 +23,7 @@ export function ThreeDCardDemo({ title, description, image, demoLink, codeLink, 
   };
 
   return (
-    <CardContainer className="inter-var h-auto w-full sm:w-[400px] sm:h-[490px] mx-auto z-50">
+    <CardContainer className="inter-var h-auto w-full sm:w-[400px] sm:h-[490px] mx-auto z-20">
       <CardBody 
         className="bg-gray-20 relative group/card dark:hover:shadow-2xl dark:hover:shadow-emerald-500/[0.1] 
                   dark:bg-black dark:border-white/[0.2] border-black/[0.1] w-full h-auto 

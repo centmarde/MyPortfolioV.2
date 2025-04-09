@@ -104,5 +104,29 @@
       "/logo/Flutter.png",
       "/logo/Firebase.png"
     ]
+  },
+  {
+    "id": 6,
+    "title": "Performance Monitoring System",
+    "description": "Innovation for Deped Electronic Class Record System. A web application that allows you to monitor the performance of your students.",
+    "image": "/works/PMS/A1.png",
+    "images": [
+     "/works/PMS/A2.png",
+      "/works/PMS/A3.png",
+      "/works/PMS/A4.png",
+      "/works/PMS/A5.png",
+      "/works/PMS/A6.png",
+      "/works/PMS/A7.png"
+      
+     
+    ],
+    "demoLink": "https://performancemonitoring.vercel.app/",
+    "codeLink": "https://github.com/centmarde/Performance-Monitoring-System",
+    "techStack": [
+      "/logo/Vue.js.png",
+      "/logo/Veutify.png",
+      "/logo/supabase.svg",
+      "/logo/pinia.png"
+    ]
   }
 ]
