@@ -9,10 +9,11 @@ interface ProjectCardProps {
   demoLink?: string;
   codeLink?: string;
   techStack?: string[];
+  tag?: string;  // Add tag property to interface
   onClick?: () => void;
 }
 
-export function ThreeDCardDemo({ title, description, image, demoLink, codeLink, techStack, onClick }: ProjectCardProps) {
+export function ThreeDCardDemo({ title, description, image, demoLink, codeLink, techStack, tag, onClick }: ProjectCardProps) {
   // Add state to track if description is expanded
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -30,10 +31,19 @@ export function ThreeDCardDemo({ title, description, image, demoLink, codeLink, 
                   sm:w-[490px] sm:h-[500px] rounded-xl p-4 sm:p-6 border flex flex-col" 
         onClick={onClick}
       >
-        {/* The entire card is now clickable */}
+        {/* Tag Badge */}
+        {tag && (
+          <CardItem
+            translateZ="60"
+            className="absolute top-3 right-3 text-xs font-semibold px-2 py-1"
+          >
+            {tag}
+          </CardItem>
+        )}
+        
         <CardItem
           translateZ="50"
-          className="text-xl font-bold text-neutral-600 dark:text-white"
+          className="text-xl mt-5 font-bold text-neutral-600 dark:text-white"
         >
           {title}
         </CardItem>

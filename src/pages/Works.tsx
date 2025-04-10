@@ -5,6 +5,7 @@ import ImageDialog from '../components/common/ImageDialog';
 
 interface Project {
   id: number;
+  tag: string; // Make sure tag is defined in the interface
   title: string;
   description: string;
   image: string;
@@ -82,6 +83,7 @@ const Works: React.FC = () => {
               demoLink={project.demoLink}
               codeLink={project.codeLink}
               techStack={project.techStack} // Pass the techStack to the component
+              tag={project.tag} // Pass the tag property
               onClick={() => openImageDialog(project)}
             />
           </div>
