@@ -2,17 +2,18 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { ThreeDCardDemo } from '../components/common/Card3d';
 import ImageDialog from '../components/common/ImageDialog';
+import { PaginationComponent } from '../components/pagination';
 
 interface Project {
   id: number;
-  tag: string; // Make sure tag is defined in the interface
+  tag: string;
   title: string;
   description: string;
   image: string;
   images: string[];
   demoLink: string;
   codeLink: string;
-  techStack: string[]; // Add techStack property to Project interface
+  techStack: string[];
 }
 
 const Works: React.FC = () => {
@@ -21,6 +22,10 @@ const Works: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const cardsPerPage = 6;
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -48,6 +53,17 @@ const Works: React.FC = () => {
     setIsDialogOpen(false);
   };
 
+  // Handle page change
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  // Calculate pagination values
+  const indexOfLastProject = currentPage * cardsPerPage;
+  const indexOfFirstProject = indexOfLastProject - cardsPerPage;
+  const currentProjects = projects.slice(indexOfFirstProject, indexOfLastProject);
+  const totalPages = Math.ceil(projects.length / cardsPerPage);
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -73,7 +89,7 @@ const Works: React.FC = () => {
       </p>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
-        {projects.map((project) => (
+        {currentProjects.map((project) => (
           <div key={project.id} className="flex justify-center">
             <ThreeDCardDemo
               title={project.title}
@@ -82,13 +98,24 @@ const Works: React.FC = () => {
               images={project.images || [project.image]}
               demoLink={project.demoLink}
               codeLink={project.codeLink}
-              techStack={project.techStack} // Pass the techStack to the component
-              tag={project.tag} // Pass the tag property
+              techStack={project.techStack}
+              tag={project.tag}
               onClick={() => openImageDialog(project)}
             />
           </div>
         ))}
       </div>
+      
+      {/* Add pagination component */}
+      {totalPages > 1 && (
+        <div className="mt-10 flex justify-center">
+          <PaginationComponent 
+            currentPage={currentPage} 
+            totalPages={totalPages} 
+            onPageChange={handlePageChange} 
+          />
+        </div>
+      )}
       
       {selectedProject && (
         <ImageDialog 

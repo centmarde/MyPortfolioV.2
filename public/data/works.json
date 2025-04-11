@@ -166,5 +166,26 @@
       "/logo/Ionic.png",
       "/logo/Capacitor.png"
     ]
+  },
+  {
+    "id": 8,
+    "tag":"School Project",
+    "title": "Chatting Hub",
+    "description": "This project is a secure chat application built using Django REST Framework (DRF) for the backend and Vue.js/Svelte for the frontend. The application supports user authentication, secure message transmission, and a dashboard for managing users and messages.",
+    "image":   "/works/ChattingHub/a1.png",
+    "images": [
+     "/works/ChattingHub/a2.png",
+     "/works/ChattingHub/a3.png"
+    
+    ],
+    "demoLink": "N/A",
+    "codeLink": "https://github.com/centmarde/ChattingHub?tab=readme-ov-file",
+    "techStack": [
+      "/logo/Vue.js.png",
+      "/logo/Veutify.png",
+      "/logo/Svelte.png",
+      "/logo/Material UI.png",
+      "/logo/Django.png"
+    ]
   }
 ]
