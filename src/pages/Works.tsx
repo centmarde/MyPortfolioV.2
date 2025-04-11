@@ -66,9 +66,9 @@ const Works: React.FC = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-4xl font-bold mb-6 text-center">My Projects</h1>
+      <h1 className="text-4xl font-bold mb-6 text-center">Highlighted Projects</h1>
       <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 text-center max-w-3xl mx-auto">
-        Explore my recent work and projects. Each project represents a unique challenge and solution.
+        Explore my recent work and highlighted projects. Each project represents a unique challenge and solution.
         <span className="block mt-2 text-sm italic">Click on any card to view more project images</span>
       </p>
       
