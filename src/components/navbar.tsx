@@ -27,7 +27,7 @@ export default function Navbar({ activeTab, setActiveTab }: NavbarProps) {
   useEffect(() => {
     // Move indicator to active tab
     const activeTabElement = tabsRef.current.find(
-      (_, index) => ["home", "background", "stack", "certificates", "projects", "skills", "contacts"][index] === activeTab
+      (_, index) => ["home", "background", "stack", "certificates", "projects", "skills"][index] === activeTab
     )
     
     if (activeTabElement && indicatorRef.current) {
@@ -78,7 +78,7 @@ export default function Navbar({ activeTab, setActiveTab }: NavbarProps) {
             { name: "Certificates", id: "certificates" },
             { name: "Projects", id: "projects" },
             { name: "Other Skills", id: "skills" },
-            { name: "Contacts", id: "contacts" },
+
           ].map((item, index) => (
             <button
               key={item.id}
@@ -227,7 +227,7 @@ function MobileMenu({
               { name: "Certificates", id: "certificates" },
               { name: "Projects", id: "projects" },
               { name: "Other Skills", id: "skills" },
-              { name: "Contacts", id: "contacts" },
+             
             ].map((item) => (
               <button
                 key={item.id}

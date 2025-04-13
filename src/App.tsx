@@ -12,6 +12,7 @@ import Apex from './pages/Apex';
 import Loading from './components/Loader';
 import Awards from './pages/Awards';
 import Works from './pages/Works';
+import Footer from './pages/Footer';
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
 
@@ -178,11 +179,10 @@ function AppContent({
         <p>skills information</p>
       </Section>
 
-      {/* Contacts Section */}
-      <Section id="contacts">
-        <p>contact information</p>
-      </Section>
+      
+      <Footer/>
     </div>
+    
   );
 }
 
