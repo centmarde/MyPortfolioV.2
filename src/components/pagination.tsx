@@ -45,7 +45,7 @@ export function PaginationComponent({ currentPage = 1, totalPages = 10, onPageCh
   const pageNumbers = getPageNumbers()
 
   return (
-    <Pagination>
+    <Pagination className="z-10">
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious

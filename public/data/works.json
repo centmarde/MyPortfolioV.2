@@ -187,5 +187,26 @@
       "/logo/Material UI.png",
       "/logo/Django.png"
     ]
+  },
+  {
+    "id": 9,
+    "tag":"Thesis Commission",
+    "title": "Smart Scheduler",
+    "description": "Comperative Research about 4 algorithms for best Teacher Schedule Generator. A web application that allows you to generate a schedule for your teachers.",
+    "image":   "/works/SmartScheduler/a1.png",
+    "images": [
+     "/works/SmartScheduler/a2.png",
+     "/works/SmartScheduler/a3.png",
+      "/works/SmartScheduler/a4.png"
+    
+    ],
+    "demoLink": "N/A",
+    "codeLink": "https://github.com/centmarde/SmartScheduler",
+    "techStack": [
+      "/logo/flask.png",
+      "/logo/Jupyter.png",
+      "/logo/Python.png",
+      "/logo/React.png"
+    ]
   }
 ]

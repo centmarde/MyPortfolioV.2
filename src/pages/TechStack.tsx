@@ -51,7 +51,7 @@ export default function TechStackShowcase() {
     {
       name: "Flask",
       icon: <Flask className="h-8 w-8" />,
-      image: "/logo/Flask.png?text=Flask&height=40&width=40",
+      image: "/logo/flask.png?text=Flask&height=40&width=40",
     },
     {
       name: "Laravel",
