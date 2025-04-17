@@ -108,7 +108,7 @@ const Works: React.FC = () => {
       
       {/* Add pagination component */}
       {totalPages > 1 && (
-        <div className="mt-10 flex justify-center">
+        <div className="mt-20 flex justify-start z-10">
           <PaginationComponent 
             currentPage={currentPage} 
             totalPages={totalPages} 
