@@ -132,15 +132,79 @@ export default function Home() {
               </div>
               <div className="flex justify-center lg:justify-end order-1 lg:order-2">
                 <div className="relative w-[280px] h-[320px] sm:w-[350px] sm:h-[400px] lg:w-[400px] lg:h-[450px] overflow-hidden rounded-lg">
-                  <div ref={imageRef} className="w-full h-full bg-muted">
-                    <img
-                      src="/test.jpg"
-                      alt="Profile Image"
-                      className="object-cover w-full h-full"
-                      width={400}
-                      height={450}
-                      loading="eager"
-                    />
+                  <div ref={imageRef} className="w-full h-full bg-muted relative">
+                    {/* Image carousel with animation */}
+                    {(() => {
+                      // Create a new ref for the carousel
+                      const imagesRef = useRef<HTMLDivElement[]>([]);
+                      
+                      useEffect(() => {
+                        // Initialize array if needed
+                        if (imagesRef.current.length !== 2) {
+                          imagesRef.current = [document.createElement('div'), document.createElement('div')];
+                        }
+                        
+                        // Initial setup - first image visible, second hidden
+                        gsap.set(imagesRef.current[0], { opacity: 1, scale: 1 });
+                        gsap.set(imagesRef.current[1], { opacity: 0, scale: 1.1 });
+                        
+                        // Create animation timeline
+                        const intervalId = setInterval(() => {
+                          // Find which image is currently visible
+                          const visibleIndex = imagesRef.current[0].style.opacity === '1' ? 0 : 1;
+                          const hiddenIndex = visibleIndex === 0 ? 1 : 0;
+                          
+                          // Animate out current image
+                          gsap.to(imagesRef.current[visibleIndex], {
+                            opacity: 0,
+                            scale: 0.9,
+                            duration: 0.8,
+                            ease: "power2.out"
+                          });
+                          
+                          // Animate in new image
+                          gsap.to(imagesRef.current[hiddenIndex], {
+                            opacity: 1,
+                            scale: 1,
+                            duration: 0.8,
+                            ease: "power2.inOut"
+                          });
+                        }, 5000);
+                        
+                        return () => clearInterval(intervalId);
+                      }, []);
+                      
+                      return (
+                        <>
+                          <div 
+                            ref={el => { if (el) imagesRef.current[0] = el; }} 
+                            className="absolute inset-0 transition-opacity"
+                          >
+                            <img
+                              src="/misc/marde.jpg"
+                              alt="Profile Image"
+                              className="object-cover w-full h-full"
+                              width={400}
+                              height={450}
+                              loading="eager"
+                            />
+                          </div>
+                          <div 
+                            ref={el => { if (el) imagesRef.current[1] = el; }} 
+                            className="absolute inset-0 transition-opacity"
+                          >
+                            <img
+                              src="/misc/marde2.jpg"
+                              alt="Profile Image"
+                              className="object-cover w-full h-full"
+                              width={400}
+                              height={450}
+                              loading="eager"
+                            />
+                          </div>
+                        </>
+                      );
+                    })()}
                   </div>
                 </div>
               </div>
