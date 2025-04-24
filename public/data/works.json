@@ -12,7 +12,8 @@
       "/works/Siniwali/S5.png",
       "/works/Siniwali/S6.png",
       "/works/Siniwali/S7.png",
-      "/works/Siniwali/S8.png"
+      "/works/Siniwali/S8.png",
+      "/works/Siniwali/S1.png"
     ],
     "demoLink": "https://sinawali-showdown.vercel.app/",
     "codeLink": "https://github.com/centmarde/Sinawali_Showdown-version-Alpha-0.0.1",
@@ -32,7 +33,8 @@
     "images": [
       "/works/AutoSolutions/A1.png",
       "/works/AutoSolutions/A3.png",
-      "/works/AutoSolutions/A4.png"
+      "/works/AutoSolutions/A4.png",
+      "/works/AutoSolutions/A2.png"
     ],
     "demoLink": "https://auto-solutions.vercel.app/",
     "codeLink": "https://github.com/centmarde/Auto-Solutions-Version2",
@@ -58,7 +60,8 @@
       "/works/Reald2d/B1.png",
      "/works/Reald2d/B2.png",
      "/works/Reald2d/B3.png",
-     "/works/Reald2d/B4.png"
+     "/works/Reald2d/B4.png",
+     "/works/Reald2d/A1.png"
     ],
     "demoLink": "https://staging.reald2d.org/",
     "codeLink": "NDA",
@@ -83,7 +86,8 @@
       "/works/IndustrialPainter/A5.png",
        "/works/IndustrialPainter/A6.png",
         "/works/IndustrialPainter/A7.png",
-         "/works/IndustrialPainter/A8.png"
+         "/works/IndustrialPainter/A8.png",
+         "/works/IndustrialPainter/A1.png"
     ],
     "demoLink": "https://industrial-painter.vercel.app/",
     "codeLink": "https://github.com/centmarde/Industrial-Painter-HCI-revise",
@@ -105,7 +109,8 @@
      "/works/DailyBite/A2.jpg",
       "/works/DailyBite/A3.jpg",
       "/works/DailyBite/A4.jpg",
-      "/works/DailyBite/A5.jpg"
+      "/works/DailyBite/A5.jpg",
+      "/works/DailyBite/A1.png"
     ],
     "demoLink": "N/A",
     "codeLink": "https://github.com/centmarde/NutriPlan",
@@ -126,7 +131,8 @@
       "/works/PMS/A4.png",
       "/works/PMS/A5.png",
       "/works/PMS/A6.png",
-      "/works/PMS/A7.png"
+      "/works/PMS/A7.png",
+      "/works/PMS/A1.png"
       
      
     ],
@@ -153,7 +159,8 @@
      "/works/SPD/A5.jpg",
      "/works/SPD/A6.jpg",
      "/works/SPD/A7.jpg",
-     "/works/SPD/A8.jpg"
+     "/works/SPD/A8.jpg",
+     "/works/SPD/Pest.png"
     ],
     "demoLink": "N/A",
     "codeLink": "https://github.com/centmarde/Smart-pest-detection",
@@ -175,7 +182,8 @@
     "image":   "/works/ChattingHub/a1.png",
     "images": [
      "/works/ChattingHub/a2.png",
-     "/works/ChattingHub/a3.png"
+     "/works/ChattingHub/a3.png",
+     "/works/ChattingHub/a1.png"
     
     ],
     "demoLink": "N/A",
@@ -197,7 +205,8 @@
     "images": [
      "/works/SmartScheduler/a2.png",
      "/works/SmartScheduler/a3.png",
-      "/works/SmartScheduler/a4.png"
+      "/works/SmartScheduler/a4.png",
+      "/works/SmartScheduler/a1.png"
     
     ],
     "demoLink": "N/A",
@@ -207,6 +216,29 @@
       "/logo/Jupyter.png",
       "/logo/Python.png",
       "/logo/React.png"
+    ]
+  },
+  {
+    "id": 10,
+    "tag":"Startup Project",
+    "title": "Scout Sphere",
+    "description": "Buneavista Heritage Preservation and tourism project. A web application that allows you to explore the heritage sites in Buenavista, Agusan del Norte.",
+    "image":   "/works/ScoutSphere/a1.png",
+    "images": [
+     "/works/ScoutSphere/a7.png",
+     "/works/ScoutSphere/a3.png",
+      "/works/ScoutSphere/a4.png",
+       "/works/ScoutSphere/a5.png",
+        "/works/ScoutSphere/a6.png",
+        "/works/ScoutSphere/a1.png"
+    
+    ],
+    "demoLink": "N/A",
+    "codeLink": "https://github.com/centmarde/Scout-Sphere",
+    "techStack": [
+      "/logo/gmap.png",
+      "/logo/React.png",
+      "/logo/supabase.svg"
     ]
   }
 ]

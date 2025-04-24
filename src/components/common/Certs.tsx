@@ -33,6 +33,23 @@ export function Certs({ items, itemType, bgPath, svgStyle, isDark }: CertsProps)
     setSelectedItem(null);
   };
 
+  // Function to extract month and year from date string
+  const formatDate = (dateStr: string | undefined) => {
+    // Check if dateStr is undefined or null
+    if (!dateStr) {
+      return { month: '', year: '' };
+    }
+    
+    // Expecting format like "June 2024" or "December 2024"
+    const parts = dateStr.split(' ');
+    if (parts.length === 2) {
+      const month = parts[0];
+      const year = parts[1];
+      return { month, year };
+    }
+    return { month: '', year: dateStr }; // fallback
+  };
+
   const gridCols = itemType === 'award' 
     ? "grid-cols-1 md:grid-cols-3" 
     : "grid-cols-1 md:grid-cols-2 lg:grid-cols-4";
@@ -60,14 +77,16 @@ export function Certs({ items, itemType, bgPath, svgStyle, isDark }: CertsProps)
               {/* Content */}
               <div className="relative z-10 p-6 flex flex-col h-full">
                 <div className="pb-2 text-center">
+                <div className={`${isDark ? 'text-dark-secondary' : 'text-muted-foreground'}`}>
+                <h2 className="text-5xl font-medium">{formatDate(item.date).year}</h2>
+                <span className="block text-xs">{formatDate(item.date).month}</span>
+                    </div>
                   <h3 className={`text-${itemType === 'award' ? 'xl' : 'lg'} font-bold ${isDark ? 'text-dark-primary' : 'text-foreground'}`}>
                     {item.title}
                   </h3>
                   <div className={`mt-${itemType === 'award' ? '1.5' : '1'}`}>
                     <span className="block">{item.issuer}</span>
-                    <span className={`text-sm ${isDark ? 'text-dark-secondary' : 'text-muted-foreground'}`}>
-                      {item.date}
-                    </span>
+                   
                   </div>
                 </div>
                
