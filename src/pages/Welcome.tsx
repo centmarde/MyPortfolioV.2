@@ -16,6 +16,17 @@ export default function Home() {
   const imageRef = useRef<HTMLDivElement>(null)
   const sectionRef = useRef<HTMLDivElement>(null)
 
+  // Function to scroll to projects section
+  const scrollToProjects = () => {
+    const projectsSection = document.getElementById('projects');
+    if (projectsSection) {
+      projectsSection.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  };
+
   useEffect(() => {
     // Create a timeline for sequenced animations
     const tl = gsap.timeline({
@@ -101,15 +112,22 @@ export default function Home() {
                   </h1>
                   <p ref={descriptionRef} className="max-w-[600px] text-muted-foreground md:text-xl">
                     A passionate full-stack developer specializing in building exceptional digital experiences. I focus
-                    on creating responsive, user-friendly applications with modern technologies.
+                    on creating responsive, user-friendly applications with modern technologies and best practices.
                   </p>
                 </div>
                 <div ref={buttonsRef} className="flex flex-col gap-2 min-[400px]:flex-row">
-                  <Button className="inline-flex items-center gap-2">
+                  <Button 
+                    className="inline-flex items-center gap-2"
+                    onClick={scrollToProjects}
+                  >
                     View My Work
                     <ArrowRight className="h-4 w-4" />
                   </Button>
-                  <Button variant="outline">Download Resume</Button>
+                  <Button variant="outline" asChild>
+  <a href="/path/to/your/resume.pdf" target="_blank" rel="noopener noreferrer">
+    Download Resume
+  </a>
+</Button>
                 </div>
                 <div ref={socialsRef} className="flex gap-4 mt-4">
                   <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">

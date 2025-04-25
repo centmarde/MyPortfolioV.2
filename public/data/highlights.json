@@ -96,11 +96,18 @@
         "provider": "DOST Philippines",
         "date": "November 2024",
         "description": "Three-day program focused on game development."
+      },
+      {
+        "title": "Caraga Startup Pitch Fest 2025",
+        "provider": "DOST Philippines",
+        "date": "April 2025",
+        "description": "Innovating for Regional Development"
       }
     ],
     "conferences": [
       { "name": "11th ICT Student Congress and Skills Competition", "location": "Philippines, Butuan", "year": "2023" },
-      { "name": "Level up DOST Esports game development", "location": "Philippines, Cagayan", "year": "2024" }
+      { "name": "Level up DOST Esports game development", "location": "Philippines, Cagayan", "year": "2024" },
+      { "name": "Caraga Startup Pitch Fest", "location": "Philippines, Butuan", "year": "2025" }
     ],
     "speaking": [
      

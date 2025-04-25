@@ -127,9 +127,9 @@ export default function TechStackShowcase() {
       image: "/logo/Flutter.png?text=Flutter&height=40&width=40",
     },
     {
-      name: "Git",
+      name: "Google Map Api",
       icon: <Code2 className="h-8 w-8" />,
-      image: "/logo/Git.png?text=Git&height=40&width=40",
+      image: "/logo/gmap.png?text=Git&height=40&width=40",
     },
   ]
 
