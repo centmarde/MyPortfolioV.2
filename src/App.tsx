@@ -13,6 +13,7 @@ import Loading from './components/Loader';
 import Awards from './pages/Awards';
 import Works from './pages/Works';
 import Footer from './pages/Footer';
+import OtherPage from './pages/Other';
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
 
@@ -80,7 +81,7 @@ function AppContent({
 }) {
   const { theme } = useTheme();
   const sectionsRef = useRef<HTMLElement[]>([]);
-  const sectionIds = ["home", "background", "stack", "certificates", "projects", "skills", "contacts"];
+  const sectionIds = ["home", "background", "stack", "certificates", "projects", "others", "contacts"];
   
   // Handle hero content loaded
   const handleHeroLoaded = () => {
@@ -175,8 +176,8 @@ function AppContent({
       </Section>
 
       {/* Other Skills Section */}
-      <Section id="skills">
-        <p>skills information</p>
+      <Section id="others">
+        <OtherPage />
       </Section>
 
       

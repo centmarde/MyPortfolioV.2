@@ -77,7 +77,7 @@ export default function Navbar({ activeTab, setActiveTab }: NavbarProps) {
             { name: "Stack", id: "stack" },
             { name: "Certificates", id: "certificates" },
             { name: "Projects", id: "projects" },
-            { name: "Other Skills", id: "skills" },
+            { name: "Other Skills", id: "others" },
 
           ].map((item, index) => (
             <button
