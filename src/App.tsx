@@ -13,6 +13,7 @@ import Loading from './components/Loader';
 import Awards from './pages/Awards';
 import Works from './pages/Works';
 import Footer from './pages/Footer';
+import OtherPage from './pages/Other';
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
 
@@ -20,17 +21,62 @@ gsap.registerPlugin(ScrollTrigger);
 const Section = ({ 
   id, 
   title, 
-  children 
+  children,
+  forceTheme,
+  isFirstSection = false
 }: { 
   id: string; 
   title?: string; // Make title optional
-  children: React.ReactNode 
+  children: React.ReactNode;
+  forceTheme?: 'light' | 'dark'; // Add optional forceTheme prop
+  isFirstSection?: boolean; // New prop to identify first section
 }) => {
-  const { theme } = useTheme();
+  const { theme, setTheme } = useTheme();
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const previousThemeRef = useRef<string | null>(null);
+  
+  useEffect(() => {
+    if (!forceTheme || !sectionRef.current) return;
+    
+    // Create a scroll trigger that changes the theme when this section is visible
+    const trigger = ScrollTrigger.create({
+      trigger: sectionRef.current,
+      start: "top 50%", 
+      end: "bottom 50%",
+      onEnter: () => {
+        // Save current theme before changing
+        previousThemeRef.current = theme;
+        setTheme(forceTheme);
+      },
+      onLeave: () => {
+        // Restore previous theme when scrolling away
+        if (previousThemeRef.current) {
+          setTheme(previousThemeRef.current as "light" | "dark");
+        }
+      },
+      onEnterBack: () => {
+        // Re-apply forced theme when scrolling back up
+        previousThemeRef.current = theme;
+        setTheme(forceTheme);
+      },
+      onLeaveBack: () => {
+        // Restore previous theme when scrolling back up and leaving section
+        if (previousThemeRef.current) {
+          setTheme(previousThemeRef.current as "light" | "dark");
+        }
+      }
+    });
+    
+    // Cleanup function
+    return () => {
+      trigger.kill();
+    };
+  }, [forceTheme, theme, setTheme]);
   
   return (
     <section 
-      id={id} 
+      id={isFirstSection ? "home" : id} 
+      ref={sectionRef}
       className={`min-h-screen py-20 px-4 ${
         theme === "light" ? "bg-[#EEF1DA] text-[#3C3D37]" : "bg-[#181C14] text-[#ECDFCC]"
       }`}
@@ -52,6 +98,23 @@ const Section = ({
 function App() {
   const [activeTab, setActiveTab] = useState("home");
   const [loading, setLoading] = useState(true);
+  
+  // Add effect to scroll to top on page load
+  useEffect(() => {
+    // Reset scroll position when the app loads
+    window.history.scrollRestoration = 'manual';
+    window.scrollTo(0, 0);
+    
+    // Remove any hash from the URL to prevent automatic scrolling
+    if (window.location.hash) {
+      const scrollToTop = () => {
+        window.scrollTo(0, 0);
+        history.pushState('', document.title, window.location.pathname + window.location.search);
+      };
+      // Use setTimeout to ensure this happens after browser's default scroll behavior
+      setTimeout(scrollToTop, 0);
+    }
+  }, []);
   
   return (
     <ThemeProvider>
@@ -80,7 +143,7 @@ function AppContent({
 }) {
   const { theme } = useTheme();
   const sectionsRef = useRef<HTMLElement[]>([]);
-  const sectionIds = ["home", "background", "stack", "certificates", "projects", "skills", "contacts"];
+  const sectionIds = ["home", "background", "stack", "certificates", "projects", "others", "contacts"];
   
   // Handle hero content loaded
   const handleHeroLoaded = () => {
@@ -175,8 +238,8 @@ function AppContent({
       </Section>
 
       {/* Other Skills Section */}
-      <Section id="skills">
-        <p>skills information</p>
+      <Section id="others" forceTheme="dark">
+        <OtherPage />
       </Section>
 
       

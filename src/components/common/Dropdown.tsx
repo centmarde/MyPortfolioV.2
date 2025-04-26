@@ -7,6 +7,7 @@ interface ScrollDownProps {
   onClick?: () => void;
   size?: number;
   showText?: boolean;
+  techStack?: { src: string; alt: string }[];
 }
 
 const ScrollDownContainer = styled.div<{ color: string; size: number }>`
@@ -92,18 +93,65 @@ const ScrollText = styled(motion.div)<{ color: string }>`
   font-family: sans-serif;
 `;
 
+const TechStackContainer = styled(motion.div)`
+  display: flex;
+  justify-content: center;
+  gap: 10px; // Further reduced gap
+  margin-bottom: 8px; // Smaller margin
+  max-width: 220px; // Even narrower
+  margin: 0 auto 8px auto;
+`;
+
+const TechItem = styled(motion.div)`
+  width: 24px; // Even smaller size
+  height: 24px; // Even smaller size
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const TechImage = styled.img`
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+`;
+
 const Title = styled(motion.div)<{ color: string }>`
   color: ${props => props.color};
-  font-size: 50px;
-  margin-left: 20px;
+  font-size: 36px; // Further reduced font size
   text-align: center;
-  margin-bottom: 12px;
+  margin-bottom: 5px; // Smaller margin
   font-family: "Metal Mania", system-ui;
   font-weight: 400;
   font-style: normal;
+  margin-left: 0; // Remove left margin
 `;
 
-const ScrollDown: React.FC<ScrollDownProps> = ({ color = 'skyblue', onClick, size = 30, showText = true }) => {
+const BuiltWith = styled(motion.div)<{ color: string }>`
+  color: ${props => props.color};
+  font-size: 10px; // Smaller font
+  text-align: center;
+  margin-bottom: 6px;
+  font-family: sans-serif;
+  opacity: 0.8;
+  letter-spacing: 0.8px;
+`;
+
+const ScrollDown: React.FC<ScrollDownProps> = ({ 
+  color = 'skyblue', 
+  onClick, 
+  size = 22, // Even smaller default size
+  showText = true, 
+  techStack = [
+    { src: '/logo/React.png', alt: 'React' },
+    { src: '/logo/three.png', alt: 'Three' },
+    { src: '/logo/Tailwind CSS.png', alt: 'tailwind' },
+    { src: '/logo/typescript.png', alt: 'typescript' },
+  ] 
+}) => {
+  // Create tech names for "Built With" text
+  const techNames = techStack.map(tech => tech.alt).join(' · ');
+  
   return (
     <div className="flex flex-col items-center">
       <Title 
@@ -114,6 +162,36 @@ const ScrollDown: React.FC<ScrollDownProps> = ({ color = 'skyblue', onClick, siz
       >
         THE APEX PREDATOR
       </Title>
+      
+      <BuiltWith
+        color={color}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.7, duration: 0.5 }}
+      >
+        BUILT WITH: {techNames}
+      </BuiltWith>
+      
+      {techStack.length > 0 && (
+        <TechStackContainer
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.5 }}
+        >
+          {techStack.map((tech, index) => (
+            <TechItem 
+              key={index}
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.6 + index * 0.1, duration: 0.4 }}
+              whileHover={{ scale: 1.2 }}
+            >
+              <TechImage src={tech.src} alt={tech.alt} />
+            </TechItem>
+          ))}
+        </TechStackContainer>
+      )}
+      
       <ScrollDownContainer color={color} size={size} onClick={onClick}>
         <Chevrons size={size}>
           <ChevronDown 
@@ -150,6 +228,7 @@ const ScrollDown: React.FC<ScrollDownProps> = ({ color = 'skyblue', onClick, siz
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5, duration: 0.5 }}
+          style={{ fontSize: '12px', marginTop: '8px' }} // Smaller text
         >
           Scroll Down
         </ScrollText>
@@ -168,7 +247,7 @@ export const ScrollReminder: React.FC<{
 }> = ({ 
   threshold = 100, 
   color = 'skyblue', 
-  size = 30,
+  size = 22, // Even smaller size
   hideAfter = 5000,
   onReturn = false,
   showText = true
@@ -219,6 +298,12 @@ export const ScrollReminder: React.FC<{
         onClick={handleClick}
         size={size}
         showText={showText}
+        techStack={[
+          { src: '/logo/React.png', alt: 'React' },
+          { src: '/logo/three.png', alt: 'Three' },
+          { src: '/logo/Tailwind CSS.png', alt: 'tailwind' },
+          { src: '/logo/typescript.png', alt: 'typescript' },
+        ]}
       />
     </motion.div>
   ) : null;
