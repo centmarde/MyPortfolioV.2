@@ -1,24 +1,21 @@
-
 import ChatBox from "@/components/Chat";
 import ChatModel from "@/components/ChatModel";
 
 export default function OtherPage() {
   return (
-    <div className="container mx-auto py-12">
-      
-      <div className="flex flex-col lg:flex-row gap-8 w-full">
-        {/* 3D Model Canvas */}
-        <div className="w-full lg:w-2/5 h-[500px] overflow-hidden">
+    <div className="relative w-full h-screen">
+      {/* Container for the two-column layout */}
+      <div className="flex flex-row w-full">
+        {/* Left column for ChatModel */}
+        <div className="w-2/5 h-full">
           <ChatModel />
         </div>
         
-        {/* ChatBox */}
-        <div className="w-full lg:w-3/5">
+        {/* Right column for ChatBox - removed h-full to prevent stretching */}
+        <div className="w-3/5 flex items-start pt-50">
           <ChatBox />
         </div>
       </div>
-      
-     
     </div>
   );
 }

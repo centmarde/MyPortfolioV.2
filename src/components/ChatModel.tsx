@@ -1,50 +1,169 @@
 "use client"
 
-import React, { useRef } from 'react'
+import { useRef, useMemo, useEffect } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { OrbitControls, useGLTF, Environment, ContactShadows } from '@react-three/drei'
 import { useTheme } from './theme-provider'
 import * as THREE from 'three'
 
-function Model() {
-  const { theme } = useTheme()
-  const meshRef = useRef<THREE.Mesh>(null!)
+function ImportedModel() {
+  const { scene } = useGLTF('/glb/blackhole.glb')
+  const modelRef = useRef<THREE.Group>(null!)
   
-  // Simple cube as placeholder - can be replaced with a more complex model using useGLTF
   useFrame((state, delta) => {
-    if (meshRef.current) {
-      meshRef.current.rotation.x += delta * 0.2
-      meshRef.current.rotation.y += delta * 0.3
+    if (modelRef.current) {
+      // Slow rotation for dramatic effect
+      modelRef.current.rotation.y += delta * 0.2
+      // Subtle oscillation up and down
+      modelRef.current.position.y = -1 + Math.sin(state.clock.elapsedTime * 0.5) * 0.1
     }
   })
-
-  return (
-    <mesh ref={meshRef} castShadow receiveShadow>
-      <boxGeometry args={[2, 2, 2]} />
-      <meshStandardMaterial 
-        color={theme === 'dark' ? '#ECDFCC' : '#3C3D37'} 
-        metalness={0.5}
-        roughness={0.3}
-      />
-    </mesh>
-  )
+  
+  // Position adjusted to better appear on the left side
+  return <primitive ref={modelRef} object={scene} scale={1.5} position={[-1,6, 0]} />
 }
 
-// Uncomment and modify this if you want to use a GLTF model
-// function ImportedModel() {
-//   const { scene } = useGLTF('/path/to/your/model.gltf')
-//   return <primitive object={scene} scale={1.5} position={[0, -1, 0]} />
-// }
+function BlackholeParticles() {
+  const count = 500; // Number of particles
+  // Change to viewport center - this is the center point where particles will shrink towards
+  const attractionPoint = new THREE.Vector3(-1, -1, 0);
+  // Add cursor position as a second attraction point
+  const cursorPoint = useRef(new THREE.Vector3(100, 100, 0)); // Start far away to have no initial effect
+  
+  // Create particles with random positions
+  const particles = useMemo(() => {
+    const temp = [];
+    for (let i = 0; i < count; i++) {
+      // Distribute particles in a sphere around the viewport
+      const radius = 10 + Math.random() * 15;
+      const theta = Math.random() * 2 * Math.PI;
+      const phi = Math.acos(2 * Math.random() - 1);
+      
+      // Position relative to the center of the viewport, not the blackhole
+      const x = radius * Math.sin(phi) * Math.cos(theta);
+      const y = radius * Math.sin(phi) * Math.sin(theta);
+      const z = radius * Math.cos(phi);
+      
+      // Each particle has position, velocity, and size
+      temp.push({
+        position: new THREE.Vector3(x, y, z),
+        velocity: new THREE.Vector3(0, 0, 0),
+        size: 0.05 + Math.random() * 0.1,
+      });
+    }
+    return temp;
+  }, []);
+  
+  // Create references for instanced mesh and particles
+  const instancedMeshRef = useRef<THREE.InstancedMesh>(null!);
+  const dummy = useMemo(() => new THREE.Object3D(), []);
+
+  // Set up mouse tracking
+  useEffect(() => {
+    // Convert mouse position to normalized device coordinates (-1 to +1)
+    const handleMouseMove = (event: MouseEvent) => {
+      const x = (event.clientX / window.innerWidth) * 2 - 1;
+      const y = -(event.clientY / window.innerHeight) * 2 + 1;
+      // Set cursor point at a fixed z distance to create a plane in 3D space
+      cursorPoint.current.set(x * 10, y * 5, 5);
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, []);
+  
+  // Animation loop for particles
+  useFrame((_, delta) => {
+    if (instancedMeshRef.current) {
+      particles.forEach((particle, i) => {
+        // Calculate direction to the main attraction point (blackhole center)
+        const directionToCenter = new THREE.Vector3().subVectors(attractionPoint, particle.position).normalize();
+        const distanceToCenter = particle.position.distanceTo(attractionPoint);
+        const gravity = Math.max(0.01, 1 / (distanceToCenter * distanceToCenter)) * 0.5;
+        
+        // Calculate direction and force to cursor - subtle magnetic effect
+        const directionToCursor = new THREE.Vector3().subVectors(cursorPoint.current, particle.position).normalize();
+        const distanceToCursor = particle.position.distanceTo(cursorPoint.current);
+        
+        // Subtle magnetic effect that's stronger when particles are closer to cursor
+        // but doesn't overpower the black hole's main attraction
+        const maxCursorDistance = 6; // Maximum effective distance
+        const cursorInfluence = Math.max(0, 1 - (distanceToCursor / maxCursorDistance));
+        const cursorForce = cursorInfluence * 0.3; // Subtle force multiplier
+        
+        // Apply forces to velocity - blackhole is primary, cursor is secondary
+        particle.velocity.add(directionToCenter.multiplyScalar(gravity * delta));
+        particle.velocity.add(directionToCursor.multiplyScalar(cursorForce * delta));
+        
+        // Add some damping to prevent excessive speed
+        particle.velocity.multiplyScalar(0.98);
+        
+        // Update position
+        particle.position.add(particle.velocity);
+        
+        // If particle gets too close to the center, reset it at a random far position
+        if (distanceToCenter < 1) {
+          // Reset particle position
+          const radius = 15 + Math.random() * 10;
+          const theta = Math.random() * 2 * Math.PI;
+          const phi = Math.acos(2 * Math.random() - 1);
+          
+          particle.position.set(
+            radius * Math.sin(phi) * Math.cos(theta),
+            radius * Math.sin(phi) * Math.sin(theta),
+            radius * Math.cos(phi)
+          );
+          particle.velocity.set(0, 0, 0);
+        }
+        
+        // Scale down particles as they get closer to the center or cursor
+        const scale = Math.min(
+          particle.size, 
+          particle.size * (distanceToCenter / 8),
+          // Make particles glow a bit when near cursor by increasing their size slightly
+          distanceToCursor < 3 ? particle.size * 1.5 : particle.size
+        );
+        
+        // Update instanced mesh
+        dummy.position.copy(particle.position);
+        dummy.scale.set(scale, scale, scale);
+        dummy.updateMatrix();
+        instancedMeshRef.current.setMatrixAt(i, dummy.matrix);
+      });
+      
+      instancedMeshRef.current.instanceMatrix.needsUpdate = true;
+    }
+  });
+  
+  return (
+    <instancedMesh ref={instancedMeshRef} args={[undefined as any, undefined as any, count]}>
+      <sphereGeometry args={[1, 8, 8]} />
+      <meshStandardMaterial 
+        color="#ffffff" 
+        transparent 
+        opacity={0.8}
+        metalness={0.8}
+        roughness={0.2}
+        envMapIntensity={1}
+      />
+    </instancedMesh>
+  );
+}
 
 export default function ChatModel() {
   const { theme } = useTheme()
   
   return (
-    <div className="w-full h-full min-h-[400px]">
-      <Canvas shadows camera={{ position: [0, 0, 5], fov: 80 }}>
+    <div className="w-full h-full min-h-[400px] absolute left-0 top-0 pointer-events-none">
+      <Canvas 
+        shadows 
+        camera={{ position: [7, 0, 10], fov: 30 }}
+      >
         <color 
           attach="background" 
-          args={[theme === 'dark' ? '#181C14' : '#EEF1DA']} 
+          args={[theme === 'dark' ? 'rgba(24, 28, 20, 0.2)' : 'rgba(238, 241, 218, 0.2)']} 
         />
         <ambientLight intensity={0.5} />
         <spotLight 
@@ -56,11 +175,11 @@ export default function ChatModel() {
         />
         <pointLight position={[-10, -10, -10]} intensity={0.5} />
         
-        <Model />
-        {/* <ImportedModel /> */}
+        <ImportedModel />
+        <BlackholeParticles />
         
-        <OrbitControls enableZoom={false} />
-        <Environment  files="/ambients/venice.hdr" background={false} />
+        <OrbitControls enableZoom={false} enablePan={false} />
+        <Environment files="/ambients/venice.hdr" background={false} />
         <ContactShadows 
           opacity={0.4} 
           scale={5} 

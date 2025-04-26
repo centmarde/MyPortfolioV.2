@@ -111,16 +111,16 @@ export default function ChatBox() {
   }
 
   return (
-    <div className={`flex flex-col w-full mx-auto rounded-xl overflow-hidden border ${
+    <div className={`flex flex-col w-full h-full mx-auto rounded-xl overflow-hidden border shadow-lg ${
       theme === "dark" 
-        ? "bg-dark-background text-dark-primary border-dark-tertiary" 
-        : "bg-light-tertiary text-dark-tertiary border-light-accent"
+        ? "bg-dark-background/90 text-dark-primary border-dark-tertiary backdrop-blur-sm" 
+        : "bg-light-tertiary/90 text-dark-tertiary border-light-accent backdrop-blur-sm"
     }`}>
       {/* Response area at the top */}
-      <div className={`p-6 min-h-[200px] max-h-[400px] overflow-y-auto ${
+      <div className={`p-6 flex-grow overflow-y-auto ${
         theme === "dark"
-          ? "bg-dark-tertiary"
-          : "bg-light-accent"
+          ? "bg-dark-tertiary/80"
+          : "bg-light-accent/80"
       }`}>
         <h2 className={`text-lg font-medium mb-4 ${
           theme === "dark"
@@ -169,8 +169,8 @@ export default function ChatBox() {
       {/* Input area at the bottom */}
       <div className={`p-4 border-t ${
         theme === "dark"
-          ? "border-dark-tertiary bg-dark-background"
-          : "border-light-accent bg-light-tertiary"
+          ? "border-dark-tertiary bg-dark-background/90"
+          : "border-light-accent bg-light-tertiary/90"
       }`}>
         <form onSubmit={handleSubmit} className="relative">
           <div className={`flex items-end border rounded-lg focus-within:ring-1 ${
