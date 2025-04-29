@@ -145,15 +145,15 @@ export default function ChatBox() {
   return (
     <div className={`flex flex-col w-full h-full mx-auto rounded-xl overflow-hidden border shadow-lg ${
       theme === "dark" 
-        ? "bg-dark-background/90 text-dark-primary border-dark-tertiary backdrop-blur-sm" 
-        : "bg-light-tertiary/90 text-dark-tertiary border-light-accent backdrop-blur-sm"
+        ? "bg-dark-background/90 text-dark-primary border-dark-tertiary backdrop-blur-xl" 
+        : "bg-light-tertiary/90 text-dark-tertiary border-light-accent backdrop-blur-xl"
     }`}>
       {/* Response area at the top - updated with fixed height and improved scrolling */}
       <div 
         className={`p-6 flex-grow overflow-y-auto max-h-[60vh] md:max-h-[60vh] custom-scrollbar ${
           theme === "dark"
-            ? "bg-dark-tertiary/80"
-            : "bg-light-accent/80"
+            ? "bg-dark-tertiary"
+            : "bg-light-accent"
         }`}
         style={{
           scrollbarWidth: 'thin',
