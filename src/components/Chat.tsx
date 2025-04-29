@@ -3,9 +3,10 @@
 import type React from "react"
 
 import { useState, useRef, useEffect } from "react"
-import { ArrowUp,  Sparkles } from "lucide-react"
+import { ArrowUp, Sparkles } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useTheme } from "../components/theme-provider"
+import { useResponse } from "@/services/response"
 
 type Message = {
   id: string
@@ -14,49 +15,28 @@ type Message = {
   timestamp: Date
 }
 
-// Predefined answers about your background
-const infoResponses: Record<string, string> = {
-  default: "Hi there! I'm here to provide information about my professional background, skills, and experience. Feel free to ask me anything about my CV, education, or projects!",
-  education: "I have a [Your Degree] from [Your University/Institution]. I specialized in [Your Specialization] and graduated in [Year].",
-  experience: "I have [X years] of experience in [Your Industry/Field]. I've worked at companies like [Company names] where I [brief description of responsibilities].",
-  skills: "My core skills include: [List your top technical skills], [List relevant soft skills], and [Any other relevant skills or certifications].",
-  projects: "Some of my notable projects include: [Project 1] where I [brief description], [Project 2] which involved [brief description], and [Project 3] that resulted in [outcomes/impact].",
-  contact: "You can reach me at [your email] or connect with me on LinkedIn at [your LinkedIn profile]. I'm currently [your availability status]."
-}
-
-// Helper function to find the most relevant response
-function getResponseForQuery(query: string): string {
-  const lowerQuery = query.toLowerCase();
-  
-  if (lowerQuery.includes('education') || lowerQuery.includes('study') || lowerQuery.includes('degree')) {
-    return infoResponses.education;
-  } else if (lowerQuery.includes('experience') || lowerQuery.includes('work') || lowerQuery.includes('job')) {
-    return infoResponses.experience;
-  } else if (lowerQuery.includes('skill') || lowerQuery.includes('know') || lowerQuery.includes('able')) {
-    return infoResponses.skills;
-  } else if (lowerQuery.includes('project') || lowerQuery.includes('portfolio')) {
-    return infoResponses.projects;
-  } else if (lowerQuery.includes('contact') || lowerQuery.includes('email') || lowerQuery.includes('reach')) {
-    return infoResponses.contact;
-  }
-  
-  return "I can provide information about my education, work experience, skills, projects, or contact details. What would you like to know?";
-}
-
 export default function ChatBox() {
-  const { theme } = useTheme();
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: '0',
-      content: infoResponses.default,
-      isUser: false,
-      timestamp: new Date(),
-    }
-  ])
+  const { theme } = useTheme()
+  const { chatContent, getBioResponse, bioData } = useResponse()
+  const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState("")
   const [isTyping, setIsTyping] = useState(false)
   const responseRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
+
+  // Add initial message when bioData is loaded
+  useEffect(() => {
+    if (bioData && messages.length === 0) {
+      setMessages([
+        {
+          id: '0',
+          content: `Hi there! I'm an AI assistant for ${bioData.name}, a ${bioData.title}. Feel free to ask me anything about their background, skills, or experience!`,
+          isUser: false,
+          timestamp: new Date(),
+        }
+      ]);
+    }
+  }, [bioData, messages.length]);
 
   // Focus input on load
   useEffect(() => {
@@ -72,14 +52,38 @@ export default function ChatBox() {
     }
   }, [input])
 
-  // Scroll to response when new message is added
+  // Modified scroll behavior for better experience
   useEffect(() => {
-    if (messages.length > 0 && !isTyping) {
-      responseRef.current?.scrollIntoView({ behavior: "smooth" })
+    if (messages.length > 0) {
+      responseRef.current?.scrollIntoView({ 
+        behavior: isTyping ? "auto" : "smooth",
+        block: "end" 
+      });
     }
-  }, [messages, isTyping])
+  }, [messages, isTyping, chatContent]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Update messages when chatContent changes
+  useEffect(() => {
+    if (chatContent && isTyping) {
+      const tempMessage = {
+        id: `ai-typing-${Date.now().toString()}`,
+        content: chatContent,
+        isUser: false,
+        timestamp: new Date(),
+      };
+      
+      // Find and replace the typing indicator message
+      setMessages(prev => {
+        const lastMessage = prev[prev.length - 1];
+        if (lastMessage && lastMessage.id.startsWith('ai-typing-')) {
+          return [...prev.slice(0, -1), tempMessage];
+        }
+        return [...prev, tempMessage];
+      });
+    }
+  }, [chatContent, isTyping]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!input.trim()) return
 
@@ -94,21 +98,49 @@ export default function ChatBox() {
     setMessages(prev => [...prev, userMessage])
     setInput("")
 
-    // Simulate AI typing
+    // Set typing indicator
     setIsTyping(true)
-
-    // Generate response based on query
-    setTimeout(() => {
-      const aiMessage: Message = {
-        id: `ai-${Date.now().toString()}`,
-        content: getResponseForQuery(userMessage.content),
-        isUser: false,
-        timestamp: new Date(),
-      }
-      setMessages(prev => [...prev, aiMessage])
-      setIsTyping(false)
-    }, 1000)
+    
+    // Add initial AI typing message
+    const typingMessage: Message = {
+      id: `ai-typing-${Date.now().toString()}`,
+      content: "",
+      isUser: false,
+      timestamp: new Date(),
+    };
+    
+    setMessages(prev => [...prev, typingMessage]);
+    
+    try {
+      // Get response using the bio information
+      await getBioResponse(userMessage.content);
+      
+      // Typing completed
+      setIsTyping(false);
+    } catch (error) {
+      console.error('Error getting response:', error);
+      
+      // Add error message
+      setMessages(prev => {
+        // Remove the typing indicator
+        const withoutTyping = prev.filter(msg => msg.id !== typingMessage.id);
+        
+        return [...withoutTyping, {
+          id: `ai-${Date.now().toString()}`,
+          content: "I'm sorry, I encountered an issue while processing your request.",
+          isUser: false,
+          timestamp: new Date(),
+        }];
+      });
+      
+      setIsTyping(false);
+    }
   }
+
+  const handleQuickQuery = (query: string) => {
+    setInput(query);
+    setTimeout(() => handleSubmit({ preventDefault: () => {} } as React.FormEvent), 100);
+  };
 
   return (
     <div className={`flex flex-col w-full h-full mx-auto rounded-xl overflow-hidden border shadow-lg ${
@@ -116,23 +148,25 @@ export default function ChatBox() {
         ? "bg-dark-background/90 text-dark-primary border-dark-tertiary backdrop-blur-sm" 
         : "bg-light-tertiary/90 text-dark-tertiary border-light-accent backdrop-blur-sm"
     }`}>
-      {/* Response area at the top */}
-      <div className={`p-6 flex-grow overflow-y-auto ${
-        theme === "dark"
-          ? "bg-dark-tertiary/80"
-          : "bg-light-accent/80"
-      }`}>
-        <h2 className={`text-lg font-medium mb-4 ${
+      {/* Response area at the top - updated with fixed height and improved scrolling */}
+      <div 
+        className={`p-6 flex-grow overflow-y-auto max-h-[60vh] md:max-h-[60vh] custom-scrollbar ${
           theme === "dark"
-            ? "text-dark-primary"
-            : "text-light-primary"
-        }`}>CV Assistant WIP.. </h2>
+            ? "bg-dark-tertiary/80"
+            : "bg-light-accent/80"
+        }`}
+        style={{
+          scrollbarWidth: 'thin',
+          scrollbarColor: theme === "dark" ? '#4a5568 #2d3748' : '#cbd5e0 #edf2f7'
+        }}
+      >
+       
 
-        <div className="space-y-4">
+        <div className="space-y-4 overflow-y-auto">
           {messages.map(message => (
             <div 
               key={message.id}
-              className={`p-4 rounded-lg border ${
+              className={`p-4 rounded-lg border break-words ${
                 message.isUser 
                   ? theme === "dark"
                     ? "bg-dark-primary text-dark-background border-dark-primary ml-8" 
@@ -141,33 +175,19 @@ export default function ChatBox() {
                     ? "bg-dark-secondary text-dark-primary border-dark-tertiary mr-8"
                     : "bg-light-secondary text-dark-tertiary border-light-tertiary mr-8"
               }`}
-            >
-              {message.content}
-            </div>
+              dangerouslySetInnerHTML={
+                message.isUser ? { __html: message.content } : { __html: message.content.replace(/<br><think>/g, '<br>') }
+              }
+            />
           ))}
           
-          {/* Typing indicator */}
-          {isTyping && (
-            <div className={`p-4 rounded-lg border mr-8 ${
-              theme === "dark"
-                ? "bg-dark-secondary text-dark-primary border-dark-tertiary"
-                : "bg-light-secondary text-dark-tertiary border-light-tertiary"
-            }`}>
-              <div className="flex space-x-2">
-                <div className={`w-2 h-2 rounded-full animate-pulse ${theme === "dark" ? "bg-dark-primary" : "bg-dark-tertiary"}`}></div>
-                <div className={`w-2 h-2 rounded-full animate-pulse ${theme === "dark" ? "bg-dark-primary" : "bg-dark-tertiary"}`} style={{ animationDelay: "0.2s" }}></div>
-                <div className={`w-2 h-2 rounded-full animate-pulse ${theme === "dark" ? "bg-dark-primary" : "bg-dark-tertiary"}`} style={{ animationDelay: "0.4s" }}></div>
-              </div>
-            </div>
-          )}
-
           {/* Keep reference to the latest message for scrolling */}
-          <div ref={responseRef} />
+          <div ref={responseRef} className="h-1" />
         </div>
       </div>
 
       {/* Input area at the bottom */}
-      <div className={`p-4 border-t ${
+      <div className={`p-4 border-t flex-shrink-0 ${
         theme === "dark"
           ? "border-dark-tertiary bg-dark-background/90"
           : "border-light-accent bg-light-tertiary/90"
@@ -182,7 +202,7 @@ export default function ChatBox() {
               ref={inputRef}
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask about my CV, experience, skills..."
+              placeholder={bioData ? `Ask about ${bioData.name}'s skills, experience...` : "Loading..."}
               className={`flex-1 p-3 pr-10 bg-transparent border-0 resize-none focus:ring-0 focus:outline-none placeholder-opacity-70 max-h-[120px] min-h-[24px] ${
                 theme === "dark" 
                   ? "text-dark-primary placeholder-dark-primary" 
@@ -198,10 +218,10 @@ export default function ChatBox() {
             <div className="flex items-center p-2 space-x-2">
               <button
                 type="submit"
-                disabled={!input.trim() || isTyping}
+                disabled={!input.trim() || isTyping || !bioData}
                 className={cn(
                   "p-2 rounded-md transition-colors",
-                  input.trim() && !isTyping
+                  input.trim() && !isTyping && bioData
                     ? theme === "dark"
                       ? "bg-dark-primary text-dark-background hover:bg-dark-primary/90"
                       : "bg-dark-tertiary text-light-primary hover:bg-dark-tertiary/90"
@@ -220,41 +240,35 @@ export default function ChatBox() {
         {/* Quick actions */}
         <div className="flex flex-wrap gap-2 mt-4">
           <button 
-            onClick={() => {
-              setInput("Tell me about your education");
-              setTimeout(() => handleSubmit({ preventDefault: () => {} } as React.FormEvent), 100);
-            }}
+            onClick={() => handleQuickQuery("What are your skills and tech stack?")}
+            disabled={isTyping || !bioData}
             className={`flex items-center px-3 py-2 text-xs rounded-md hover:bg-opacity-80 transition-colors ${
               theme === "dark"
                 ? "text-dark-primary bg-dark-tertiary border border-dark-secondary" 
                 : "text-dark-tertiary bg-light-secondary border border-light-accent"
-            }`}>
+            } ${(isTyping || !bioData) ? "opacity-50 cursor-not-allowed" : ""}`}>
             <Sparkles className="w-3 h-3 mr-2" />
-            Education
+            Skills & Tech
           </button>
           <button 
-            onClick={() => {
-              setInput("What work experience do you have?");
-              setTimeout(() => handleSubmit({ preventDefault: () => {} } as React.FormEvent), 100);
-            }}
+            onClick={() => handleQuickQuery("Tell me about your background and location")}
+            disabled={isTyping || !bioData}
             className={`flex items-center px-3 py-2 text-xs rounded-md hover:bg-opacity-80 transition-colors ${
               theme === "dark"
                 ? "text-dark-primary bg-dark-tertiary border border-dark-secondary" 
                 : "text-dark-tertiary bg-light-secondary border border-light-accent"
-            }`}>
-            Work Experience
+            } ${(isTyping || !bioData) ? "opacity-50 cursor-not-allowed" : ""}`}>
+            Background
           </button>
           <button 
-            onClick={() => {
-              setInput("What are your key skills?");
-              setTimeout(() => handleSubmit({ preventDefault: () => {} } as React.FormEvent), 100);
-            }}
+            onClick={() => handleQuickQuery("How can someone contact you?")}
+            disabled={isTyping || !bioData}
             className={`flex items-center px-3 py-2 text-xs rounded-md hover:bg-opacity-80 transition-colors ${
               theme === "dark"
                 ? "text-dark-primary bg-dark-tertiary border border-dark-secondary" 
                 : "text-dark-tertiary bg-light-secondary border border-light-accent"
-            }`}>
-            Skills
+            } ${(isTyping || !bioData) ? "opacity-50 cursor-not-allowed" : ""}`}>
+            Contact Info
           </button>
         </div>
       </div>

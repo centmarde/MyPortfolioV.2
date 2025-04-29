@@ -1,0 +1,63 @@
+{
+  "name": "Centmarde",
+  "title": "Full-stack Developer",
+  "address": "Philippines, Butuan City",
+  "phone": "09633490312",
+  "description": "A passionate full-stack developer specializing in building exceptional digital experiences. I focus on creating responsive, user-friendly applications with modern technologies and best practices.",
+  "hobbies": [
+    "Playing games",
+    "Watching movies",
+    "Reading books",
+    "Listening to music",
+    "Playing Guitar",
+    "Coding",
+    "Watching Anime",
+    "SkateBoard",
+    "Tattooist"
+  ],
+  "social": {
+    "github": "https://github.com/centmarde",
+    "facebook": "https://web.facebook.com/centmarde.campado",
+    "email": "centmarde.campado@gmail.com"
+  },
+  "skills": [
+    "Full-stack Development",
+    "Responsive Design",
+    "User Experience",
+    "Modern Technologies"
+  ],
+    "languages": [
+        { "name": "English", "level": "Fluent" },
+        { "name": "Filipino", "level": "Fluent" },
+        { "name": "Bisaya", "level": "Mother Tongue" }
+    ],
+    "tech stack": [
+        { "name": "HTML", "level": "Intermediate" },
+        { "name": "CSS", "level": "Intermediate" },
+        { "name": "JavaScript", "level": "Intermediate" },
+        { "name": "React", "level": "Intermediate" },
+        { "name": "Node.js", "level": "Intermediate" },
+        { "name": "Express.js", "level": "Intermediate" },
+        { "name": "MongoDB", "level": "Intermediate" },
+        { "name": "MySQL", "level": "Intermediate" },
+        { "name": "Python", "level": "Intermediate" },
+        { "name": "Java", "level": "Intermediate" },
+        { "nmae": "Vue3", "level": "Intermediate" },
+        { "name": "Bootstrap", "level": "Intermediate" },
+        { "name": "Tailwind", "level": "Intermediate" },
+        { "name": "React", "level": "Intermediate" },
+        { "name": "Next.js", "level": "Intermediate" },
+        { "name": "TypeScript", "level": "Intermediate" },
+        { "name": "Laravel", "level": "Intermediate" },
+        { "name": "Unreal Engine", "level": "Intermediate" },
+        { "name": "Android Studio", "level": "Intermediate" },
+        { "name": "PHP", "level": "Intermediate" },
+        { "name": "Django", "level": "Intermediate" },
+        { "name": "Flask", "level": "Intermediate" },
+        { "name": "Git", "level": "Intermediate" },
+        { "name": "GitHub", "level": "Intermediate" },
+        { "name": "Photoshop", "level": "Intermediate" },
+        { "name": "Game Development", "level": "Intermediate" },
+        { "name": "AI Development", "level": "Intermediate" }
+    ]
+}
