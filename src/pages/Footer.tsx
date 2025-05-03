@@ -52,7 +52,7 @@ function SocialLink({ href, icon: Icon, label }: { href: string, icon: React.Com
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="hover:text-slate-300 transition-colors group flex items-center gap-1"
+      className="hover:text-light-tertiary dark:hover:text-dark-primary transition-colors group flex items-center gap-1"
     >
       <Icon className="h-6 w-6 group-hover:scale-110 transition-transform" />
       <span className="sr-only">{label}</span>
@@ -66,7 +66,7 @@ export default function Footer() {
   const slogan = useAnimatedText("Let's build something amazing together!")
   
   return (
-    <footer className="w-full bg-slate-900 text-white py-12 relative overflow-hidden">
+    <footer className="w-full bg-dark-tertiary text-light-primary py-12 relative overflow-hidden">
       {/* Animated background sparkles - purely decorative */}
       <div className="absolute inset-0 opacity-10 pointer-events-none">
         {[...Array(6)].map((_, i) => (
@@ -87,7 +87,7 @@ export default function Footer() {
       <div className="container mx-auto px-4">
         {/* Animated slogan */}
         <div className="text-center mb-8">
-          <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">
+          <h2 className="text-2xl font-bold text-light-accent dark:text-dark-primary">
             {slogan}<span className="animate-pulse">|</span>
           </h2>
         </div>
@@ -95,27 +95,27 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Contact Information */}
           <div className="space-y-4 flex flex-col items-center">
-            <h3 className="text-xl font-bold border-b-2 border-blue-500 pb-2">Contact Me</h3>
+            <h3 className="text-xl font-bold border-b-2 border-light-accent dark:border-dark-primary pb-2">Contact Me</h3>
             <div className="space-y-3">
-              <div className="flex items-center justify-center gap-2 group hover:text-blue-400 transition-colors">
+              <div className="flex items-center justify-center gap-2 group hover:text-light-accent dark:hover:text-dark-primary transition-colors">
                 <Mail className="h-5 w-5 group-hover:animate-bounce" />
                 <a href="mailto:centmarde.campado@gmail.com" className="hover:underline">
                   centmarde.campado@gmail.com
                 </a>
               </div>
-              <div className="flex items-center justify-center gap-2 group hover:text-blue-400 transition-colors">
+              <div className="flex items-center justify-center gap-2 group hover:text-light-accent dark:hover:text-dark-primary transition-colors">
                 <Phone className="h-5 w-5 group-hover:animate-bounce" />
                 <span className="hover:underline">
                   +63 9633490312
                 </span>
               </div>
-              <div className="text-sm mt-3">
+              <div className="text-sm mt-3 flex justify-center">
                 {isOnline ? (
-                  <span className="text-green-400 flex items-center gap-1">
-                    <span className="w-2 h-2 bg-green-400 rounded-full inline-block animate-pulse"></span> Online and available for work
+                  <span className="text-light-secondary dark:text-dark-secondary flex items-center gap-1">
+                    <span className="w-2 h-2 bg-light-secondary dark:bg-dark-secondary rounded-full inline-block animate-pulse"></span> Online and available for work
                   </span>
                 ) : (
-                  <span className="text-gray-400">Currently offline</span>
+                  <span className="text-light-tertiary dark:text-dark-tertiary">Currently offline</span>
                 )}
               </div>
             </div>
@@ -123,7 +123,7 @@ export default function Footer() {
 
           {/* Social Links */}
           <div className="space-y-4 flex flex-col items-center">
-            <h3 className="text-xl font-bold border-b-2 border-blue-500 pb-2">Connect With Me</h3>
+            <h3 className="text-xl font-bold border-b-2 border-light-accent dark:border-dark-primary pb-2">Connect With Me</h3>
             <div className="flex flex-wrap justify-center gap-5">
               <SocialLink 
                 href="https://github.com/centmarde" 
@@ -140,13 +140,13 @@ export default function Footer() {
 
           {/* CV Download */}
           <div className="space-y-4 flex flex-col items-center">
-            <h3 className="text-xl font-bold border-b-2 border-blue-500 pb-2">Curriculum Vitae</h3>
+            <h3 className="text-xl font-bold border-b-2 border-light-accent dark:border-dark-primary pb-2">Curriculum Vitae</h3>
             <Button
               variant="outline"
-              className="bg-transparent border-white hover:bg-white hover:text-slate-900 transition-colors group relative overflow-hidden"
+              className="bg-transparent border-light-primary hover:bg-light-primary hover:text-dark-tertiary dark:border-dark-primary dark:hover:bg-dark-primary dark:hover:text-dark-tertiary transition-colors group relative overflow-hidden"
               onClick={() => window.open("https://www.dropbox.com/scl/fi/ju882jgxo07go6yax91cv/The-Strongest-Algorithm-CV.pdf?rlkey=pxwakx1eadrb6mn4q115ic2p0&st=xi6uuy1t&dl=0", "_blank")}
             >
-              <span className="absolute inset-0 w-0 bg-blue-500 transition-all duration-300 ease-out group-hover:w-full opacity-20"></span>
+              <span className="absolute inset-0 w-0 bg-light-accent dark:bg-dark-primary transition-all duration-300 ease-out group-hover:w-full opacity-20"></span>
               <FileDown className="mr-2 h-4 w-4 group-hover:animate-bounce" />
               Download from Dropbox
               <ExternalLink className="ml-2 h-3 w-3" />
@@ -154,7 +154,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 pt-4 border-t border-slate-700 text-center text-sm text-slate-400">
+        <div className="mt-12 pt-4 border-t border-light-tertiary dark:border-dark-tertiary text-center text-sm text-light-tertiary dark:text-dark-primary">
           <p>© {currentYear} Centmarde Campado. All rights reserved.</p>
           <p className="mt-1 text-xs opacity-70">Designed with React, Tailwind CSS, and passion</p>
         </div>
