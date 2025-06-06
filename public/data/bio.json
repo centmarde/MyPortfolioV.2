@@ -1,8 +1,10 @@
 {
   "name": "Centmarde",
+  "nickname": ["Cent","Marde"],
   "firstname": "Centmarde",
   "middlename": "Jubay",
   "lastname": "Campado",
+  "age": "28",
   "title": "Full-stack Developer",
   "address": "Philippines, Butuan City",
   "school": "Caraga State University (Main Campus)",

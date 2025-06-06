@@ -176,6 +176,13 @@
       "issuer": "SOLO LEARN",
       "date": "April 2024",
       "image": "/certs/Java Intermediate.png"
+    },
+    {
+      "id": 24,
+      "title": "Avre Framework Training",
+      "issuer": "Ateneo Virtual Reality Escape",
+      "date": "June 2025",
+      "image": "/certs/Avre.png"
     }
   ]
 }
