@@ -17,26 +17,26 @@ type Message = {
 
 export default function ChatBox() {
   const { theme } = useTheme()
-  const { chatContent, getBioResponse, bioData } = useResponse()
+  const { chatContent, getBioResponse, portfolioData } = useResponse()
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState("")
   const [isTyping, setIsTyping] = useState(false)
   const responseRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
 
-  // Add initial message when bioData is loaded
+  // Add initial message when portfolioData is loaded
   useEffect(() => {
-    if (bioData && messages.length === 0) {
+    if (portfolioData.bio && messages.length === 0) {
       setMessages([
         {
           id: '0',
-          content: `Hi there! I'm an AI assistant for ${bioData.name}, a ${bioData.title}. Feel free to ask me anything about their background, skills, or experience!`,
+          content: `Hi there! I'm an AI assistant for ${portfolioData.bio.name}, a ${portfolioData.bio.title}. I have information about their skills, work history, projects, achievements, and more. Feel free to ask me anything about their portfolio!`,
           isUser: false,
           timestamp: new Date(),
         }
       ]);
     }
-  }, [bioData, messages.length]);
+  }, [portfolioData.bio, messages.length]);
 
   // Focus input on load
   useEffect(() => {
@@ -112,7 +112,7 @@ export default function ChatBox() {
     setMessages(prev => [...prev, typingMessage]);
     
     try {
-      // Get response using the bio information
+      // Get response using the portfolio information
       await getBioResponse(userMessage.content);
       
       // Typing completed
@@ -141,6 +141,9 @@ export default function ChatBox() {
     setInput(query);
     setTimeout(() => handleSubmit({ preventDefault: () => {} } as React.FormEvent), 100);
   };
+  
+  // Check if all portfolio data is loaded
+  const isDataLoaded = portfolioData.bio && portfolioData.works && portfolioData.highlights && portfolioData.achievements;
 
   return (
     <div className={`flex flex-col w-full h-full mx-auto rounded-xl overflow-hidden border shadow-lg ${
@@ -202,7 +205,7 @@ export default function ChatBox() {
               ref={inputRef}
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder={bioData ? `Ask about ${bioData.name}'s skills, experience...` : "Loading..."}
+              placeholder={portfolioData.bio ? `Ask about ${portfolioData.bio.name}'s skills, projects, experience...` : "Loading..."}
               className={`flex-1 p-3 pr-10 bg-transparent border-0 resize-none focus:ring-0 focus:outline-none placeholder-opacity-70 max-h-[120px] min-h-[24px] ${
                 theme === "dark" 
                   ? "text-dark-primary placeholder-dark-primary" 
@@ -218,10 +221,10 @@ export default function ChatBox() {
             <div className="flex items-center p-2 space-x-2">
               <button
                 type="submit"
-                disabled={!input.trim() || isTyping || !bioData}
+                disabled={!input.trim() || isTyping || !isDataLoaded}
                 className={cn(
                   "p-2 rounded-md transition-colors",
-                  input.trim() && !isTyping && bioData
+                  input.trim() && !isTyping && isDataLoaded
                     ? theme === "dark"
                       ? "bg-dark-primary text-dark-background hover:bg-dark-primary/90"
                       : "bg-dark-tertiary text-light-primary hover:bg-dark-tertiary/90"
@@ -241,33 +244,43 @@ export default function ChatBox() {
         <div className="flex flex-wrap gap-2 mt-4">
           <button 
             onClick={() => handleQuickQuery("What are your skills and tech stack?")}
-            disabled={isTyping || !bioData}
+            disabled={isTyping || !isDataLoaded}
             className={`flex items-center px-3 py-2 text-xs rounded-md hover:bg-opacity-80 transition-colors ${
               theme === "dark"
                 ? "text-dark-primary bg-dark-tertiary border border-dark-secondary" 
                 : "text-dark-tertiary bg-light-secondary border border-light-accent"
-            } ${(isTyping || !bioData) ? "opacity-50 cursor-not-allowed" : ""}`}>
+            } ${(isTyping || !isDataLoaded) ? "opacity-50 cursor-not-allowed" : ""}`}>
             <Sparkles className="w-3 h-3 mr-2" />
             Skills & Tech
           </button>
           <button 
-            onClick={() => handleQuickQuery("Tell me about your background and location")}
-            disabled={isTyping || !bioData}
+            onClick={() => handleQuickQuery("Tell me about your projects and work experience")}
+            disabled={isTyping || !isDataLoaded}
             className={`flex items-center px-3 py-2 text-xs rounded-md hover:bg-opacity-80 transition-colors ${
               theme === "dark"
                 ? "text-dark-primary bg-dark-tertiary border border-dark-secondary" 
                 : "text-dark-tertiary bg-light-secondary border border-light-accent"
-            } ${(isTyping || !bioData) ? "opacity-50 cursor-not-allowed" : ""}`}>
-            Background
+            } ${(isTyping || !isDataLoaded) ? "opacity-50 cursor-not-allowed" : ""}`}>
+            Projects
+          </button>
+          <button 
+            onClick={() => handleQuickQuery("What certifications and achievements do you have?")}
+            disabled={isTyping || !isDataLoaded}
+            className={`flex items-center px-3 py-2 text-xs rounded-md hover:bg-opacity-80 transition-colors ${
+              theme === "dark"
+                ? "text-dark-primary bg-dark-tertiary border border-dark-secondary" 
+                : "text-dark-tertiary bg-light-secondary border border-light-accent"
+            } ${(isTyping || !isDataLoaded) ? "opacity-50 cursor-not-allowed" : ""}`}>
+            Achievements
           </button>
           <button 
             onClick={() => handleQuickQuery("How can someone contact you?")}
-            disabled={isTyping || !bioData}
+            disabled={isTyping || !isDataLoaded}
             className={`flex items-center px-3 py-2 text-xs rounded-md hover:bg-opacity-80 transition-colors ${
               theme === "dark"
                 ? "text-dark-primary bg-dark-tertiary border border-dark-secondary" 
                 : "text-dark-tertiary bg-light-secondary border border-light-accent"
-            } ${(isTyping || !bioData) ? "opacity-50 cursor-not-allowed" : ""}`}>
+            } ${(isTyping || !isDataLoaded) ? "opacity-50 cursor-not-allowed" : ""}`}>
             Contact Info
           </button>
         </div>

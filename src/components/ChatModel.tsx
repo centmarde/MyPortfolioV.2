@@ -1,7 +1,7 @@
 "use client"
 
 import { useRef, useMemo, useEffect } from 'react'
-import { Canvas, useFrame } from '@react-three/fiber'
+import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { OrbitControls, useGLTF, Environment, ContactShadows } from '@react-three/drei'
 import { useTheme } from './theme-provider'
 import * as THREE from 'three'
@@ -152,6 +152,54 @@ function BlackholeParticles() {
   );
 }
 
+// Camera controller for slow random position changes
+function CameraController() {
+  const { camera } = useThree()
+  const targetPosition = useRef(new THREE.Vector3(7, 0, 10))
+  const targetFOV = useRef(30) // Default FOV
+  const lerpSpeed = 0.015 // Increased for more noticeable movement
+  
+  useEffect(() => {
+    // Set new random position and FOV targets every 6 seconds (more frequent changes)
+    const interval = setInterval(() => {
+      // Generate more dramatic random position within wider bounds
+      const x = 7 + (Math.random() * 10 - 5) // 7 ± 5
+      const y = (Math.random() * 8 - 4)      // ± 4
+      const z = 10 + (Math.random() * 8 - 4) // 10 ± 4
+      
+      targetPosition.current.set(x, y, z)
+      
+      // Random FOV between 25 (zoomed in) and 40 (zoomed out)
+      targetFOV.current = 25 + Math.random() * 15;
+    }, 6000)
+    
+    return () => clearInterval(interval)
+  }, [])
+  
+  useFrame((state) => {
+    // Smoothly interpolate camera position with increased speed
+    camera.position.lerp(targetPosition.current, lerpSpeed)
+    
+    // Smoothly interpolate FOV for zoom effect
+    if (camera instanceof THREE.PerspectiveCamera) {
+      camera.fov += (targetFOV.current - camera.fov) * 0.05;
+    }
+    
+    // Ensure camera always looks at the scene center/blackhole
+    camera.lookAt(new THREE.Vector3(-1, 0, 0))
+    
+    // Add more pronounced continuous motion
+    const time = state.clock.elapsedTime
+    camera.position.x += Math.sin(time * 0.5) * 0.03
+    camera.position.y += Math.cos(time * 0.4) * 0.02
+    camera.position.z += Math.sin(time * 0.3) * 0.02
+    
+    camera.updateProjectionMatrix()
+  })
+  
+  return null
+}
+
 export default function ChatModel() {
   const { theme } = useTheme()
   
@@ -178,7 +226,8 @@ export default function ChatModel() {
         <ImportedModel />
         <BlackholeParticles />
         
-        <OrbitControls enableZoom={false} enablePan={false} />
+        <CameraController />
+        <OrbitControls enableZoom={false} enablePan={false} enableRotate={false} />
         <Environment files="/ambients/venice.hdr" background={false} />
         <ContactShadows 
           opacity={0.4} 
