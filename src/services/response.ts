@@ -58,38 +58,6 @@ export function useResponse() {
 
     fetchBioData();
   }, []);
-
-  async function getRecommendedAction(pestName: string): Promise<string> {
-    setChatContent("");
-    
-    const chatCompletion = await groq.chat.completions.create({
-      messages: [
-        {
-          role: "system",
-          content: "You are an agricultural expert. Provide specific treatment recommendations."
-        },
-        {
-          role: "user",
-          content: `Provide a very short overview about ${pestName} in crops.`
-        }
-      ],
-      model: "llama-3.3-70b-versatile",
-      temperature: 0.6,
-      max_completion_tokens: 600,
-      top_p: 0.95,
-      stream: true,
-      stop: null,
-    });
-
-    let fullResponse = "";
-    for await (const chunk of chatCompletion) {
-      const content = chunk.choices[0]?.delta?.content || "";
-      fullResponse += content;
-      setChatContent(prev => prev + formatResponse(content));
-    }
-    
-    return fullResponse;
-  }
   
   async function getBioResponse(query: string): Promise<string> {
     setChatContent("");
@@ -148,7 +116,6 @@ export function useResponse() {
 
   return {
     chatContent,
-    getRecommendedAction,
     getBioResponse,
     bioData
   };
