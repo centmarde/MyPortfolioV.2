@@ -99,31 +99,22 @@ function App() {
   const [activeTab, setActiveTab] = useState("home");
   const [loading, setLoading] = useState(true);
   
-  // Add effect to scroll to top on page load
-  useEffect(() => {
-    // Reset scroll position when the app loads
-    window.history.scrollRestoration = 'manual';
+  // Handle the completion of loading
+  const handleLoadingComplete = () => {
+    setLoading(false);
+    // Ensure scroll is enabled and position is at top
+    document.body.style.overflow = '';
+    document.body.style.height = '';
     window.scrollTo(0, 0);
-    
-    // Remove any hash from the URL to prevent automatic scrolling
-    if (window.location.hash) {
-      const scrollToTop = () => {
-        window.scrollTo(0, 0);
-        history.pushState('', document.title, window.location.pathname + window.location.search);
-      };
-      // Use setTimeout to ensure this happens after browser's default scroll behavior
-      setTimeout(scrollToTop, 0);
-    }
-  }, []);
+  };
   
   return (
     <ThemeProvider>
-      {loading && <Loading onLoadingComplete={() => {/* No auto completion */}} />}
+      {loading && <Loading onLoadingComplete={handleLoadingComplete} />}
       <AppContent 
         activeTab={activeTab} 
         setActiveTab={setActiveTab} 
         loading={loading}
-        setLoading={setLoading}
       />
     </ThemeProvider>
   );
@@ -133,25 +124,15 @@ function App() {
 function AppContent({ 
   activeTab, 
   setActiveTab,
-  loading,
-  setLoading
+  loading
 }: { 
   activeTab: string; 
   setActiveTab: (tab: string) => void;
   loading: boolean;
-  setLoading: (loading: boolean) => void;
 }) {
   const { theme } = useTheme();
   const sectionsRef = useRef<HTMLElement[]>([]);
   const sectionIds = ["home", "background", "stack", "certificates", "projects", "others", "contacts"];
-  
-  // Handle hero content loaded
-  const handleHeroLoaded = () => {
-    // Allow a small delay to ensure everything is ready before hiding loader
-    setTimeout(() => {
-      setLoading(false);
-    }, 500);
-  };
   
   useEffect(() => {
     // Only set up scroll triggers when content is loaded
@@ -175,7 +156,7 @@ function AppContent({
     return () => {
       triggers.forEach(trigger => trigger.kill());
     };
-  }, [loading]); // Re-run when loading state changes
+  }, [loading, setActiveTab]);
   
   // Prevent body scrolling while loading
   useEffect(() => {
@@ -197,14 +178,10 @@ function AppContent({
     <div className="App">
       {!loading && <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />}
 
-      {/* Home Section - Adjusted height to match Hero and Apex components */}
-      <section 
-        id="home" 
-        className="h-[1030vh] lg:h-[1100vh]" // Responsive heights for different screen sizes
-      >
-        <Hero onFullyLoaded={handleHeroLoaded} />
+      {/* Home Section with Hero as the first component */}
+      <section id="home" className="h-auto min-h-screen">
+        <Hero onFullyLoaded={() => {}} />
         <Apex />
-        {/* Theme-responsive wave SVG */}
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
           <path 
             fill={theme === "dark" ? "#030712" : "#FFFFFF"} 
@@ -250,3 +227,4 @@ function AppContent({
 }
 
 export default App;
+

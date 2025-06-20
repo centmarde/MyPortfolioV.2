@@ -48,16 +48,12 @@ export default function Loading({ onLoadingComplete }: LoadingProps) {
     
     // Change quote every 3 seconds with fade transition
     const quoteInterval = setInterval(() => {
-      // Start fade out
       setQuoteVisible(false);
-      
-      // After fade out completes, change quote and fade in
       setTimeout(() => {
         setQuoteIndex(prev => (prev + 1) % devQuotes.length);
         setQuoteVisible(true);
-      }, 500); // Wait for fade out to complete
-      
-    }, 5000); // Changed from 2000ms to 3000ms
+      }, 500);
+    }, 5000);
     
     return () => {
       clearInterval(interval);
@@ -125,3 +121,4 @@ export default function Loading({ onLoadingComplete }: LoadingProps) {
     </div>
   );
 }
+
