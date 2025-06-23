@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react"
-import { Button } from "@/components/ui/button"
 import { Github, Facebook, Mail, Phone, FileDown, Sparkles, ExternalLink } from "lucide-react"
 
 // Custom hook for animated text effect
