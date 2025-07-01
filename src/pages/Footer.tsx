@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react"
-import { Button } from "@/components/ui/button"
 import { Github, Facebook, Mail, Phone, FileDown, Sparkles, ExternalLink } from "lucide-react"
 
 // Custom hook for animated text effect
@@ -141,16 +140,18 @@ export default function Footer() {
           {/* CV Download */}
           <div className="space-y-4 flex flex-col items-center">
             <h3 className="text-xl font-bold border-b-2 border-light-accent dark:border-dark-primary pb-2">Curriculum Vitae</h3>
-            <Button
-              variant="outline"
-              className="bg-transparent border-light-primary hover:bg-light-primary hover:text-dark-tertiary dark:border-dark-primary dark:hover:bg-dark-primary dark:hover:text-dark-tertiary transition-colors group relative overflow-hidden"
-              onClick={() => window.open("https://www.dropbox.com/scl/fi/ju882jgxo07go6yax91cv/The-Strongest-Algorithm-CV.pdf?rlkey=pxwakx1eadrb6mn4q115ic2p0&st=xi6uuy1t&dl=0", "_blank")}
+            <a
+              href="/CV/CV.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              download="/CV/CV.pdf"
+              className="bg-transparent border border-light-primary hover:bg-light-primary hover:text-dark-tertiary dark:border-dark-primary dark:hover:bg-dark-primary dark:hover:text-dark-tertiary transition-colors group relative overflow-hidden px-4 py-2 rounded-md inline-flex items-center"
             >
               <span className="absolute inset-0 w-0 bg-light-accent dark:bg-dark-primary transition-all duration-300 ease-out group-hover:w-full opacity-20"></span>
               <FileDown className="mr-2 h-4 w-4 group-hover:animate-bounce" />
-              Download from Dropbox
+              Download Resume
               <ExternalLink className="ml-2 h-3 w-3" />
-            </Button>
+            </a>
           </div>
         </div>
 
