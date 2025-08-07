@@ -4,16 +4,21 @@
       "id": 1
      
     },
-    {
+     {
       "id": 2,
-      "title": "Nationals Game Dev Challenge",
+       "title": "Nationals Game Dev Challenge",
       "issuer": "DOST PHILIPPINES E-SPORTS",
       "date": "December2024 3rdPlacer",
       "image": "/certs/game.png"
     },
     {
-      "id": 3
+      "id": 3,
+      "title": "Regional Hackathon Challenge",
+      "issuer": "DOST PHILIPPINES / LGU",
+      "date": "July25 2ndPlacer",
+      "image": "/certs/game.png"
     }
+   
   ],
   "certificates": [
     {
