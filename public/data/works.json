@@ -1,7 +1,7 @@
 [
   {
     "id": 1,
-    "tag":"Startup Project",
+    "tag": "Startup Project",
     "title": "Siniwali Showdown",
     "description": "Turn Based, TCG Game, with a twist of RPG. A game that is based on the Filipino Martial Arts, Arnis.",
     "image": "/works/Siniwali/S1.png",
@@ -26,7 +26,7 @@
   },
   {
     "id": 2,
-    "tag":"School Project",
+    "tag": "School Project",
     "title": "Auto-Solutions",
     "description": "a 1 stop 1 go Car buying and selling platform. A platform that is designed to help you buy and sell your car in a hassle free way.",
     "image": "/works/AutoSolutions/A2.png",
@@ -41,7 +41,7 @@
     "techStack": [
       "/logo/Vue.js.png",
       "/logo/Veutify.png",
-        "/logo/pinia.png",
+      "/logo/pinia.png",
       "/logo/supabase.svg",
       "/logo/three.png",
       "/logo/paymongo.jpg",
@@ -50,7 +50,7 @@
   },
   {
     "id": 3,
-    "tag":"Freelance Project",
+    "tag": "Freelance Project",
     "title": "Reald D2D",
     "description": "serves as a comprehensive platform tailored to the needs of real estate professionals, offering a range of features designed to streamline various aspects of their workflow.",
     "image": "/works/Reald2d/A1.png",
@@ -58,10 +58,10 @@
       "/works/Reald2d/A2.png",
       "/works/Reald2d/A3.png",
       "/works/Reald2d/B1.png",
-     "/works/Reald2d/B2.png",
-     "/works/Reald2d/B3.png",
-     "/works/Reald2d/B4.png",
-     "/works/Reald2d/A1.png"
+      "/works/Reald2d/B2.png",
+      "/works/Reald2d/B3.png",
+      "/works/Reald2d/B4.png",
+      "/works/Reald2d/A1.png"
     ],
     "demoLink": "https://staging.reald2d.org/",
     "codeLink": "NDA",
@@ -75,19 +75,19 @@
   },
   {
     "id": 4,
-    "tag":"School Project",
+    "tag": "School Project",
     "title": "Idustrial Painter",
     "description": "A School Project for HCI subject. A web application that Revolutionize your industrial painting workflow with our state-of-the-art solution. Manage projects, optimize resources, and deliver perfection on every surface.",
     "image": "/works/IndustrialPainter/A1.png",
     "images": [
       "/works/IndustrialPainter/A2.png",
-     "/works/IndustrialPainter/A3.png",
-     "/works/IndustrialPainter/A4.png",
+      "/works/IndustrialPainter/A3.png",
+      "/works/IndustrialPainter/A4.png",
       "/works/IndustrialPainter/A5.png",
-       "/works/IndustrialPainter/A6.png",
-        "/works/IndustrialPainter/A7.png",
-         "/works/IndustrialPainter/A8.png",
-         "/works/IndustrialPainter/A1.png"
+      "/works/IndustrialPainter/A6.png",
+      "/works/IndustrialPainter/A7.png",
+      "/works/IndustrialPainter/A8.png",
+      "/works/IndustrialPainter/A1.png"
     ],
     "demoLink": "https://industrial-painter.vercel.app/",
     "codeLink": "https://github.com/centmarde/Industrial-Painter-HCI-revise",
@@ -99,14 +99,14 @@
       "/logo/supabase.svg"
     ]
   },
-   {
+  {
     "id": 5,
-    "tag":"School Project",
+    "tag": "School Project",
     "title": "Daily Bite",
     "description": "A mobile meal planning app that helps you plan your meals for the week. It allows you to create a meal plan, generate a shopping list, and track your progress.",
     "image": "/works/DailyBite/A1.png",
     "images": [
-     "/works/DailyBite/A2.jpg",
+      "/works/DailyBite/A2.jpg",
       "/works/DailyBite/A3.jpg",
       "/works/DailyBite/A4.jpg",
       "/works/DailyBite/A5.jpg",
@@ -114,27 +114,22 @@
     ],
     "demoLink": "N/A",
     "codeLink": "https://github.com/centmarde/NutriPlan",
-    "techStack": [
-      "/logo/Flutter.png",
-      "/logo/Firebase.png"
-    ]
+    "techStack": ["/logo/Flutter.png", "/logo/Firebase.png"]
   },
   {
     "id": 6,
-    "tag":"Thesis Commission",
+    "tag": "Thesis Commission",
     "title": "Performance Monitoring System",
     "description": "Innovation for Deped Electronic Class Record System. A web application that allows you to monitor the performance of your students.",
     "image": "/works/PMS/A1.png",
     "images": [
-     "/works/PMS/A2.png",
+      "/works/PMS/A2.png",
       "/works/PMS/A3.png",
       "/works/PMS/A4.png",
       "/works/PMS/A5.png",
       "/works/PMS/A6.png",
       "/works/PMS/A7.png",
       "/works/PMS/A1.png"
-      
-     
     ],
     "demoLink": "https://performancemonitoring.vercel.app/",
     "codeLink": "https://github.com/centmarde/Performance-Monitoring-System",
@@ -147,20 +142,20 @@
   },
   {
     "id": 7,
-    "tag":"Thesis Commission",
+    "tag": "Thesis Commission",
     "title": "Smart Pest Detection",
     "description": "a mobile application that uses machine learning to detect pests in crops. It is designed to help farmers identify and manage pests in their fields.",
     "image": "/works/SPD/Pest.png",
     "images": [
-     "/works/SPD/A1.jpg",
-     "/works/SPD/A2.jpg",
-     "/works/SPD/A3.jpg",
-     "/works/SPD/A4.jpg",
-     "/works/SPD/A5.jpg",
-     "/works/SPD/A6.jpg",
-     "/works/SPD/A7.jpg",
-     "/works/SPD/A8.jpg",
-     "/works/SPD/Pest.png"
+      "/works/SPD/A1.jpg",
+      "/works/SPD/A2.jpg",
+      "/works/SPD/A3.jpg",
+      "/works/SPD/A4.jpg",
+      "/works/SPD/A5.jpg",
+      "/works/SPD/A6.jpg",
+      "/works/SPD/A7.jpg",
+      "/works/SPD/A8.jpg",
+      "/works/SPD/Pest.png"
     ],
     "demoLink": "N/A",
     "codeLink": "https://github.com/centmarde/Smart-pest-detection",
@@ -176,15 +171,14 @@
   },
   {
     "id": 8,
-    "tag":"School Project",
+    "tag": "School Project",
     "title": "Chatting Hub",
     "description": "This project is a secure chat application built using Django REST Framework (DRF) for the backend and Vue.js/Svelte for the frontend. The application supports user authentication, secure message transmission, and a dashboard for managing users and messages.",
-    "image":   "/works/ChattingHub/a1.png",
+    "image": "/works/ChattingHub/a1.png",
     "images": [
-     "/works/ChattingHub/a2.png",
-     "/works/ChattingHub/a3.png",
-     "/works/ChattingHub/a1.png"
-    
+      "/works/ChattingHub/a2.png",
+      "/works/ChattingHub/a3.png",
+      "/works/ChattingHub/a1.png"
     ],
     "demoLink": "N/A",
     "codeLink": "https://github.com/centmarde/ChattingHub?tab=readme-ov-file",
@@ -198,16 +192,15 @@
   },
   {
     "id": 9,
-    "tag":"Thesis Commission",
+    "tag": "Thesis Commission",
     "title": "Smart Scheduler",
     "description": "Comperative Research about 4 algorithms for best Teacher Schedule Generator. A web application that allows you to generate a schedule for your teachers.",
-    "image":   "/works/SmartScheduler/a1.png",
+    "image": "/works/SmartScheduler/a1.png",
     "images": [
-     "/works/SmartScheduler/a2.png",
-     "/works/SmartScheduler/a3.png",
+      "/works/SmartScheduler/a2.png",
+      "/works/SmartScheduler/a3.png",
       "/works/SmartScheduler/a4.png",
       "/works/SmartScheduler/a1.png"
-    
     ],
     "demoLink": "N/A",
     "codeLink": "https://github.com/centmarde/SmartScheduler",
@@ -220,48 +213,65 @@
   },
   {
     "id": 10,
-    "tag":"Startup Project",
+    "tag": "Startup Project",
     "title": "Scout Sphere",
     "description": "Buneavista Heritage Preservation and tourism project. A web application that allows you to explore the heritage sites in Buenavista, Agusan del Norte.",
-    "image":   "/works/ScoutSphere/a1.png",
+    "image": "/works/ScoutSphere/a1.png",
     "images": [
-     "/works/ScoutSphere/a7.png",
-     "/works/ScoutSphere/a3.png",
+      "/works/ScoutSphere/a7.png",
+      "/works/ScoutSphere/a3.png",
       "/works/ScoutSphere/a4.png",
-       "/works/ScoutSphere/a5.png",
-        "/works/ScoutSphere/a6.png",
-        "/works/ScoutSphere/a1.png"
-    
+      "/works/ScoutSphere/a5.png",
+      "/works/ScoutSphere/a6.png",
+      "/works/ScoutSphere/a1.png"
     ],
     "demoLink": "N/A",
     "codeLink": "https://github.com/centmarde/Scout-Sphere",
-    "techStack": [
-      "/logo/gmap.png",
-      "/logo/React.png",
-      "/logo/supabase.svg"
-    ]
+    "techStack": ["/logo/gmap.png", "/logo/React.png", "/logo/supabase.svg"]
   },
-   {
+  {
     "id": 11,
-    "tag":"Startup Project",
+    "tag": "Startup Project",
     "title": "Biznest",
     "description": "A web application that connects local businesses with customers in Butuan, Agusan del Norte.",
-    "image":   "/works/Biznest/a1.png",
+    "image": "/works/Biznest/a1.png",
     "images": [
-        "/works/Biznest/a2.png",
-        "/works/Biznest/a3.png",
-        "/works/Biznest/a4.png",
-        "/works/Biznest/a5.png",
-        "/works/Biznest/a6.png",
-        "/works/Biznest/a7.png",
-        "/works/Biznest/a8.png",
-        "/works/Biznest/a9.png"
+      "/works/Biznest/a2.png",
+      "/works/Biznest/a3.png",
+      "/works/Biznest/a4.png",
+      "/works/Biznest/a5.png",
+      "/works/Biznest/a6.png",
+      "/works/Biznest/a7.png",
+      "/works/Biznest/a8.png",
+      "/works/Biznest/a9.png"
     ],
     "demoLink": "https://biznest-gitpush.vercel.app/",
     "codeLink": "https://github.com/centmarde/Biznest",
+    "techStack": ["/logo/gmap.png", "/logo/React.png", "/logo/typescript.png"]
+  },
+  {
+    "id": 12,
+    "tag": "Freelance Project",
+    "title": "CZARLES",
+    "description": "A Human Resource Management System that helps you manage your employees, payroll, and other HR-related tasks.",
+    "image": "/works/CZARLES/a1.png",
+    "images": [
+      "/works/CZARLES/a2.png",
+      "/works/CZARLES/a3.png",
+      "/works/CZARLES/a4.png",
+      "/works/CZARLES/a5.png",
+      "/works/CZARLES/a6.png",
+      "/works/CZARLES/a7.png",
+      "/works/CZARLES/a8.png"
+    ],
+    "demoLink": "https://czarles.vercel.app/",
+    "codeLink": "https://github.com/jipenalver/web-czarles",
     "techStack": [
-      "/logo/gmap.png",
-      "/logo/React.png"
+      "/logo/Vue.js.png",
+      "/logo/Veutify.png",
+      "/logo/supabase.svg",
+      "/logo/pinia.png",
+      "/logo/typescript.png"
     ]
   }
 ]
