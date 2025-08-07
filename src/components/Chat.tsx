@@ -146,14 +146,14 @@ export default function ChatBox() {
   const isDataLoaded = portfolioData.bio && portfolioData.works && portfolioData.highlights && portfolioData.achievements;
 
   return (
-    <div className={`flex flex-col w-full h-full mx-auto rounded-xl overflow-hidden border shadow-lg ${
+    <div className={`flex flex-col w-full h-full max-w-full mx-auto rounded-xl overflow-hidden border shadow-lg ${
       theme === "dark" 
         ? "bg-dark-background/90 text-dark-primary border-dark-tertiary backdrop-blur-xl" 
         : "bg-light-tertiary/90 text-dark-tertiary border-light-accent backdrop-blur-xl"
     }`}>
       {/* Response area at the top - updated with fixed height and improved scrolling */}
       <div 
-        className={`p-6 flex-grow overflow-y-auto max-h-[60vh] md:max-h-[60vh] custom-scrollbar ${
+        className={`p-3 md:p-6 flex-grow overflow-y-auto max-h-[60vh] md:max-h-[60vh] custom-scrollbar ${
           theme === "dark"
             ? "bg-dark-tertiary"
             : "bg-light-accent"
@@ -169,14 +169,14 @@ export default function ChatBox() {
           {messages.map(message => (
             <div 
               key={message.id}
-              className={`p-4 rounded-lg border break-words ${
+              className={`p-3 md:p-4 rounded-lg border break-words ${
                 message.isUser 
                   ? theme === "dark"
-                    ? "bg-dark-primary text-dark-background border-dark-primary ml-8" 
-                    : "bg-dark-tertiary text-light-primary border-dark-tertiary ml-8"
+                    ? "bg-dark-primary text-dark-background border-dark-primary ml-2 md:ml-8" 
+                    : "bg-dark-tertiary text-light-primary border-dark-tertiary ml-2 md:ml-8"
                   : theme === "dark"
-                    ? "bg-dark-secondary text-dark-primary border-dark-tertiary mr-8"
-                    : "bg-light-secondary text-dark-tertiary border-light-tertiary mr-8"
+                    ? "bg-dark-secondary text-dark-primary border-dark-tertiary mr-2 md:mr-8"
+                    : "bg-light-secondary text-dark-tertiary border-light-tertiary mr-2 md:mr-8"
               }`}
               dangerouslySetInnerHTML={
                 message.isUser ? { __html: message.content } : { __html: message.content.replace(/<br><think>/g, '<br>') }
@@ -190,7 +190,7 @@ export default function ChatBox() {
       </div>
 
       {/* Input area at the bottom */}
-      <div className={`p-4 border-t flex-shrink-0 ${
+      <div className={`p-3 md:p-4 border-t flex-shrink-0 ${
         theme === "dark"
           ? "border-dark-tertiary bg-dark-background/90"
           : "border-light-accent bg-light-tertiary/90"
@@ -206,7 +206,7 @@ export default function ChatBox() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder={portfolioData.bio ? `Ask about ${portfolioData.bio.name}'s skills, projects, experience...` : "Loading..."}
-              className={`flex-1 p-3 pr-10 bg-transparent border-0 resize-none focus:ring-0 focus:outline-none placeholder-opacity-70 max-h-[120px] min-h-[24px] ${
+              className={`flex-1 p-2 md:p-3 pr-8 md:pr-10 bg-transparent border-0 resize-none focus:ring-0 focus:outline-none placeholder-opacity-70 max-h-[120px] min-h-[24px] text-sm md:text-base ${
                 theme === "dark" 
                   ? "text-dark-primary placeholder-dark-primary" 
                   : "text-dark-tertiary placeholder-dark-tertiary"
@@ -218,12 +218,12 @@ export default function ChatBox() {
                 }
               }}
             />
-            <div className="flex items-center p-2 space-x-2">
+            <div className="flex items-center p-1 md:p-2 space-x-2">
               <button
                 type="submit"
                 disabled={!input.trim() || isTyping || !isDataLoaded}
                 className={cn(
-                  "p-2 rounded-md transition-colors",
+                  "p-1.5 md:p-2 rounded-md transition-colors",
                   input.trim() && !isTyping && isDataLoaded
                     ? theme === "dark"
                       ? "bg-dark-primary text-dark-background hover:bg-dark-primary/90"
@@ -234,29 +234,30 @@ export default function ChatBox() {
                 )}
                 aria-label="Send message"
               >
-                <ArrowUp className="w-4 h-4" />
+                <ArrowUp className="w-3 h-3 md:w-4 md:h-4" />
               </button>
             </div>
           </div>
         </form>
 
         {/* Quick actions */}
-        <div className="flex flex-wrap gap-2 mt-4">
+        <div className="flex flex-wrap gap-1.5 md:gap-2 mt-3 md:mt-4">
           <button 
             onClick={() => handleQuickQuery("What are your skills and tech stack?")}
             disabled={isTyping || !isDataLoaded}
-            className={`flex items-center px-3 py-2 text-xs rounded-md hover:bg-opacity-80 transition-colors ${
+            className={`flex items-center px-2 md:px-3 py-1.5 md:py-2 text-xs rounded-md hover:bg-opacity-80 transition-colors ${
               theme === "dark"
                 ? "text-dark-primary bg-dark-tertiary border border-dark-secondary" 
                 : "text-dark-tertiary bg-light-secondary border border-light-accent"
             } ${(isTyping || !isDataLoaded) ? "opacity-50 cursor-not-allowed" : ""}`}>
-            <Sparkles className="w-3 h-3 mr-2" />
-            Skills & Tech
+            <Sparkles className="w-3 h-3 mr-1 md:mr-2" />
+            <span className="hidden sm:inline">Skills & Tech</span>
+            <span className="sm:hidden">Skills</span>
           </button>
           <button 
             onClick={() => handleQuickQuery("Tell me about your projects and work experience")}
             disabled={isTyping || !isDataLoaded}
-            className={`flex items-center px-3 py-2 text-xs rounded-md hover:bg-opacity-80 transition-colors ${
+            className={`flex items-center px-2 md:px-3 py-1.5 md:py-2 text-xs rounded-md hover:bg-opacity-80 transition-colors ${
               theme === "dark"
                 ? "text-dark-primary bg-dark-tertiary border border-dark-secondary" 
                 : "text-dark-tertiary bg-light-secondary border border-light-accent"
@@ -266,22 +267,23 @@ export default function ChatBox() {
           <button 
             onClick={() => handleQuickQuery("What certifications and achievements do you have?")}
             disabled={isTyping || !isDataLoaded}
-            className={`flex items-center px-3 py-2 text-xs rounded-md hover:bg-opacity-80 transition-colors ${
+            className={`flex items-center px-2 md:px-3 py-1.5 md:py-2 text-xs rounded-md hover:bg-opacity-80 transition-colors ${
               theme === "dark"
                 ? "text-dark-primary bg-dark-tertiary border border-dark-secondary" 
                 : "text-dark-tertiary bg-light-secondary border border-light-accent"
             } ${(isTyping || !isDataLoaded) ? "opacity-50 cursor-not-allowed" : ""}`}>
-            Achievements
+            <span className="hidden sm:inline">Achievements</span>
+            <span className="sm:hidden">Awards</span>
           </button>
           <button 
             onClick={() => handleQuickQuery("How can someone contact you?")}
             disabled={isTyping || !isDataLoaded}
-            className={`flex items-center px-3 py-2 text-xs rounded-md hover:bg-opacity-80 transition-colors ${
+            className={`flex items-center px-2 md:px-3 py-1.5 md:py-2 text-xs rounded-md hover:bg-opacity-80 transition-colors ${
               theme === "dark"
                 ? "text-dark-primary bg-dark-tertiary border border-dark-secondary" 
                 : "text-dark-tertiary bg-light-secondary border border-light-accent"
             } ${(isTyping || !isDataLoaded) ? "opacity-50 cursor-not-allowed" : ""}`}>
-            Contact Info
+            Contact
           </button>
         </div>
       </div>
