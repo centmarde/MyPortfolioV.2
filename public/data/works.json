@@ -240,5 +240,28 @@
       "/logo/React.png",
       "/logo/supabase.svg"
     ]
+  },
+   {
+    "id": 11,
+    "tag":"Startup Project",
+    "title": "Biznest",
+    "description": "A web application that connects local businesses with customers in Butuan, Agusan del Norte.",
+    "image":   "/works/Biznest/a1.png",
+    "images": [
+        "/works/Biznest/a2.png",
+        "/works/Biznest/a3.png",
+        "/works/Biznest/a4.png",
+        "/works/Biznest/a5.png",
+        "/works/Biznest/a6.png",
+        "/works/Biznest/a7.png",
+        "/works/Biznest/a8.png",
+        "/works/Biznest/a9.png"
+    ],
+    "demoLink": "https://biznest-gitpush.vercel.app/",
+    "codeLink": "https://github.com/centmarde/Biznest",
+    "techStack": [
+      "/logo/gmap.png",
+      "/logo/React.png"
+    ]
   }
 ]
