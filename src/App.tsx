@@ -180,7 +180,7 @@ function AppContent({
 
       {/* Home Section with Hero as the first component */}
       <section id="home" className="h-auto min-h-screen">
-        <Hero onFullyLoaded={() => {}} />
+        <Hero onFullyLoaded={() => {}} /> 
         <Apex />
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
           <path 

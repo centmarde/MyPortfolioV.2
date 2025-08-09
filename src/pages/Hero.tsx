@@ -184,6 +184,7 @@ export default function Hero({ onFullyLoaded }: HeroProps) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [assetsLoaded, setAssetsLoaded] = useState(false);
   const [showScrollReminder, setShowScrollReminder] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const quoteRef = useRef<HTMLDivElement>(null);
 
@@ -300,6 +301,17 @@ export default function Hero({ onFullyLoaded }: HeroProps) {
   }, [isLoaded]);
 
   useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth < 768); // md breakpoint
+    };
+
+    checkIsMobile();
+    window.addEventListener('resize', checkIsMobile);
+
+    return () => window.removeEventListener('resize', checkIsMobile);
+  }, []);
+
+  useEffect(() => {
     const handleVisibilityOnIntersect = () => {
       if (window.scrollY < 100 && isLoaded) {
         setShowScrollReminder(true);
@@ -316,17 +328,11 @@ export default function Hero({ onFullyLoaded }: HeroProps) {
   return (
     <div 
       ref={containerRef} 
-      className="h-[1000vh] w-full bg-light-primary dark:bg-dark-background"
+      className="h-[200vh] md:h-[1000vh] w-full bg-light-primary dark:bg-dark-background"
     >
-      {!isLoaded && (
-        <div className="fixed inset-0 bg-light-primary dark:bg-dark-background z-50 flex items-center justify-center">
-          <div className="text-2xl font-bold">Loading assets...</div>
-        </div>
-      )}
-      
       <div 
         ref={quoteRef}
-        className="fixed md:top-1/2 md:right-12 top-1/3 left-1/2 transform -translate-x-1/2 md:-translate-x-0 -translate-y-1/2 max-w-xl w-[85%] md:w-auto p-4 md:p-8 z-10 text-dark-tertiary dark:text-light-primary"
+        className="fixed md:top-1/2 md:right-12 top-1/3 left-1/2 transform -translate-x-1/2 md:-translate-x-0 -translate-y-1/2 max-w-xl w-[85%] md:w-auto p-4 md:p-8 z-10 text-dark-tertiary dark:text-light-primary hidden md:block"
         style={{ opacity: 0 }}
       >
         <blockquote className="border-l-4 border-light-accent dark:border-dark-primary pl-4 md:pl-6">
@@ -344,7 +350,7 @@ export default function Hero({ onFullyLoaded }: HeroProps) {
           shadows
           gl={{ alpha: true }}
           camera={{ position: [-10, 5, 5], fov: 70 }}
-          className="h-full w-full"
+          className="h-full w-full hidden md:block"
           onCreated={handleCanvasCreated}
         >
           <fogExp2 attach="fog" args={['#000000', 0.02]} />
@@ -372,7 +378,10 @@ export default function Hero({ onFullyLoaded }: HeroProps) {
               scrollProgress={scrollProgress}
             />
             <Environment  files="/ambients/venice.hdr" background={false} />
-            <OrbitControls enableZoom={false} enablePan={false} enableRotate={true} />
+            {/* Hide OrbitControls on mobile view */}
+            {!isMobile && (
+              <OrbitControls enableZoom={false} enablePan={false} enableRotate={true} />
+            )}
           </Suspense>
         </Canvas>
         
