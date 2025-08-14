@@ -1,5 +1,5 @@
 import ChatBox from "@/components/Chat";
-import ChatModel from "@/components/ChatModel";
+//import ChatModel from "@/components/ChatModel";
 
 export default function OtherPage() {
   return (
@@ -8,7 +8,7 @@ export default function OtherPage() {
       <div className="flex flex-col lg:flex-row w-full h-full">
         {/* Left column for ChatModel - hidden on mobile */}
         <div className="hidden lg:block lg:w-2/5 h-full">
-          <ChatModel />
+         {/*  <ChatModel /> */}
         </div>
         
         {/* Right column for ChatBox - full width on mobile, 3/5 on desktop */}
