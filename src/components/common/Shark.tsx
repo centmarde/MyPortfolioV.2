@@ -20,9 +20,15 @@ export default function Shark({
   scrollProgress = 0 // Default to 0 (start of scroll)
 }: SharkProps) {
   const group = useRef<THREE.Group>(null!);
-  const { scene, animations } = useGLTF('/glb/waltz.glb'); // Path to shark model
+  const { scene, animations } = useGLTF('/glb/waltz.glb', '/draco/'); // Path to shark model, Draco decoder path
   const { actions, mixer } = useAnimations(animations, group);
   const actionRef = useRef<THREE.AnimationAction | null>(null);
+  
+  // Log Draco usage indicator
+  useEffect(() => {
+    console.log("🦈 Shark model loaded with Draco decoder support enabled");
+    console.log("🔧 Draco decoder path: /draco/");
+  }, []);
   
   // Set up animation on load
   useEffect(() => {
