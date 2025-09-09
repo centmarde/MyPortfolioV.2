@@ -85,7 +85,13 @@ interface HighlightsData {
       location: string;
       year: string;
     }>;
-    speaking: any[];
+    speaking: Array<{
+      title: string;
+      event?: string;
+      date?: string;
+      description?: string;
+      link?: string;
+    }>;
   };
   organizations: {
     professional: Array<{
@@ -94,7 +100,12 @@ interface HighlightsData {
       period: string;
       description: string;
     }>;
-    volunteer: any[];
+    volunteer: Array<{
+      name: string;
+      role: string;
+      period: string;
+      description: string;
+    }>;
     alumni: Array<{
       name: string;
       role: string;
