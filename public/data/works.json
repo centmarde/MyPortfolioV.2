@@ -63,7 +63,7 @@
       "/works/Reald2d/B4.png",
       "/works/Reald2d/A1.png"
     ],
-    "demoLink": "https://staging.reald2d.org/",
+    "demoLink": "https://reald2d.org/",
     "codeLink": "NDA",
     "techStack": [
       "/logo/Vue.js.png",
@@ -254,8 +254,12 @@
     "tag": "Freelance Project",
     "title": "CZARLES",
     "description": "A Human Resource Management System that helps you manage your employees, payroll, and other HR-related tasks.",
-    "image": "/works/CZARLES/a1.png",
+    "image": "/works/CZARLES/a9.png",
     "images": [
+      "/works/CZARLES/a10.png",
+      "/works/CZARLES/a11.png",
+      "/works/CZARLES/a12.png",
+      "/works/CZARLES/a1.png",
       "/works/CZARLES/a2.png",
       "/works/CZARLES/a3.png",
       "/works/CZARLES/a4.png",
@@ -264,7 +268,7 @@
       "/works/CZARLES/a7.png",
       "/works/CZARLES/a8.png"
     ],
-    "demoLink": "https://czarles.vercel.app/",
+    "demoLink": "https://czarles.com/",
     "codeLink": "https://github.com/jipenalver/web-czarles",
     "techStack": [
       "/logo/Vue.js.png",

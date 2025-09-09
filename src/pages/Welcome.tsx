@@ -15,6 +15,8 @@ export default function Home() {
   const socialsRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
+  // Image carousel refs
+  const imagesRef = useRef<HTMLDivElement[]>([]);
 
   // Function to scroll to projects section
   const scrollToProjects = () => {
@@ -109,6 +111,60 @@ export default function Home() {
     }
   }, []);
 
+  // Image carousel animation effect
+  useEffect(() => {
+    // Initialize array if needed
+    if (imagesRef.current.length !== 2) {
+      imagesRef.current = [];
+    }
+
+    // Wait for refs to be populated
+    const timer = setTimeout(() => {
+      if (imagesRef.current.length === 2) {
+        // Initial setup - first image visible, second hidden
+        gsap.set(imagesRef.current[0], {
+          opacity: 1,
+          scale: 1,
+        });
+        gsap.set(imagesRef.current[1], {
+          opacity: 0,
+          scale: 1.1,
+        });
+
+        // Create animation timeline
+        const intervalId = setInterval(() => {
+          if (imagesRef.current.length === 2) {
+            // Find which image is currently visible
+            const visibleIndex =
+              imagesRef.current[0]?.style.opacity === "1" || 
+              imagesRef.current[0]?.style.opacity === "" ? 0 : 1;
+            const hiddenIndex = visibleIndex === 0 ? 1 : 0;
+
+            // Animate out current image
+            gsap.to(imagesRef.current[visibleIndex], {
+              opacity: 0,
+              scale: 0.9,
+              duration: 0.8,
+              ease: "power2.out",
+            });
+
+            // Animate in new image
+            gsap.to(imagesRef.current[hiddenIndex], {
+              opacity: 1,
+              scale: 1,
+              duration: 0.8,
+              ease: "power2.inOut",
+            });
+          }
+        }, 5000);
+
+        return () => clearInterval(intervalId);
+      }
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <div ref={sectionRef} className="flex min-h-screen flex-col">
       <main className="flex-1">
@@ -193,91 +249,36 @@ export default function Home() {
                     className="w-full h-full bg-muted relative"
                   >
                     {/* Image carousel with animation */}
-                    {(() => {
-                      // Create a new ref for the carousel
-                      const imagesRef = useRef<HTMLDivElement[]>([]);
-
-                      useEffect(() => {
-                        // Initialize array if needed
-                        if (imagesRef.current.length !== 2) {
-                          imagesRef.current = [
-                            document.createElement("div"),
-                            document.createElement("div"),
-                          ];
-                        }
-
-                        // Initial setup - first image visible, second hidden
-                        gsap.set(imagesRef.current[0], {
-                          opacity: 1,
-                          scale: 1,
-                        });
-                        gsap.set(imagesRef.current[1], {
-                          opacity: 0,
-                          scale: 1.1,
-                        });
-
-                        // Create animation timeline
-                        const intervalId = setInterval(() => {
-                          // Find which image is currently visible
-                          const visibleIndex =
-                            imagesRef.current[0].style.opacity === "1" ? 0 : 1;
-                          const hiddenIndex = visibleIndex === 0 ? 1 : 0;
-
-                          // Animate out current image
-                          gsap.to(imagesRef.current[visibleIndex], {
-                            opacity: 0,
-                            scale: 0.9,
-                            duration: 0.8,
-                            ease: "power2.out",
-                          });
-
-                          // Animate in new image
-                          gsap.to(imagesRef.current[hiddenIndex], {
-                            opacity: 1,
-                            scale: 1,
-                            duration: 0.8,
-                            ease: "power2.inOut",
-                          });
-                        }, 5000);
-
-                        return () => clearInterval(intervalId);
-                      }, []);
-
-                      return (
-                        <>
-                          <div
-                            ref={(el) => {
-                              if (el) imagesRef.current[0] = el;
-                            }}
-                            className="absolute inset-0 transition-opacity"
-                          >
-                            <img
-                              src="/misc/marde.jpg"
-                              alt="Profile Image"
-                              className="object-cover w-full h-full"
-                              width={400}
-                              height={450}
-                              loading="eager"
-                            />
-                          </div>
-                          <div
-                            ref={(el) => {
-                              if (el) imagesRef.current[1] = el;
-                            }}
-                            className="absolute inset-0 transition-opacity"
-                          >
-                            <img
-                              src="/misc/marde2.jpg"
-                              alt="Profile Image"
-                              className="object-cover w-full h-full"
-                              width={400}
-                              height={450}
-                              loading="eager"
-                            />
-                          </div>
-                        </>
-                      );
-                    })()}
+                    <div
+                      ref={(el) => {
+                        if (el) imagesRef.current[0] = el;
+                      }}
+                      className="absolute inset-0 transition-opacity"
+                    >
+                      <img
+                        src="/misc/marde.jpg"
+                        alt="Profile Image"
+                        className="object-cover w-full h-full"
+                        width={400}
+                        height={450}
+                        loading="eager"
+                      />
+                    </div>
+                    <div
+                      ref={(el) => {
+                        if (el) imagesRef.current[1] = el;
+                      }}
+                      className="absolute inset-0 transition-opacity"
+                    >
+                      <img
+                        src="/misc/marde2.jpg"
+                        alt="Profile Image"
+                        className="object-cover w-full h-full"
+                        width={400}
+                        height={450}
+                        loading="eager"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
