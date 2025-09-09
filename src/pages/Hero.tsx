@@ -1,13 +1,13 @@
 import { useRef, useEffect, useState, Suspense } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { OrbitControls, Environment, useGLTF, useAnimations } from '@react-three/drei';
+import { OrbitControls, Environment, useGLTF, useAnimations, Html, useProgress } from '@react-three/drei';
 import * as THREE from 'three';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ScrollReminder } from '../components/common/Dropdown';
 import Shark from '../components/common/Shark';
 import UnderwaterParticles from '../components/common/UnderwaterParticles';
-import Loading from '../components/Loader';
+import { ThreeProgressTracker } from '../components/ThreeProgressTracker';
 
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
@@ -134,7 +134,18 @@ const UnderwaterLighting = () => {
   );
 };
 
-
+// Simple loading fallback component
+const LoadingFallback = () => {
+  const { progress } = useProgress();
+  return (
+    <Html center>
+      <div className="flex flex-col items-center justify-center">
+        <div className="text-2xl font-bold mb-2">Loading Models</div>
+        <div className="text-lg">{progress.toFixed(0)}%</div>
+      </div>
+    </Html>
+  );
+};
 
 // Add a component to check when all 3D assets are loaded
 const AssetsLoader = ({ onAllAssetsLoaded }: { onAllAssetsLoaded: () => void }) => {
@@ -175,7 +186,6 @@ export default function Hero({ onFullyLoaded }: HeroProps) {
   const [assetsLoaded, setAssetsLoaded] = useState(false);
   const [showScrollReminder, setShowScrollReminder] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
-  const [showLoader, setShowLoader] = useState(true);
   const containerRef = useRef<HTMLDivElement>(null);
   const quoteRef = useRef<HTMLDivElement>(null);
 
@@ -187,7 +197,6 @@ export default function Hero({ onFullyLoaded }: HeroProps) {
 
   const handleAllAssetsLoaded = () => {
     setAssetsLoaded(true);
-    setShowLoader(false);
 
     if (onFullyLoaded) {
       onFullyLoaded();
@@ -317,11 +326,6 @@ export default function Hero({ onFullyLoaded }: HeroProps) {
     };
   }, [isLoaded]);
 
-  // Show loader while assets are loading
-  if (showLoader) {
-    return <Loading onLoadingComplete={() => setShowLoader(false)} />;
-  }
-
   return (
     <div 
       ref={containerRef} 
@@ -352,7 +356,8 @@ export default function Hero({ onFullyLoaded }: HeroProps) {
         >
           <fogExp2 attach="fog" args={['#000000', 0.02]} />
           
-          <Suspense fallback={null}>
+          <Suspense fallback={<LoadingFallback />}>
+            <ThreeProgressTracker />
             <AssetsLoader onAllAssetsLoaded={handleAllAssetsLoaded} />
             <UnderwaterLighting />
             <UnderwaterParticles 

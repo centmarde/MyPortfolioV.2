@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { ThemeProvider } from './components/theme-provider';
+import { ThreeLoaderProvider } from './components/ThreeLoaderProvider';
 import Navbar from './components/navbar';
 import { useTheme } from './components/theme-provider';
 import { gsap } from 'gsap';
@@ -110,12 +111,14 @@ function App() {
   
   return (
     <ThemeProvider>
-      {loading && <Loading onLoadingComplete={handleLoadingComplete} />}
-      <AppContent 
-        activeTab={activeTab} 
-        setActiveTab={setActiveTab} 
-        loading={loading}
-      />
+      <ThreeLoaderProvider>
+        {loading && <Loading onLoadingComplete={handleLoadingComplete} />}
+        <AppContent 
+          activeTab={activeTab} 
+          setActiveTab={setActiveTab} 
+          loading={loading}
+        />
+      </ThreeLoaderProvider>
     </ThemeProvider>
   );
 }
@@ -132,11 +135,12 @@ function AppContent({
 }) {
   const { theme } = useTheme();
   const sectionsRef = useRef<HTMLElement[]>([]);
-  const sectionIds = ["home", "background", "stack", "certificates", "projects", "others", "contacts"];
   
   useEffect(() => {
     // Only set up scroll triggers when content is loaded
     if (loading) return;
+    
+    const sectionIds = ["home", "background", "stack", "certificates", "projects", "others", "contacts"];
     
     // Collect all section elements
     sectionsRef.current = sectionIds.map(id => document.getElementById(id)).filter(Boolean) as HTMLElement[];
