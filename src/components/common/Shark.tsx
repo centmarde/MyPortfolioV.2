@@ -24,11 +24,59 @@ export default function Shark({
   const { actions, mixer } = useAnimations(animations, group);
   const actionRef = useRef<THREE.AnimationAction | null>(null);
   
-  // Log Draco usage indicator
+  // Log Draco usage indicator and compression info
   useEffect(() => {
     console.log("🦈 Shark model loaded with Draco decoder support enabled");
     console.log("🔧 Draco decoder path: /draco/");
-  }, []);
+    
+    // Log compression information if available
+    if (scene) {
+      // Calculate estimated original size based on geometry
+      let originalSize = 0;
+      let compressedSize = 0;
+      
+      scene.traverse((child) => {
+        if (child instanceof THREE.Mesh && child.geometry) {
+          const geometry = child.geometry;
+          
+          // Estimate original size based on vertex count and attributes
+          const vertexCount = geometry.attributes.position ? geometry.attributes.position.count : 0;
+          const indexCount = geometry.index ? geometry.index.count : 0;
+          
+          // Estimate uncompressed size (positions + normals + uvs + indices)
+          const positionSize = vertexCount * 3 * 4; // 3 floats per vertex
+          const normalSize = geometry.attributes.normal ? vertexCount * 3 * 4 : 0;
+          const uvSize = geometry.attributes.uv ? vertexCount * 2 * 4 : 0;
+          const indexSize = indexCount * 2; // assuming 16-bit indices
+          
+          const meshOriginalSize = positionSize + normalSize + uvSize + indexSize;
+          originalSize += meshOriginalSize;
+          
+          // For compressed size, we'll use a rough estimate since we can't get exact Draco size
+          // Draco typically achieves 3-10x compression ratio
+          const estimatedCompressionRatio = 6; // Conservative estimate
+          compressedSize += meshOriginalSize / estimatedCompressionRatio;
+          
+          console.log(`📊 Mesh geometry stats:
+            • Vertices: ${vertexCount.toLocaleString()}
+            • Indices: ${indexCount.toLocaleString()}
+            • Estimated uncompressed size: ${(meshOriginalSize / 1024).toFixed(2)} KB
+            • Estimated Draco compressed size: ${(meshOriginalSize / estimatedCompressionRatio / 1024).toFixed(2)} KB
+            • Estimated compression ratio: ${estimatedCompressionRatio}:1`);
+        }
+      });
+      
+      if (originalSize > 0) {
+        const compressionRatio = originalSize / compressedSize;
+        console.log(`🗜️ Total Draco compression summary:
+          • Estimated original GLB geometry size: ${(originalSize / 1024).toFixed(2)} KB
+          • Estimated Draco compressed size: ${(compressedSize / 1024).toFixed(2)} KB
+          • Space saved: ${((originalSize - compressedSize) / 1024).toFixed(2)} KB
+          • Compression ratio: ${compressionRatio.toFixed(1)}:1
+          • Size reduction: ${((1 - compressedSize / originalSize) * 100).toFixed(1)}%`);
+      }
+    }
+  }, [scene]);
   
   // Set up animation on load
   useEffect(() => {

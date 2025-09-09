@@ -23,7 +23,7 @@ interface ModelProps {
 
 const Model = ({ path, scale = 1, position = [0, 0, 0], rotation = [0, 0, 0], isScrolling = false }: ModelProps) => {
   const group = useRef<THREE.Group>(null!);
-  const { scene, animations } = useGLTF(path);
+  const { scene, animations } = useGLTF(path, '/draco/'); // Added Draco decoder path
   const { actions, mixer } = useAnimations(animations, group);
   const actionRef = useRef<THREE.AnimationAction | null>(null);
 
@@ -42,6 +42,54 @@ const Model = ({ path, scale = 1, position = [0, 0, 0], rotation = [0, 0, 0], is
       }
     };
   }, [actions]);
+
+  // Log Draco compression info for whale model
+  useEffect(() => {
+    console.log("🐋 Whale model loaded with Draco decoder support enabled");
+    console.log("🔧 Draco decoder path: /draco/");
+    
+    if (scene) {
+      let originalSize = 0;
+      let compressedSize = 0;
+      
+      scene.traverse((child) => {
+        if (child instanceof THREE.Mesh && child.geometry) {
+          const geometry = child.geometry;
+          
+          const vertexCount = geometry.attributes.position ? geometry.attributes.position.count : 0;
+          const indexCount = geometry.index ? geometry.index.count : 0;
+          
+          const positionSize = vertexCount * 3 * 4;
+          const normalSize = geometry.attributes.normal ? vertexCount * 3 * 4 : 0;
+          const uvSize = geometry.attributes.uv ? vertexCount * 2 * 4 : 0;
+          const indexSize = indexCount * 2;
+          
+          const meshOriginalSize = positionSize + normalSize + uvSize + indexSize;
+          originalSize += meshOriginalSize;
+          
+          const estimatedCompressionRatio = 6;
+          compressedSize += meshOriginalSize / estimatedCompressionRatio;
+          
+          console.log(`📊 Whale mesh geometry stats:
+            • Vertices: ${vertexCount.toLocaleString()}
+            • Indices: ${indexCount.toLocaleString()}
+            • Estimated uncompressed size: ${(meshOriginalSize / 1024).toFixed(2)} KB
+            • Estimated Draco compressed size: ${(meshOriginalSize / estimatedCompressionRatio / 1024).toFixed(2)} KB
+            • Estimated compression ratio: ${estimatedCompressionRatio}:1`);
+        }
+      });
+      
+      if (originalSize > 0) {
+        const compressionRatio = originalSize / compressedSize;
+        console.log(`🗜️ Total Whale Draco compression summary:
+          • Estimated original GLB geometry size: ${(originalSize / 1024).toFixed(2)} KB
+          • Estimated Draco compressed size: ${(compressedSize / 1024).toFixed(2)} KB
+          • Space saved: ${((originalSize - compressedSize) / 1024).toFixed(2)} KB
+          • Compression ratio: ${compressionRatio.toFixed(1)}:1
+          • Size reduction: ${((1 - compressedSize / originalSize) * 100).toFixed(1)}%`);
+      }
+    }
+  }, [scene]);
 
   useEffect(() => {
     if (actionRef.current) {
