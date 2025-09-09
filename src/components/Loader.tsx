@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useTheme } from './theme-provider';
+import { useThreeLoader } from '../hooks/useThreeLoader';
 
 interface LoadingProps {
   onLoadingComplete: () => void;
+  externalProgress?: number; // Optional external progress
+  loadingText?: string; // Optional custom loading text
 }
 
 // Collection of development-related quotes
@@ -24,29 +27,83 @@ const devQuotes = [
   "Perfection is achieved not when there is nothing more to add, but when there is nothing left to take away. – Antoine de Saint-Exupery"
 ];
 
-export default function Loading({ onLoadingComplete }: LoadingProps) {
+export default function Loading({ onLoadingComplete, externalProgress, loadingText }: LoadingProps) {
   const { theme } = useTheme();
-  const [progress, setProgress] = useState(0);
+  const [internalProgress, setInternalProgress] = useState(0);
   const [fadeOut, setFadeOut] = useState(false);
   const [quoteIndex, setQuoteIndex] = useState(Math.floor(Math.random() * devQuotes.length));
   const [quoteVisible, setQuoteVisible] = useState(true);
+  const [useThreeProgress, setUseThreeProgress] = useState(false);
+  
+  // Try to get three.js progress if available
+  let threeProgress = 0;
+  let threeLoaded = 0;
+  let threeTotal = 0;
+  let hasThreeContext = false;
+  
+  try {
+    const threeLoader = useThreeLoader();
+    threeProgress = threeLoader.progress;
+    threeLoaded = threeLoader.loaded;
+    threeTotal = threeLoader.total;
+    hasThreeContext = true;
+  } catch {
+    // ThreeLoader context not available, use fallback
+    hasThreeContext = false;
+  }
+  
+  // Effect to set useThreeProgress only when we have meaningful data
+  useEffect(() => {
+    if (hasThreeContext && (threeTotal > 0 || threeProgress > 0) && !useThreeProgress) {
+      setUseThreeProgress(true);
+    } else if (!hasThreeContext && useThreeProgress) {
+      setUseThreeProgress(false);
+    }
+  }, [hasThreeContext, threeTotal, threeProgress, useThreeProgress]);
+  
+  // Use external progress if provided, otherwise use three.js progress, otherwise use internal progress
+  const progress = Math.round(
+    externalProgress !== undefined 
+      ? externalProgress 
+      : useThreeProgress 
+        ? threeProgress 
+        : internalProgress
+  );
   
   useEffect(() => {
+    // If external progress or three.js progress is provided, don't run internal timer
+    if (externalProgress !== undefined || useThreeProgress) return;
+    
+    // Fallback internal progress for when no external progress is provided
     const interval = setInterval(() => {
-      setProgress(prev => {
+      setInternalProgress(prev => {
         if (prev >= 100) {
           clearInterval(interval);
-          setFadeOut(true);
-          setTimeout(() => {
-            onLoadingComplete();
-          }, 600); // Allow time for fade out animation
           return 100;
         }
-        return prev + 2; // Increase by 2% every interval to complete in roughly 5 seconds
+        return prev + 2; // Increase by 2% every interval
       });
     }, 100);
     
-    // Change quote every 3 seconds with fade transition
+    return () => clearInterval(interval);
+  }, [externalProgress, useThreeProgress]);
+  
+  useEffect(() => {
+    // When loading is complete
+    if (progress >= 100) {
+      const timer = setTimeout(() => {
+        setFadeOut(true);
+        setTimeout(() => {
+          onLoadingComplete();
+        }, 600); // Allow time for fade out animation
+      }, 500); // Small delay to ensure smooth completion
+      
+      return () => clearTimeout(timer);
+    }
+  }, [progress, onLoadingComplete]);
+  
+  useEffect(() => {
+    // Change quote every 5 seconds with fade transition
     const quoteInterval = setInterval(() => {
       setQuoteVisible(false);
       setTimeout(() => {
@@ -56,10 +113,9 @@ export default function Loading({ onLoadingComplete }: LoadingProps) {
     }, 5000);
     
     return () => {
-      clearInterval(interval);
       clearInterval(quoteInterval);
     };
-  }, [onLoadingComplete]);
+  }, []);
 
   return (
     <div 
@@ -106,11 +162,11 @@ export default function Loading({ onLoadingComplete }: LoadingProps) {
       </div>
       
       <h3 className="mt-6 text-xl font-medium text-light-accent dark:text-dark-primary animate-pulse">
-        Loading Experience
+        {loadingText || (useThreeProgress ? "Loading 3D Assets" : "Loading Experience")}
       </h3>
       
       <p className="mt-2 text-light-accent/80 dark:text-dark-primary/80 font-medium text-sm">
-        {progress < 100 ? `${progress}% complete` : 'Ready!'}
+        {progress < 100 ? `${progress}% complete${useThreeProgress && threeTotal > 0 ? ` (${threeLoaded}/${threeTotal} assets)` : ''}` : 'Ready!'}
       </p>
       
       <div className="fixed bottom-8 left-0 right-0 flex justify-center">
