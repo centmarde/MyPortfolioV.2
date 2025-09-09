@@ -34,6 +34,7 @@ export default function Loading({ onLoadingComplete, externalProgress, loadingTe
   const [quoteIndex, setQuoteIndex] = useState(Math.floor(Math.random() * devQuotes.length));
   const [quoteVisible, setQuoteVisible] = useState(true);
   const [useThreeProgress, setUseThreeProgress] = useState(false);
+  const [hasMinimumTimeElapsed, setHasMinimumTimeElapsed] = useState(false);
   
   // Try to get three.js progress if available
   let threeProgress = 0;
@@ -52,16 +53,25 @@ export default function Loading({ onLoadingComplete, externalProgress, loadingTe
     hasThreeContext = false;
   }
   
-  // Effect to set useThreeProgress only when we have meaningful data
+  // Effect to track minimum 20-second timer
   useEffect(() => {
-    if (hasThreeContext && (threeTotal > 0 || threeProgress > 0) && !useThreeProgress) {
+    const timer = setTimeout(() => {
+      setHasMinimumTimeElapsed(true);
+    }, 20000); // 20 seconds
+    
+    return () => clearTimeout(timer);
+  }, []);
+  
+  // Effect to set useThreeProgress only after minimum time has elapsed
+  useEffect(() => {
+    if (hasMinimumTimeElapsed && hasThreeContext && (threeTotal > 0 || threeProgress > 0) && !useThreeProgress) {
       setUseThreeProgress(true);
     } else if (!hasThreeContext && useThreeProgress) {
       setUseThreeProgress(false);
     }
-  }, [hasThreeContext, threeTotal, threeProgress, useThreeProgress]);
+  }, [hasMinimumTimeElapsed, hasThreeContext, threeTotal, threeProgress, useThreeProgress]);
   
-  // Use external progress if provided, otherwise use three.js progress, otherwise use internal progress
+  // Use external progress if provided, otherwise use three.js progress after 10 seconds, otherwise use internal progress
   const progress = Math.round(
     externalProgress !== undefined 
       ? externalProgress 
@@ -71,22 +81,36 @@ export default function Loading({ onLoadingComplete, externalProgress, loadingTe
   );
   
   useEffect(() => {
-    // If external progress or three.js progress is provided, don't run internal timer
-    if (externalProgress !== undefined || useThreeProgress) return;
-    
-    // Fallback internal progress for when no external progress is provided
+    // Always run internal timer
     const interval = setInterval(() => {
       setInternalProgress(prev => {
-        if (prev >= 100) {
-          clearInterval(interval);
-          return 100;
+        if (!hasMinimumTimeElapsed) {
+          // For the first 20 seconds, progress slowly to 80%
+          const targetProgress = 80;
+          const increment = targetProgress / 200; // 80% over 20 seconds (200 intervals)
+          return Math.min(prev + increment, targetProgress);
+        } else {
+          // After 20 seconds, continue to 100% if not using dynamic progress
+          if (prev >= 100) {
+            clearInterval(interval);
+            return 100;
+          }
+          // Faster progression after minimum time elapsed
+          return Math.min(prev + 5, 100);
         }
-        return prev + 2; // Increase by 2% every interval
       });
     }, 100);
     
     return () => clearInterval(interval);
-  }, [externalProgress, useThreeProgress]);
+  }, [hasMinimumTimeElapsed]);
+  
+  // Separate effect to handle three.js progress override
+  useEffect(() => {
+    if (useThreeProgress && threeProgress >= 0) {
+      // When using three.js progress, ensure it progresses to completion
+      setInternalProgress(Math.max(80, threeProgress)); // Ensure minimum 80% from timer phase
+    }
+  }, [useThreeProgress, threeProgress]);
   
   useEffect(() => {
     // When loading is complete
