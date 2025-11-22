@@ -1,22 +1,26 @@
 {
   "topAwards": [
     {
-      "id": 1
-     
-    },
-     {
-      "id": 2,
+      "id": 1,
        "title": "Nationals Game Dev Challenge",
       "issuer": "DOST PHILIPPINES E-SPORTS",
       "date": "December2024 3rdPlacer",
       "image": "/certs/game.png"
+     
+    },
+     {
+      "id": 2,
+       "title": "Regionals DICT startUp Challenge 2025",
+      "issuer": "DICT Caraga",
+      "date": "November2024 Champion",
+      "image": "/certs/Champion.jpg"
     },
     {
       "id": 3,
       "title": "Regionals Hackathon Challenge",
       "issuer": "DOST PHILIPPINES / LGU",
       "date": "July25 2ndPlacer",
-      "image": "/certs/game.png"
+      "image": "/certs/hack4smarter.jpg"
     }
    
   ],
@@ -188,6 +192,34 @@
       "issuer": "Ateneo Virtual Reality Escape",
       "date": "June 2025",
       "image": "/certs/Avre.png"
+    },
+     {
+      "id": 25,
+      "title": "Capacity Building for Startup Growth: Angel Funding Pathways Training",
+      "issuer": "DOST Caraga Regional Office",
+      "date": "October 2025",
+      "image": "/certs/DOST1.jpg"
+    },
+     {
+      "id": 26,
+      "title": "Capacity Building for Hack4Smarter Butuan: Empowering AI-Enabled Innovation through the Elve8Caraga Startup Challenge",
+      "issuer": "DOST Caraga Regional Office",
+      "date": "July 2025",
+      "image": "/certs/DOST2.jpg"
+    },
+      {
+      "id": 27,
+      "title": "Top 15 Finalists - Philippine Startup Challenge X: Regional Pitching Competition",
+      "issuer": "ICT Industry Development Bureau (IIDB) of the DICT Caraga",
+      "date": "November 2025",
+      "image": "/certs/DICT1.jpg"
+    },
+      {
+      "id": 28,
+      "title": "Gemini for Workspace Training for Caraga Employees and Stakeholders",
+      "issuer": "DICT Caraga Regional Office",
+      "date": "October 2025",
+      "image": "/certs/Gemini1.jpg"
     }
   ]
 }

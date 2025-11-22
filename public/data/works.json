@@ -277,5 +277,27 @@
       "/logo/pinia.png",
       "/logo/typescript.png"
     ]
+  },
+   {
+    "id": 13,
+    "tag": "Freelance Project",
+    "title": "LuxLights",
+    "description": "an Admin System for LuxLights Lighting Solutions that helps you manage Staffs and Services.",
+    "image": "/works/luxlights/lux1.png",
+    "images": [
+      "/works/luxlights/lux2.png",
+      "/works/luxlights/lux3.png",
+      "/works/luxlights/lux4.png"
+
+    ],
+    "demoLink": "https://www.luxlights.com/",
+    "codeLink": "NDA",
+    "techStack": [
+      "/logo/Vue.js.png",
+      "/logo/Tailwind CSS.png",
+      "/logo/supabase.svg",
+      "/logo/pinia.png",
+      "/logo/typescript.png"
+    ]
   }
 ]
