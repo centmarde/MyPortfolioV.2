@@ -3,7 +3,7 @@
 import type React from "react"
 
 import { useState, useRef, useEffect } from "react"
-import { ArrowUp, Sparkles } from "lucide-react"
+import { ArrowUp } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useTheme } from "../components/theme-provider"
 import { useResponse } from "@/services/response"
@@ -146,42 +146,57 @@ export default function ChatBox() {
   const isDataLoaded = portfolioData.bio && portfolioData.works && portfolioData.highlights && portfolioData.achievements;
 
   return (
-    <div className={`flex flex-col w-full h-full max-w-full mx-auto rounded-xl overflow-hidden border shadow-lg ${
+    <div className={`flex flex-col w-full h-full max-w-4xl mx-auto ${
       theme === "dark" 
-        ? "bg-dark-background/90 text-dark-primary border-dark-tertiary backdrop-blur-xl" 
-        : "bg-light-tertiary/90 text-dark-tertiary border-light-accent backdrop-blur-xl"
+        ? "bg-[#1a1a1a] text-[#e8e8e8]" 
+        : "bg-white text-[#2c2c2c]"
     }`}>
-      {/* Response area at the top - updated with fixed height and improved scrolling */}
+      {/* Messages area */}
       <div 
-        className={`p-3 md:p-6 flex-grow overflow-y-auto max-h-[60vh] md:max-h-[60vh] custom-scrollbar ${
+        className={`flex-1 overflow-y-auto px-4 md:px-6 ${
           theme === "dark"
-            ? "bg-dark-tertiary"
-            : "bg-light-accent"
+            ? "bg-[#1a1a1a]"
+            : "bg-white"
         }`}
         style={{
           scrollbarWidth: 'thin',
-          scrollbarColor: theme === "dark" ? '#4a5568 #2d3748' : '#cbd5e0 #edf2f7'
+          scrollbarColor: theme === "dark" ? '#333 #1a1a1a' : '#d4d4d4 #fff'
         }}
       >
-       
-
-        <div className="space-y-4 overflow-y-auto">
+        <div className="max-w-3xl mx-auto py-6 space-y-6">
           {messages.map(message => (
             <div 
               key={message.id}
-              className={`p-3 md:p-4 rounded-lg border break-words ${
+              className="flex gap-4"
+            >
+              {/* Avatar */}
+              <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
                 message.isUser 
                   ? theme === "dark"
-                    ? "bg-dark-primary text-dark-background border-dark-primary ml-2 md:ml-8" 
-                    : "bg-dark-tertiary text-light-primary border-dark-tertiary ml-2 md:ml-8"
+                    ? "bg-[#2d2d2d] text-[#e8e8e8]"
+                    : "bg-[#f4f4f4] text-[#2c2c2c]"
                   : theme === "dark"
-                    ? "bg-dark-secondary text-dark-primary border-dark-tertiary mr-2 md:mr-8"
-                    : "bg-light-secondary text-dark-tertiary border-light-tertiary mr-2 md:mr-8"
-              }`}
-              dangerouslySetInnerHTML={
-                message.isUser ? { __html: message.content } : { __html: message.content.replace(/<br><think>/g, '<br>') }
-              }
-            />
+                    ? "bg-[#d97706] text-white"
+                    : "bg-[#ea580c] text-white"
+              }`}>
+                {message.isUser ? "U" : "A"}
+              </div>
+              
+              {/* Message content */}
+              <div className="flex-1 min-w-0 pt-1">
+                <div className={`text-[15px] leading-relaxed break-words ${
+                  theme === "dark" ? "text-[#e8e8e8]" : "text-[#2c2c2c]"
+                }`}>
+                  <div 
+                    dangerouslySetInnerHTML={
+                      message.isUser 
+                        ? { __html: message.content } 
+                        : { __html: message.content.replace(/<br><think>/g, '<br>') }
+                    }
+                  />
+                </div>
+              </div>
+            </div>
           ))}
           
           {/* Keep reference to the latest message for scrolling */}
@@ -189,102 +204,104 @@ export default function ChatBox() {
         </div>
       </div>
 
-      {/* Input area at the bottom */}
-      <div className={`p-3 md:p-4 border-t flex-shrink-0 ${
+      {/* Input area - Fixed at bottom */}
+      <div className={`border-t flex-shrink-0 ${
         theme === "dark"
-          ? "border-dark-tertiary bg-dark-background/90"
-          : "border-light-accent bg-light-tertiary/90"
+          ? "border-[#2d2d2d] bg-[#1a1a1a]"
+          : "border-[#e5e5e5] bg-white"
       }`}>
-        <form onSubmit={handleSubmit} className="relative">
-          <div className={`flex items-end border rounded-lg focus-within:ring-1 ${
-            theme === "dark"
-              ? "border-dark-tertiary bg-dark-secondary focus-within:ring-dark-primary focus-within:border-dark-primary"
-              : "border-light-accent bg-light-secondary focus-within:ring-dark-tertiary focus-within:border-dark-tertiary"
-          }`}>
-            <textarea
-              ref={inputRef}
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder={portfolioData.bio ? `Ask about ${portfolioData.bio.name}'s skills, projects, experience...` : "Loading..."}
-              className={`flex-1 p-2 md:p-3 pr-8 md:pr-10 bg-transparent border-0 resize-none focus:ring-0 focus:outline-none placeholder-opacity-70 max-h-[120px] min-h-[24px] text-sm md:text-base ${
-                theme === "dark" 
-                  ? "text-dark-primary placeholder-dark-primary" 
-                  : "text-dark-tertiary placeholder-dark-tertiary"
-              }`}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && !e.shiftKey) {
-                  e.preventDefault()
-                  handleSubmit(e)
-                }
-              }}
-            />
-            <div className="flex items-center p-1 md:p-2 space-x-2">
-              <button
-                type="submit"
-                disabled={!input.trim() || isTyping || !isDataLoaded}
-                className={cn(
-                  "p-1.5 md:p-2 rounded-md transition-colors",
-                  input.trim() && !isTyping && isDataLoaded
-                    ? theme === "dark"
-                      ? "bg-dark-primary text-dark-background hover:bg-dark-primary/90"
-                      : "bg-dark-tertiary text-light-primary hover:bg-dark-tertiary/90"
-                    : theme === "dark"
-                      ? "bg-dark-tertiary text-dark-secondary cursor-not-allowed"
-                      : "bg-light-accent text-light-primary cursor-not-allowed"
-                )}
-                aria-label="Send message"
-              >
-                <ArrowUp className="w-3 h-3 md:w-4 md:h-4" />
+        <div className="max-w-3xl mx-auto px-4 md:px-6 py-4">
+          {/* Quick actions */}
+          {messages.length <= 1 && (
+            <div className="flex flex-wrap gap-2 mb-4">
+              <button 
+                onClick={() => handleQuickQuery("What are your skills and tech stack?")}
+                disabled={isTyping || !isDataLoaded}
+                className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
+                  theme === "dark"
+                    ? "bg-[#2d2d2d] text-[#e8e8e8] hover:bg-[#3d3d3d] border border-[#3d3d3d]" 
+                    : "bg-[#f4f4f4] text-[#2c2c2c] hover:bg-[#e5e5e5] border border-[#e5e5e5]"
+                } ${(isTyping || !isDataLoaded) ? "opacity-50 cursor-not-allowed" : ""}`}>
+                Skills & Tech
+              </button>
+              <button 
+                onClick={() => handleQuickQuery("Tell me about your projects and work experience")}
+                disabled={isTyping || !isDataLoaded}
+                className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
+                  theme === "dark"
+                    ? "bg-[#2d2d2d] text-[#e8e8e8] hover:bg-[#3d3d3d] border border-[#3d3d3d]" 
+                    : "bg-[#f4f4f4] text-[#2c2c2c] hover:bg-[#e5e5e5] border border-[#e5e5e5]"
+                } ${(isTyping || !isDataLoaded) ? "opacity-50 cursor-not-allowed" : ""}`}>
+                Projects
+              </button>
+              <button 
+                onClick={() => handleQuickQuery("What certifications and achievements do you have?")}
+                disabled={isTyping || !isDataLoaded}
+                className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
+                  theme === "dark"
+                    ? "bg-[#2d2d2d] text-[#e8e8e8] hover:bg-[#3d3d3d] border border-[#3d3d3d]" 
+                    : "bg-[#f4f4f4] text-[#2c2c2c] hover:bg-[#e5e5e5] border border-[#e5e5e5]"
+                } ${(isTyping || !isDataLoaded) ? "opacity-50 cursor-not-allowed" : ""}`}>
+                Achievements
+              </button>
+              <button 
+                onClick={() => handleQuickQuery("How can someone contact you?")}
+                disabled={isTyping || !isDataLoaded}
+                className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
+                  theme === "dark"
+                    ? "bg-[#2d2d2d] text-[#e8e8e8] hover:bg-[#3d3d3d] border border-[#3d3d3d]" 
+                    : "bg-[#f4f4f4] text-[#2c2c2c] hover:bg-[#e5e5e5] border border-[#e5e5e5]"
+                } ${(isTyping || !isDataLoaded) ? "opacity-50 cursor-not-allowed" : ""}`}>
+                Contact
               </button>
             </div>
-          </div>
-        </form>
-
-        {/* Quick actions */}
-        <div className="flex flex-wrap gap-1.5 md:gap-2 mt-3 md:mt-4">
-          <button 
-            onClick={() => handleQuickQuery("What are your skills and tech stack?")}
-            disabled={isTyping || !isDataLoaded}
-            className={`flex items-center px-2 md:px-3 py-1.5 md:py-2 text-xs rounded-md hover:bg-opacity-80 transition-colors ${
+          )}
+          
+          <form onSubmit={handleSubmit} className="relative">
+            <div className={`flex items-end rounded-2xl border transition-all ${
               theme === "dark"
-                ? "text-dark-primary bg-dark-tertiary border border-dark-secondary" 
-                : "text-dark-tertiary bg-light-secondary border border-light-accent"
-            } ${(isTyping || !isDataLoaded) ? "opacity-50 cursor-not-allowed" : ""}`}>
-            <Sparkles className="w-3 h-3 mr-1 md:mr-2" />
-            <span className="hidden sm:inline">Skills & Tech</span>
-            <span className="sm:hidden">Skills</span>
-          </button>
-          <button 
-            onClick={() => handleQuickQuery("Tell me about your projects and work experience")}
-            disabled={isTyping || !isDataLoaded}
-            className={`flex items-center px-2 md:px-3 py-1.5 md:py-2 text-xs rounded-md hover:bg-opacity-80 transition-colors ${
-              theme === "dark"
-                ? "text-dark-primary bg-dark-tertiary border border-dark-secondary" 
-                : "text-dark-tertiary bg-light-secondary border border-light-accent"
-            } ${(isTyping || !isDataLoaded) ? "opacity-50 cursor-not-allowed" : ""}`}>
-            Projects
-          </button>
-          <button 
-            onClick={() => handleQuickQuery("What certifications and achievements do you have?")}
-            disabled={isTyping || !isDataLoaded}
-            className={`flex items-center px-2 md:px-3 py-1.5 md:py-2 text-xs rounded-md hover:bg-opacity-80 transition-colors ${
-              theme === "dark"
-                ? "text-dark-primary bg-dark-tertiary border border-dark-secondary" 
-                : "text-dark-tertiary bg-light-secondary border border-light-accent"
-            } ${(isTyping || !isDataLoaded) ? "opacity-50 cursor-not-allowed" : ""}`}>
-            <span className="hidden sm:inline">Achievements</span>
-            <span className="sm:hidden">Awards</span>
-          </button>
-          <button 
-            onClick={() => handleQuickQuery("How can someone contact you?")}
-            disabled={isTyping || !isDataLoaded}
-            className={`flex items-center px-2 md:px-3 py-1.5 md:py-2 text-xs rounded-md hover:bg-opacity-80 transition-colors ${
-              theme === "dark"
-                ? "text-dark-primary bg-dark-tertiary border border-dark-secondary" 
-                : "text-dark-tertiary bg-light-secondary border border-light-accent"
-            } ${(isTyping || !isDataLoaded) ? "opacity-50 cursor-not-allowed" : ""}`}>
-            Contact
-          </button>
+                ? "border-[#3d3d3d] bg-[#2d2d2d] focus-within:border-[#5d5d5d]"
+                : "border-[#d4d4d4] bg-[#f9f9f9] focus-within:border-[#b4b4b4]"
+            }`}>
+              <textarea
+                ref={inputRef}
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder={portfolioData.bio ? `Message about ${portfolioData.bio.name}...` : "Loading..."}
+                className={`flex-1 px-4 py-3 bg-transparent border-0 resize-none focus:ring-0 focus:outline-none max-h-[200px] min-h-[52px] text-[15px] leading-relaxed ${
+                  theme === "dark" 
+                    ? "text-[#e8e8e8] placeholder-[#737373]" 
+                    : "text-[#2c2c2c] placeholder-[#6b6b6b]"
+                }`}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault()
+                    handleSubmit(e)
+                  }
+                }}
+                rows={1}
+              />
+              <div className="flex items-center pb-2 pr-2">
+                <button
+                  type="submit"
+                  disabled={!input.trim() || isTyping || !isDataLoaded}
+                  className={cn(
+                    "p-2 rounded-lg transition-all",
+                    input.trim() && !isTyping && isDataLoaded
+                      ? theme === "dark"
+                        ? "bg-[#d97706] text-white hover:bg-[#b45309]"
+                        : "bg-[#ea580c] text-white hover:bg-[#c2410c]"
+                      : theme === "dark"
+                        ? "bg-[#3d3d3d] text-[#737373] cursor-not-allowed"
+                        : "bg-[#e5e5e5] text-[#a3a3a3] cursor-not-allowed"
+                  )}
+                  aria-label="Send message"
+                >
+                  <ArrowUp className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+          </form>
         </div>
       </div>
     </div>
