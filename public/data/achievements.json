@@ -21,6 +21,27 @@
       "issuer": "DOST PHILIPPINES / LGU",
       "date": "July25 2ndPlacer",
       "image": "/certs/hack4smarter.jpg"
+    },
+    {
+      "id": 4,
+      "title": "PSCX Special Award",
+      "issuer": "Huawei’s Special Award",
+      "date": "Dec4 GameDevelopment",
+      "image": "/certs/GameDevelopment.jpg"
+    },
+    {
+      "id": 5,
+      "title": "PSCX Special Award",
+      "issuer": "DOST PHILIPPINES / LGU",
+      "date": "Dec4 Trailblazer",
+      "image": "/certs/tailBlazer.jpg"
+    },
+    {
+      "id": 6,
+      "title": "Philippine National Startup Competition",
+      "issuer": "DOST PHILIPPINES / LGU",
+      "date": "Dec4 4thPlacer",
+      "image": "/certs/4th.jpg"
     }
    
   ],
