@@ -299,5 +299,82 @@
       "/logo/pinia.png",
       "/logo/typescript.png"
     ]
+  },
+     {
+    "id": 14,
+    "tag": "Thesis Commission",
+    "title": "Dhome-Makers-cafe",
+    "description": "an Admin System for Dhome-Makers-cafe that helps you manage Staffs and Services.",
+    "image": "/works/QRsys/a2.png",
+    "images": [
+      "/works/QRsys/a3.png",
+      "/works/QRsys/a1.png",
+      "/works/QRsys/a4.png",
+      "/works/QRsys/a5.png",
+      "/works/QRsys/a6.png",
+      "/works/QRsys/a7.png"
+    ],
+    "demoLink": "https://dhome-makers.vercel.app/",
+    "codeLink": "https://github.com/centmarde/Scan-Order-Savor-Implementing-a-QR-Code-Based-Point-of-Sale-System-for-D-Home-Makers-Caf-",
+    "techStack": [
+      "/logo/Vue.js.png",
+      "/logo/Veutify.png",
+      "/logo/supabase.svg",
+      "/logo/pinia.png",
+      "/logo/typescript.png"
+    ]
+  },
+   {
+    "id": 15,
+    "tag": "Thesis Commission",
+    "title": "CSU-LCO-clearance-system",
+    "description": "an Admin System for CSU-LCO-clearance-system that helps you manage Students Clearance.",
+    "image": "/works/LCO/a1.png",
+    "images": [
+      "/works/LCO/a2.png",
+      "/works/LCO/a3.png",
+      "/works/LCO/a4.png",
+      "/works/LCO/a5.png",
+      "/works/LCO/a6.png",
+      "/works/LCO/a7.png"
+    ],
+    "demoLink": "https://lco-clearance.vercel.app/",
+    "codeLink": "https://github.com/centmarde/LCO-Centralized-membership-and-Clearance-Tracking-System",
+    "techStack": [
+      "/logo/Vue.js.png",
+      "/logo/Veutify.png",
+      "/logo/supabase.svg",
+      "/logo/pinia.png",
+      "/logo/typescript.png"
+    ]
+  },
+   {
+    "id": 15,
+    "tag": "Thesis Commission",
+    "title": "parish-event-appointment-system",
+    "description": "a system for appointment and form management for san isidro parish",
+    "image": "/works/Parish/a2.png",
+    "images": [
+      "/works/Parish/a1.png",
+      "/works/Parish/a3.png",
+      "/works/Parish/a4.png",
+      "/works/Parish/a5.png",
+      "/works/Parish/a6.png",
+      "/works/Parish/a7.png",
+      "/works/Parish/a8.png",
+      "/works/Parish/a9.png",
+      "/works/Parish/a10.png",
+      "/works/Parish/a11.png",
+      "/works/Parish/a12.png"
+    ],
+    "demoLink": "https://silp.vercel.app/",
+    "codeLink": "https://github.com/centmarde/Parish-Econnect",
+    "techStack": [
+      "/logo/Vue.js.png",
+      "/logo/Veutify.png",
+      "/logo/supabase.svg",
+      "/logo/pinia.png",
+      "/logo/typescript.png"
+    ]
   }
 ]

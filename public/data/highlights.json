@@ -14,6 +14,8 @@
     "Digital Transformation"
   ],
   "notableAchievements": [
+    "3rd place in National Game Development Competition, Philippines",
+    "4th place in National Startup Competition, Philippines",
     "Thesis published in leading academic journal",
     "Led a team of 2+ in a successful Student Thesis project",
     "Led a team of 1+ in a successful Game Dev project",
@@ -25,7 +27,30 @@
   ],
   "professionalSummary": "Seasoned professional with over 1+ years of experience driving organizational success through strategic leadership, innovative problem-solving, and effective team management. Proven track record of delivering results in fast-paced, complex environments while maintaining a focus on quality and continuous improvement.",
   "experience": [
-   
+    {
+      "title": "CTO",
+      "company": "Biznest Startup",
+      "location": "Philippines",
+      "period": "2023 - Present",
+      "responsibilities": [
+        "Led technical strategy and architecture decisions for the startup",
+        "Oversaw development of innovative business solutions and platforms",
+        "Managed engineering teams and technical product development",
+        "Implemented scalable technology infrastructure and best practices"
+      ]
+    },
+   {
+        "title": "CEO of Sinawali-Showdown",
+        "company": "CSU game developers",
+        "location": "Philippines, Butuan",
+        "period": "2022 - Present",
+        "responsibilities": [
+          "Brains of the team, leading the development of innovative game solutions",
+          "Collaborated with cross-functional developers to design and implement game features",
+          "Plans the game design and development process",    
+          "Conducted quality assurance testing and ensured code quality standards"
+        ]
+      },
     {
       "title": "Project Manager",
       "company": "Strongest Algorithm Corp.",
@@ -38,18 +63,7 @@
         "Fast phased environment, managing multiple projects simultaneously"
       ]
     },
-    {
-        "title": "Lead Developer",
-        "company": "CSU game developers",
-        "location": "Philippines, Butuan",
-        "period": "2022 - Present",
-        "responsibilities": [
-          "Brains of the team, leading the development of innovative game solutions",
-          "Collaborated with cross-functional developers to design and implement game features",
-          "Plans the game design and development process",    
-          "Conducted quality assurance testing and ensured code quality standards"
-        ]
-      },
+    
     {
       "title": "Jr. Developer",
       "company": "Real D2D",

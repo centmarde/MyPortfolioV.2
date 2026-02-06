@@ -45,7 +45,7 @@ function useOnlineStatus() {
   return isOnline
 }
 
-function SocialLink({ href, icon: Icon, label }: { href: string, icon: React.ComponentType<any>, label: string }) {
+function SocialLink({ href, icon: Icon, label }: { href: string, icon: React.ComponentType<React.SVGProps<SVGSVGElement>>, label: string }) {
   return (
     <a
       href={href}
