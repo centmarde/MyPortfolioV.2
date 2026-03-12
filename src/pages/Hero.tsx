@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState, Suspense } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { OrbitControls, Environment, useGLTF, useAnimations, Html, useProgress } from '@react-three/drei';
+import { OrbitControls, Environment, useGLTF, useAnimations } from '@react-three/drei';
 import * as THREE from 'three';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -182,17 +182,9 @@ const UnderwaterLighting = () => {
   );
 };
 
-// Simple loading fallback component
+// Simple loading fallback component (hidden)
 const LoadingFallback = () => {
-  const { progress } = useProgress();
-  return (
-    <Html center>
-      <div className="flex flex-col items-center justify-center">
-        <div className="text-2xl font-bold mb-2">Loading Models</div>
-        <div className="text-lg">{progress.toFixed(0)}%</div>
-      </div>
-    </Html>
-  );
+  return null;
 };
 
 // Add a component to check when all 3D assets are loaded
@@ -422,11 +414,13 @@ export default function Hero({ onFullyLoaded }: HeroProps) {
               rotation={modelRotation}
               isScrolling={isScrolling}
             />
-            <Shark 
-              position={sharkPosition} 
-              isScrolling={isScrolling}
-              scrollProgress={scrollProgress}
-            />
+            {assetsLoaded && (
+              <Shark 
+                position={sharkPosition} 
+                isScrolling={isScrolling}
+                scrollProgress={scrollProgress}
+              />
+            )}
             <Environment  files="/ambients/venice.hdr" background={false} />
             {/* Hide OrbitControls on mobile view */}
             {!isMobile && (

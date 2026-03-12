@@ -99,6 +99,7 @@ const Section = ({
 function App() {
   const [activeTab, setActiveTab] = useState("home");
   const [loading, setLoading] = useState(true);
+  const [assetsProgress, setAssetsProgress] = useState(0);
   
   // Handle the completion of loading
   const handleLoadingComplete = () => {
@@ -109,14 +110,24 @@ function App() {
     window.scrollTo(0, 0);
   };
   
+  // Handle when 3D assets are fully loaded
+  const handleAssetsLoaded = () => {
+    setAssetsProgress(100);
+    // Trigger loading complete after a short delay
+    setTimeout(() => {
+      handleLoadingComplete();
+    }, 800); // Small delay to show 100% before hiding
+  };
+  
   return (
     <ThemeProvider>
       <ThreeLoaderProvider>
-        {loading && <Loading onLoadingComplete={handleLoadingComplete} />}
+        {loading && <Loading onLoadingComplete={handleLoadingComplete} externalProgress={assetsProgress > 0 ? assetsProgress : undefined} />}
         <AppContent 
           activeTab={activeTab} 
           setActiveTab={setActiveTab} 
           loading={loading}
+          onAssetsLoaded={handleAssetsLoaded}
         />
       </ThreeLoaderProvider>
     </ThemeProvider>
@@ -127,11 +138,13 @@ function App() {
 function AppContent({ 
   activeTab, 
   setActiveTab,
-  loading
+  loading,
+  onAssetsLoaded
 }: { 
   activeTab: string; 
   setActiveTab: (tab: string) => void;
   loading: boolean;
+  onAssetsLoaded: () => void;
 }) {
   const { theme } = useTheme();
   const sectionsRef = useRef<HTMLElement[]>([]);
@@ -184,7 +197,7 @@ function AppContent({
 
       {/* Home Section with Hero as the first component */}
       <section id="home" className="h-auto min-h-screen">
-        <Hero onFullyLoaded={() => {}} /> 
+        <Hero onFullyLoaded={onAssetsLoaded} /> 
         <Apex />
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
           <path 

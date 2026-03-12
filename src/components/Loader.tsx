@@ -33,13 +33,13 @@ export default function Loading({ onLoadingComplete, externalProgress, loadingTe
   const [fadeOut, setFadeOut] = useState(false);
   const [quoteIndex, setQuoteIndex] = useState(Math.floor(Math.random() * devQuotes.length));
   const [quoteVisible, setQuoteVisible] = useState(true);
-  const [useThreeProgress, setUseThreeProgress] = useState(false);
-  const [hasMinimumTimeElapsed, setHasMinimumTimeElapsed] = useState(false);
+  const [displayProgress, setDisplayProgress] = useState(0);
   
   // Try to get three.js progress if available
   let threeProgress = 0;
   let threeLoaded = 0;
   let threeTotal = 0;
+  let threeActive = false;
   let hasThreeContext = false;
   
   try {
@@ -47,70 +47,53 @@ export default function Loading({ onLoadingComplete, externalProgress, loadingTe
     threeProgress = threeLoader.progress;
     threeLoaded = threeLoader.loaded;
     threeTotal = threeLoader.total;
+    threeActive = threeLoader.active;
     hasThreeContext = true;
   } catch {
     // ThreeLoader context not available, use fallback
     hasThreeContext = false;
   }
   
-  // Effect to track minimum 20-second timer
+  // Update internal progress based on Three.js loading
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setHasMinimumTimeElapsed(true);
-    }, 20000); // 20 seconds
-    
-    return () => clearTimeout(timer);
-  }, []);
-  
-  // Effect to set useThreeProgress only after minimum time has elapsed
-  useEffect(() => {
-    if (hasMinimumTimeElapsed && hasThreeContext && (threeTotal > 0 || threeProgress > 0) && !useThreeProgress) {
-      setUseThreeProgress(true);
-    } else if (!hasThreeContext && useThreeProgress) {
-      setUseThreeProgress(false);
-    }
-  }, [hasMinimumTimeElapsed, hasThreeContext, threeTotal, threeProgress, useThreeProgress]);
-  
-  // Use external progress if provided, otherwise use three.js progress after 10 seconds, otherwise use internal progress
-  const progress = Math.round(
-    externalProgress !== undefined 
-      ? externalProgress 
-      : useThreeProgress 
-        ? threeProgress 
-        : internalProgress
-  );
-  
-  useEffect(() => {
-    // Always run internal timer
-    const interval = setInterval(() => {
-      setInternalProgress(prev => {
-        if (!hasMinimumTimeElapsed) {
-          // For the first 20 seconds, progress slowly to 80%
-          const targetProgress = 80;
-          const increment = targetProgress / 200; // 80% over 20 seconds (200 intervals)
-          return Math.min(prev + increment, targetProgress);
-        } else {
-          // After 20 seconds, continue to 100% if not using dynamic progress
-          if (prev >= 100) {
+    if (hasThreeContext && threeActive && threeProgress > 0) {
+      // Use real Three.js progress when available
+      setInternalProgress(threeProgress);
+    } else if (!threeActive && internalProgress < 100) {
+      // If Three.js loading is not active yet, show a slow fake progress
+      const interval = setInterval(() => {
+        setInternalProgress(prev => {
+          if (prev >= 30) {
             clearInterval(interval);
-            return 100;
+            return prev; // Stop at 30% until real loading starts
           }
-          // Faster progression after minimum time elapsed
-          return Math.min(prev + 5, 100);
-        }
-      });
-    }, 100);
-    
-    return () => clearInterval(interval);
-  }, [hasMinimumTimeElapsed]);
-  
-  // Separate effect to handle three.js progress override
-  useEffect(() => {
-    if (useThreeProgress && threeProgress >= 0) {
-      // When using three.js progress, ensure it progresses to completion
-      setInternalProgress(Math.max(80, threeProgress)); // Ensure minimum 80% from timer phase
+          return prev + 1;
+        });
+      }, 100);
+      
+      return () => clearInterval(interval);
     }
-  }, [useThreeProgress, threeProgress]);
+  }, [hasThreeContext, threeActive, threeProgress, internalProgress]);
+  
+  // Smooth out the displayed progress to avoid jumps
+  useEffect(() => {
+    const targetProgress = externalProgress !== undefined ? externalProgress : internalProgress;
+    
+    if (displayProgress < targetProgress) {
+      const diff = targetProgress - displayProgress;
+      const increment = Math.max(0.5, diff / 10); // Smooth transition
+      
+      const timer = setTimeout(() => {
+        setDisplayProgress(prev => Math.min(prev + increment, targetProgress));
+      }, 50);
+      
+      return () => clearTimeout(timer);
+    } else if (displayProgress > targetProgress) {
+      setDisplayProgress(targetProgress);
+    }
+  }, [internalProgress, externalProgress, displayProgress]);
+  
+  const progress = Math.round(displayProgress);
   
   useEffect(() => {
     // When loading is complete
@@ -186,11 +169,13 @@ export default function Loading({ onLoadingComplete, externalProgress, loadingTe
       </div>
       
       <h3 className="mt-6 text-xl font-medium text-light-accent dark:text-dark-primary animate-pulse">
-        {loadingText || (useThreeProgress ? "Loading 3D Assets" : "Loading Experience")}
+        {loadingText || "Loading Experience"}
       </h3>
       
       <p className="mt-2 text-light-accent/80 dark:text-dark-primary/80 font-medium text-sm">
-        {progress < 100 ? `${progress}% complete${useThreeProgress && threeTotal > 0 ? ` (${threeLoaded}/${threeTotal} assets)` : ''}` : 'Ready!'}
+        {progress < 100 
+          ? `${progress}% complete${hasThreeContext && threeTotal > 0 && threeActive ? ` • ${threeLoaded}/${threeTotal} assets` : ''}` 
+          : 'Ready!'}
       </p>
       
       <div className="fixed bottom-8 left-0 right-0 flex justify-center">

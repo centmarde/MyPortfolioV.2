@@ -24,6 +24,7 @@
     "lucide-react": "^0.485.0",
     "motion": "^12.6.3",
     "react": "^19.0.0",
+    "react-dev-inspector": "^2.0.1",
     "react-dom": "^19.0.0",
     "styled-components": "^6.1.17",
     "tailwind-merge": "^3.1.0",
