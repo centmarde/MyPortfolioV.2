@@ -215,8 +215,6 @@ export function useResponse() {
       }
       
       // Make sure we've received everything before returning
-      console.log("Full response length:", fullResponse.length);
-      
       // Small delay to ensure UI updates completely
       await new Promise(resolve => setTimeout(resolve, 100));
       

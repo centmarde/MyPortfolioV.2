@@ -170,7 +170,7 @@ export default function Github({ username = "centmarde" }: GithubProps) {
   <div className="w-full overflow-x-auto pb-1 -mx-1 px-1">
     <div className="min-w-[640px]">
       <img 
-        src={`https://github-profile-trophy.vercel.app/?username=${username}&row=1&column=8&theme=${isDark ? 'darkhub' : 'flat'}&margin-w=8&no-frame=true`}
+        src={`https://github-profile-trophy-kannan.vercel.app/?username=${username}&row=1&column=7&theme=${isDark ? 'darkhub' : 'flat'}&margin-w=8&no-frame=true`}
         alt="GitHub Trophies" 
         className="max-w-full mx-auto"
       />

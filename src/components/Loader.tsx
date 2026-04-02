@@ -34,6 +34,7 @@ export default function Loading({ onLoadingComplete, externalProgress, loadingTe
   const [quoteIndex, setQuoteIndex] = useState(Math.floor(Math.random() * devQuotes.length));
   const [quoteVisible, setQuoteVisible] = useState(true);
   const [displayProgress, setDisplayProgress] = useState(0);
+  const [fallbackTriggered, setFallbackTriggered] = useState(false);
   
   // Try to get three.js progress if available
   let threeProgress = 0;
@@ -59,7 +60,7 @@ export default function Loading({ onLoadingComplete, externalProgress, loadingTe
     if (hasThreeContext && threeActive && threeProgress > 0) {
       // Use real Three.js progress when available
       setInternalProgress(threeProgress);
-    } else if (!threeActive && internalProgress < 100) {
+    } else if (!threeActive && internalProgress < 100 && !fallbackTriggered) {
       // If Three.js loading is not active yet, show a slow fake progress
       const interval = setInterval(() => {
         setInternalProgress(prev => {
@@ -73,7 +74,31 @@ export default function Loading({ onLoadingComplete, externalProgress, loadingTe
       
       return () => clearInterval(interval);
     }
-  }, [hasThreeContext, threeActive, threeProgress, internalProgress]);
+  }, [hasThreeContext, threeActive, threeProgress, internalProgress, fallbackTriggered]);
+  
+  // Fallback mechanism - if stuck at 30% for too long, complete loading anyway
+  useEffect(() => {
+    if (internalProgress >= 30 && !threeActive && !fallbackTriggered) {
+      const fallbackTimeout = setTimeout(() => {
+        setFallbackTriggered(true);
+        
+        // Gradually complete the loading
+        let currentProgress = 30;
+        const completeInterval = setInterval(() => {
+          currentProgress += 2;
+          setInternalProgress(currentProgress);
+          
+          if (currentProgress >= 100) {
+            clearInterval(completeInterval);
+          }
+        }, 50);
+      }, 5000); // Wait 5 seconds before triggering fallback
+      
+      return () => {
+        clearTimeout(fallbackTimeout);
+      };
+    }
+  }, [internalProgress, threeActive, fallbackTriggered]);
   
   // Smooth out the displayed progress to avoid jumps
   useEffect(() => {
@@ -174,7 +199,7 @@ export default function Loading({ onLoadingComplete, externalProgress, loadingTe
       
       <p className="mt-2 text-light-accent/80 dark:text-dark-primary/80 font-medium text-sm">
         {progress < 100 
-          ? `${progress}% complete${hasThreeContext && threeTotal > 0 && threeActive ? ` • ${threeLoaded}/${threeTotal} assets` : ''}` 
+          ? `${progress}% complete${hasThreeContext && threeTotal > 0 && threeActive ? ` • ${threeLoaded}/${threeTotal} assets` : ''}${fallbackTriggered ? ' (fallback mode)' : ''}` 
           : 'Ready!'}
       </p>
       

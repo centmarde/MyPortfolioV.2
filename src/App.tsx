@@ -101,8 +101,27 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [assetsProgress, setAssetsProgress] = useState(0);
   
+  // Protection flags to prevent infinite loops
+  const loadingCompletedRef = useRef(false);
+  const assetsLoadedRef = useRef(false);
+  const completionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  
+  // Cleanup effect to prevent memory leaks
+  useEffect(() => {
+    return () => {
+      if (completionTimeoutRef.current) {
+        clearTimeout(completionTimeoutRef.current);
+      }
+    };
+  }, []);
+  
   // Handle the completion of loading
   const handleLoadingComplete = () => {
+    if (loadingCompletedRef.current) {
+      return;
+    }
+    
+    loadingCompletedRef.current = true;
     setLoading(false);
     // Ensure scroll is enabled and position is at top
     document.body.style.overflow = '';
@@ -112,9 +131,20 @@ function App() {
   
   // Handle when 3D assets are fully loaded
   const handleAssetsLoaded = () => {
+    if (assetsLoadedRef.current) {
+      return;
+    }
+    
+    assetsLoadedRef.current = true;
     setAssetsProgress(100);
+    
+    // Clear any existing timeout
+    if (completionTimeoutRef.current) {
+      clearTimeout(completionTimeoutRef.current);
+    }
+    
     // Trigger loading complete after a short delay
-    setTimeout(() => {
+    completionTimeoutRef.current = setTimeout(() => {
       handleLoadingComplete();
     }, 800); // Small delay to show 100% before hiding
   };
