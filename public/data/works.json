@@ -376,5 +376,53 @@
       "/logo/pinia.png",
       "/logo/typescript.png"
     ]
+  },
+   {
+    "id": 16,
+    "tag": "Startup Project",
+    "title": "Eco-Barangay/E-wise",
+    "description": "About Eco-Barangay is a Vue-based app for coordinating e-waste collection at the community level, allowing residents to schedule pickups, track materials, and generate reports for disposal management.",
+    "image": "/works/EcoBarangay/e1.png",
+    "images": [
+      "/works/EcoBarangay/e2.png",
+      "/works/EcoBarangay/e3.png",
+      "/works/EcoBarangay/e4.png",
+      "/works/EcoBarangay/e5.png",
+      "/works/EcoBarangay/e6.png",
+      "/works/EcoBarangay/e7.png"
+    ],
+    "demoLink": "eco-barangay.vercel.app",
+    "codeLink": "https://github.com/centmarde/Eco-Barangay.git",
+    "techStack": [
+      "/logo/Vue.js.png",
+      "/logo/Veutify.png",
+      "/logo/supabase.svg",
+      "/logo/pinia.png",
+      "/logo/typescript.png"
+    ]
+  },
+   {
+    "id": 17,
+    "tag": "Upskill Project",
+    "title": "chubabi/serenity-web-template-reusable",
+    "description": "AboutA beautiful, personalized web application template designed for couples to create their own romantic digital spaces. Built with React, TypeScript, and Zustand for maximum reusability and customization.",
+    "image": "/works/ChuBabi/j4.png",
+    "images": [
+      "/works/ChuBabi/j2.png",
+      "/works/ChuBabi/j3.png",
+      "/works/ChuBabi/j1.png",
+      "/works/ChuBabi/j5.png",
+      "/works/ChuBabi/j6.png",
+      "/works/ChuBabi/j7.png"
+    ],
+    "demoLink": "https://chubabi.vercel.app/",
+    "codeLink": "https://github.com/centmarde/serenity-web-template-reusable.git",
+    "techStack": [
+      "/logo/React.png",
+      "/logo/Tailwind CSS.png",
+      "/logo/supabase.svg",
+      "/logo/typescript.png",
+      "/logo/zustand.svg"
+    ]
   }
 ]
