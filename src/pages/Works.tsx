@@ -17,6 +17,8 @@ interface Project {
   techStack: string[];
 }
 
+const CARDS_PER_PAGE = 6;
+
 const Works: React.FC = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -26,7 +28,6 @@ const Works: React.FC = () => {
   
   // Pagination states
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const cardsPerPage = 6;
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -37,6 +38,7 @@ const Works: React.FC = () => {
         // Randomize the projects
         const shuffledProjects = [...response.data].sort(() => Math.random() - 0.5);
         setProjects(shuffledProjects);
+        setCurrentPage(1);
         
         setLoading(false);
       } catch (err) {
@@ -64,10 +66,18 @@ const Works: React.FC = () => {
   };
 
   // Calculate pagination values
-  const indexOfLastProject = currentPage * cardsPerPage;
-  const indexOfFirstProject = indexOfLastProject - cardsPerPage;
+  const totalPages = Math.ceil(projects.length / CARDS_PER_PAGE);
+
+  // Keep the current page within bounds when data changes
+  useEffect(() => {
+    if (projects.length === 0) return;
+    if (currentPage < 1) setCurrentPage(1);
+    else if (currentPage > totalPages) setCurrentPage(totalPages);
+  }, [projects.length, currentPage, totalPages]);
+
+  const indexOfLastProject = currentPage * CARDS_PER_PAGE;
+  const indexOfFirstProject = indexOfLastProject - CARDS_PER_PAGE;
   const currentProjects = projects.slice(indexOfFirstProject, indexOfLastProject);
-  const totalPages = Math.ceil(projects.length / cardsPerPage);
 
   if (loading) {
     return (
@@ -88,7 +98,7 @@ const Works: React.FC = () => {
   return (
     <div className="w-full">
       {/* Works Carousel - Full Width */}
-      <WorksCarousel projects={projects} />
+      <WorksCarousel projects={currentProjects} />
       
       <div className="container mx-auto px-4 py-8">
         <h1 className="text-4xl font-bold mb-6 text-center">Projects</h1>
