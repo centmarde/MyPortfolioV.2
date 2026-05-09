@@ -278,7 +278,7 @@
       "/logo/typescript.png"
     ]
   },
-   {
+  {
     "id": 13,
     "tag": "Freelance Project",
     "title": "LuxLights",
@@ -288,7 +288,6 @@
       "/works/luxlights/lux2.png",
       "/works/luxlights/lux3.png",
       "/works/luxlights/lux4.png"
-
     ],
     "demoLink": "https://www.luxlights.com/",
     "codeLink": "NDA",
@@ -300,7 +299,7 @@
       "/logo/typescript.png"
     ]
   },
-     {
+  {
     "id": 14,
     "tag": "Thesis Commission",
     "title": "Dhome-Makers-cafe",
@@ -324,7 +323,7 @@
       "/logo/typescript.png"
     ]
   },
-   {
+  {
     "id": 15,
     "tag": "Thesis Commission",
     "title": "CSU-LCO-clearance-system",
@@ -348,7 +347,7 @@
       "/logo/typescript.png"
     ]
   },
-   {
+  {
     "id": 15,
     "tag": "Thesis Commission",
     "title": "parish-event-appointment-system",
@@ -377,7 +376,7 @@
       "/logo/typescript.png"
     ]
   },
-   {
+  {
     "id": 16,
     "tag": "Startup Project",
     "title": "Eco-Barangay/E-wise",
@@ -401,7 +400,7 @@
       "/logo/typescript.png"
     ]
   },
-   {
+  {
     "id": 17,
     "tag": "Upskill Project",
     "title": "chubabi/serenity-web-template-reusable",
@@ -423,6 +422,29 @@
       "/logo/supabase.svg",
       "/logo/typescript.png",
       "/logo/zustand.svg"
+    ]
+  },
+  {
+    "id": 18,
+    "tag": "Thesis Commission",
+    "title": "Web-Based-Automated-Document-Classification-and-Control-System-for-Accreditation-Project-Milestones",
+    "description": "An intelligent OCR-based system that automates the classification, organization, and management of accreditation documents, streamlining the entire documentation process for institutional compliance and quality assurance.",
+    "image": "/works/CCISrepo/d1.png",
+    "images": [
+      "/works/CCISrepo/d2.png",
+      "/works/CCISrepo/d3.png",
+      "/works/CCISrepo/d4.png",
+      "/works/CCISrepo/d5.png",
+      "/works/CCISrepo/d6.png"
+    ],
+    "demoLink": "csu-repository.vercel.app",
+    "codeLink": "https://github.com/centmarde/Web-Based-Automated-Document-Classification-and-Control-System-for-Accreditation-Project-Milestones.git",
+    "techStack": [
+      "/logo/Vue.js.png",
+      "/logo/Veutify.png",
+      "/logo/supabase.svg",
+      "/logo/pinia.png",
+      "/logo/typescript.png"
     ]
   }
 ]

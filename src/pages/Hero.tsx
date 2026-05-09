@@ -1,13 +1,19 @@
-import { useRef, useEffect, useState, Suspense } from 'react';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { OrbitControls, Environment, useGLTF, useAnimations } from '@react-three/drei';
-import * as THREE from 'three';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ScrollReminder } from '../components/common/Dropdown';
-import Shark from '../components/common/Shark';
-import UnderwaterParticles from '../components/common/UnderwaterParticles';
-import { ThreeProgressTracker } from '../components/ThreeProgressTracker';
+import { useRef, useEffect, useState, Suspense } from "react";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import {
+  OrbitControls,
+  Environment,
+  useGLTF,
+  useAnimations,
+  useProgress,
+} from "@react-three/drei";
+import * as THREE from "three";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ScrollReminder } from "../components/common/Dropdown";
+import Shark from "../components/common/Shark";
+import UnderwaterParticles from "../components/common/UnderwaterParticles";
+import { ThreeProgressTracker } from "../components/ThreeProgressTracker";
 
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
@@ -21,9 +27,15 @@ interface ModelProps {
   isScrolling?: boolean;
 }
 
-const Model = ({ path, scale = 1, position = [0, 0, 0], rotation = [0, 0, 0], isScrolling = false }: ModelProps) => {
+const Model = ({
+  path,
+  scale = 1,
+  position = [0, 0, 0],
+  rotation = [0, 0, 0],
+  isScrolling = false,
+}: ModelProps) => {
   const group = useRef<THREE.Group>(null!);
-  const { scene, animations } = useGLTF(path, '/draco/'); // Added Draco decoder path
+  const { scene, animations } = useGLTF(path, "/draco/"); // Added Draco decoder path
   const { actions, mixer } = useAnimations(animations, group);
   const actionRef = useRef<THREE.AnimationAction | null>(null);
 
@@ -68,12 +80,7 @@ const Model = ({ path, scale = 1, position = [0, 0, 0], rotation = [0, 0, 0], is
   });
 
   return (
-    <primitive 
-      ref={group}
-      object={scene} 
-      scale={scale} 
-      rotation={rotation} 
-    />
+    <primitive ref={group} object={scene} scale={scale} rotation={rotation} />
   );
 };
 
@@ -83,7 +90,7 @@ const UnderwaterLighting = () => {
   const lightRay2Ref = useRef<THREE.SpotLight>(null!);
   const ambientRef = useRef<THREE.AmbientLight>(null!);
 
-  useFrame(({clock}) => {
+  useFrame(({ clock }) => {
     const time = clock.getElapsedTime();
 
     if (lightRayRef.current) {
@@ -143,26 +150,24 @@ const LoadingFallback = () => {
 };
 
 // Add a component to check when all 3D assets are loaded
-const AssetsLoader = ({ onAllAssetsLoaded }: { onAllAssetsLoaded: () => void }) => {
-  const { gl, scene } = useThree();
+const AssetsLoader = ({
+  onAllAssetsLoaded,
+}: {
+  onAllAssetsLoaded: () => void;
+}) => {
+  const { scene } = useThree();
+  const { active, loaded, total, progress } = useProgress();
 
   useEffect(() => {
-    const checkLoadingComplete = () => {
-      let allLoaded = true;
+    if (active) return;
 
-      if (!gl.info.memory.textures) {
-        allLoaded = false;
-      }
+    const isComplete = total === 0 ? progress >= 100 : loaded >= total;
 
-      if (allLoaded && scene.children.length > 0) {
-        setTimeout(onAllAssetsLoaded, 1000);
-      }
-    };
-
-    const interval = setInterval(checkLoadingComplete, 500);
-
-    return () => clearInterval(interval);
-  }, [gl, scene, onAllAssetsLoaded]);
+    if (isComplete && scene.children.length > 0) {
+      const timeoutId = setTimeout(onAllAssetsLoaded, 300);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [active, loaded, total, progress, scene, onAllAssetsLoaded]);
 
   return null;
 };
@@ -172,9 +177,15 @@ interface HeroProps {
 }
 
 export default function Hero({ onFullyLoaded }: HeroProps) {
-  const [modelPosition, setModelPosition] = useState<[number, number, number]>([-20, 0, 0]);
-  const [modelRotation, setModelRotation] = useState<[number, number, number]>([5.3, 3, 0]);
-  const [sharkPosition, setSharkPosition] = useState<[number, number, number]>([20, 0, 0]);
+  const [modelPosition, setModelPosition] = useState<[number, number, number]>([
+    -20, 0, 0,
+  ]);
+  const [modelRotation, setModelRotation] = useState<[number, number, number]>([
+    5.3, 3, 0,
+  ]);
+  const [sharkPosition, setSharkPosition] = useState<[number, number, number]>([
+    20, 0, 0,
+  ]);
   const [isScrolling, setIsScrolling] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -201,44 +212,52 @@ export default function Hero({ onFullyLoaded }: HeroProps) {
   useEffect(() => {
     if (!containerRef.current || !isLoaded || !quoteRef.current) return;
 
-    gsap.to({}, {
-      scrollTrigger: {
-        trigger: containerRef.current,
-        start: "top top",
-        end: "bottom bottom",
-        scrub: true,
-        onUpdate: (self) => {
-          setScrollProgress(self.progress);
+    gsap.to(
+      {},
+      {
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top top",
+          end: "bottom bottom",
+          scrub: true,
+          onUpdate: (self) => {
+            setScrollProgress(self.progress);
 
-          const xPosition = gsap.utils.interpolate(-20, 20, self.progress);
-          const yPosition = Math.sin(self.progress * Math.PI * 2) * 2;
-          const xRotationOffset = Math.cos(self.progress * Math.PI * 2) * 0.5;
-          const baseXRotation = 5.3;
-          const zRotationOffset = Math.sin(self.progress * Math.PI * 3) * 0.2;
+            const xPosition = gsap.utils.interpolate(-20, 20, self.progress);
+            const yPosition = Math.sin(self.progress * Math.PI * 2) * 2;
+            const xRotationOffset = Math.cos(self.progress * Math.PI * 2) * 0.5;
+            const baseXRotation = 5.3;
+            const zRotationOffset = Math.sin(self.progress * Math.PI * 3) * 0.2;
 
-          setModelPosition([xPosition, yPosition, 0]);
-          setModelRotation([
-            baseXRotation + xRotationOffset, 
-            1.5, 
-            zRotationOffset
-          ]);
+            setModelPosition([xPosition, yPosition, 0]);
+            setModelRotation([
+              baseXRotation + xRotationOffset,
+              1.5,
+              zRotationOffset,
+            ]);
 
-          const sharkXPosition = gsap.utils.interpolate(20, -20, self.progress);
-          const sharkYPosition = Math.sin(self.progress * Math.PI * -5 + Math.PI) * 2;
-          setSharkPosition([sharkXPosition, sharkYPosition, 0]);
+            const sharkXPosition = gsap.utils.interpolate(
+              20,
+              -20,
+              self.progress,
+            );
+            const sharkYPosition =
+              Math.sin(self.progress * Math.PI * -5 + Math.PI) * 2;
+            setSharkPosition([sharkXPosition, sharkYPosition, 0]);
 
-          setIsScrolling(true);
+            setIsScrolling(true);
 
-          if (scrollTimer.current) {
-            clearTimeout(scrollTimer.current);
-          }
+            if (scrollTimer.current) {
+              clearTimeout(scrollTimer.current);
+            }
 
-          scrollTimer.current = setTimeout(() => {
-            setIsScrolling(false);
-          }, 150);
+            scrollTimer.current = setTimeout(() => {
+              setIsScrolling(false);
+            }, 150);
+          },
         },
-      }
-    });
+      },
+    );
 
     gsap.fromTo(
       quoteRef.current,
@@ -270,11 +289,11 @@ export default function Hero({ onFullyLoaded }: HeroProps) {
             },
           });
         },
-      }
+      },
     );
 
     return () => {
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
       if (scrollTimer.current) {
         clearTimeout(scrollTimer.current);
       }
@@ -283,16 +302,16 @@ export default function Hero({ onFullyLoaded }: HeroProps) {
 
   useEffect(() => {
     if (!isLoaded) {
-      document.body.style.overflow = 'hidden';
-      document.body.style.height = '100vh';
+      document.body.style.overflow = "hidden";
+      document.body.style.height = "100vh";
     } else {
-      document.body.style.overflow = '';
-      document.body.style.height = '';
+      document.body.style.overflow = "";
+      document.body.style.height = "";
     }
 
     return () => {
-      document.body.style.overflow = '';
-      document.body.style.height = '';
+      document.body.style.overflow = "";
+      document.body.style.height = "";
     };
   }, [isLoaded]);
 
@@ -302,9 +321,9 @@ export default function Hero({ onFullyLoaded }: HeroProps) {
     };
 
     checkIsMobile();
-    window.addEventListener('resize', checkIsMobile);
+    window.addEventListener("resize", checkIsMobile);
 
-    return () => window.removeEventListener('resize', checkIsMobile);
+    return () => window.removeEventListener("resize", checkIsMobile);
   }, []);
 
   useEffect(() => {
@@ -322,25 +341,57 @@ export default function Hero({ onFullyLoaded }: HeroProps) {
   }, [isLoaded]);
 
   return (
-    <div 
-      ref={containerRef} 
+    <div
+      ref={containerRef}
       className="h-[200vh] md:h-[1000vh] w-full bg-light-primary dark:bg-dark-background"
     >
-      <div 
+      <div
         ref={quoteRef}
         className="fixed md:top-1/2 md:right-12 top-1/3 left-1/2 transform -translate-x-1/2 md:-translate-x-0 -translate-y-1/2 max-w-xl w-[85%] md:w-auto p-4 md:p-8 z-10 text-dark-tertiary dark:text-light-primary hidden md:block"
         style={{ opacity: 0 }}
       >
         <blockquote className="border-l-4 border-light-accent dark:border-dark-primary pl-4 md:pl-6">
           <p className="text-xl md:text-3xl font-serif italic mb-3 md:mb-5 leading-relaxed">
-            "The <span className="text-light-accent dark:text-dark-accent font-bold">whale</span> rules the ocean, not by speed or stealth, but by sheer <span className="text-light-accent dark:text-dark-accent font-bold">presence</span> and <span className="text-light-accent dark:text-dark-accent font-bold">mastery</span> of its domain."
+            "The{" "}
+            <span className="text-light-accent dark:text-dark-accent font-bold">
+              whale
+            </span>{" "}
+            rules the ocean, not by speed or stealth, but by sheer{" "}
+            <span className="text-light-accent dark:text-dark-accent font-bold">
+              presence
+            </span>{" "}
+            and{" "}
+            <span className="text-light-accent dark:text-dark-accent font-bold">
+              mastery
+            </span>{" "}
+            of its domain."
           </p>
           <p className="text-sm md:text-xl mb-2 md:mb-3 leading-relaxed">
-            As a developer, be like the whale—<span className="text-light-accent dark:text-dark-accent font-bold">dominate</span> your field not by rushing through tasks or cutting corners, but by <span className="text-light-accent dark:text-dark-accent font-bold">deeply understanding</span> your craft, making <span className="text-light-accent dark:text-dark-accent font-bold">deliberate choices</span>, and building <span className="text-light-accent dark:text-dark-accent font-bold">robust</span>, <span className="text-light-accent dark:text-dark-accent font-bold">scalable solutions</span> that stand the test of time.
+            As a developer, be like the whale—
+            <span className="text-light-accent dark:text-dark-accent font-bold">
+              dominate
+            </span>{" "}
+            your field not by rushing through tasks or cutting corners, but by{" "}
+            <span className="text-light-accent dark:text-dark-accent font-bold">
+              deeply understanding
+            </span>{" "}
+            your craft, making{" "}
+            <span className="text-light-accent dark:text-dark-accent font-bold">
+              deliberate choices
+            </span>
+            , and building{" "}
+            <span className="text-light-accent dark:text-dark-accent font-bold">
+              robust
+            </span>
+            ,{" "}
+            <span className="text-light-accent dark:text-dark-accent font-bold">
+              scalable solutions
+            </span>{" "}
+            that stand the test of time.
           </p>
         </blockquote>
       </div>
-      
+
       <div className="sticky top-0 h-screen w-full">
         <Canvas
           shadows
@@ -349,45 +400,47 @@ export default function Hero({ onFullyLoaded }: HeroProps) {
           className="h-full w-full hidden md:block"
           onCreated={handleCanvasCreated}
         >
-          <fogExp2 attach="fog" args={['#000000', 0.02]} />
-          
+          <fogExp2 attach="fog" args={["#000000", 0.02]} />
+
           <Suspense fallback={<LoadingFallback />}>
             <ThreeProgressTracker />
             <AssetsLoader onAllAssetsLoaded={handleAllAssetsLoaded} />
             <UnderwaterLighting />
-            <UnderwaterParticles 
-              count={150} 
-              color="#a3c7e8" 
-              size={0.08} 
+            <UnderwaterParticles
+              count={150}
+              color="#a3c7e8"
+              size={0.08}
               bounds={15}
               speed={isScrolling ? 0.15 : 0.03}
             />
-            <Model 
-              path="/glb/whale.glb" 
+            <Model
+              path="/glb/whale.glb"
               scale={5}
               position={modelPosition}
               rotation={modelRotation}
               isScrolling={isScrolling}
             />
-            {assetsLoaded && (
-              <Shark 
-                position={sharkPosition} 
-                isScrolling={isScrolling}
-                scrollProgress={scrollProgress}
-              />
-            )}
-            <Environment  files="/ambients/venice.hdr" background={false} />
+            <Shark
+              position={sharkPosition}
+              isScrolling={isScrolling}
+              scrollProgress={scrollProgress}
+            />
+            <Environment files="/ambients/venice.hdr" background={false} />
             {/* Hide OrbitControls on mobile view */}
             {!isMobile && (
-              <OrbitControls enableZoom={false} enablePan={false} enableRotate={true} />
+              <OrbitControls
+                enableZoom={false}
+                enablePan={false}
+                enableRotate={true}
+              />
             )}
           </Suspense>
         </Canvas>
-        
+
         {isLoaded && assetsLoaded && showScrollReminder && (
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
             <div className="transform translate-y-[30vh] dark:text-light-primary text-dark-secondary">
-              <ScrollReminder 
+              <ScrollReminder
                 threshold={150}
                 color="currentColor"
                 size={40}
