@@ -1,13 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Github, Linkedin, Mail, Twitter } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import PortfolioSections from "@/components/common/Portfolio";
+import CVdialog from "@/dialogs/CVdialog";
 // Ensure ScrollTrigger is registered
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Home() {
+  const [isCvDialogOpen, setIsCvDialogOpen] = useState(false);
   // References for animated elements
   const headingRef = useRef<HTMLHeadingElement>(null);
   const descriptionRef = useRef<HTMLParagraphElement>(null);
@@ -40,7 +42,7 @@ export default function Home() {
       tl.fromTo(
         headingRef.current,
         { y: 50, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8 }
+        { y: 0, opacity: 1, duration: 0.8 },
       );
     }
 
@@ -49,7 +51,7 @@ export default function Home() {
         descriptionRef.current,
         { y: 30, opacity: 0 },
         { y: 0, opacity: 1, duration: 0.7 },
-        "-=0.4"
+        "-=0.4",
       );
     }
 
@@ -59,7 +61,7 @@ export default function Home() {
         buttonsRef.current.children,
         { y: 20, opacity: 0 },
         { y: 0, opacity: 1, duration: 0.5, stagger: 0.2 },
-        "-=0.3"
+        "-=0.3",
       );
     }
 
@@ -75,7 +77,7 @@ export default function Home() {
           stagger: 0.1,
           ease: "back.out(1.7)",
         },
-        "-=0.2"
+        "-=0.2",
       );
     }
 
@@ -85,7 +87,7 @@ export default function Home() {
         imageRef.current,
         { clipPath: "polygon(0 0, 0 0, 0 100%, 0 100%)" },
         { clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)", duration: 1 },
-        "-=1.5"
+        "-=1.5",
       );
     }
 
@@ -136,8 +138,10 @@ export default function Home() {
           if (imagesRef.current.length === 2) {
             // Find which image is currently visible
             const visibleIndex =
-              imagesRef.current[0]?.style.opacity === "1" || 
-              imagesRef.current[0]?.style.opacity === "" ? 0 : 1;
+              imagesRef.current[0]?.style.opacity === "1" ||
+              imagesRef.current[0]?.style.opacity === ""
+                ? 0
+                : 1;
             const hiddenIndex = visibleIndex === 0 ? 1 : 0;
 
             // Animate out current image
@@ -200,15 +204,11 @@ export default function Home() {
                     View My Work
                     <ArrowRight className="h-4 w-4" />
                   </Button>
-                  <Button variant="outline" asChild>
-                    <a
-                      href="/CV/CV.pdf"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      download="/CV/CV.pdf"
-                    >
-                      Download Resume
-                    </a>
+                  <Button
+                    variant="outline"
+                    onClick={() => setIsCvDialogOpen(true)}
+                  >
+                    Download Resume
                   </Button>
                 </div>
                 <div ref={socialsRef} className="flex gap-4 mt-4">
@@ -285,6 +285,10 @@ export default function Home() {
             </div>
           </div>
         </section>
+        <CVdialog
+          isOpen={isCvDialogOpen}
+          onClose={() => setIsCvDialogOpen(false)}
+        />
         <PortfolioSections />
       </main>
     </div>
