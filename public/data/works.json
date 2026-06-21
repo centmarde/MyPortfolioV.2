@@ -446,5 +446,22 @@
       "/logo/pinia.png",
       "/logo/typescript.png"
     ]
+  },
+  {
+    "id": 19,
+    "tag": "Game Project",
+    "title": "Bigkis",
+    "description": "A rouge-like game that challenges players to navigate a dynamic battlefield, making tactical decisions to outmaneuver opponents and achieve victory. Based on Filipino Mythology, Bigkis combines strategic gameplay with rich cultural storytelling, offering an immersive experience that tests both skill and wit.",
+    "image": "/works/Bigkis/l1.png",
+    "images": [
+      "/works/Bigkis/l0.png",
+      "/works/Bigkis/l2.png",
+      "/works/Bigkis/l3.png",
+      "/works/Bigkis/l4.png",
+      "/works/Bigkis/l5.png"
+    ],
+    "demoLink": "https://drive.google.com/drive/folders/1fjsiJ9qq8R7OM15OnEnqxBuST834ot3x",
+    "codeLink": "https://github.com/centmarde/GameDevYC3Entry",
+    "techStack": ["/logo/unity-icon.png"]
   }
 ]
