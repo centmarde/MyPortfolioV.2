@@ -14,7 +14,8 @@ import Loading from './components/Loader';
 import Awards from './pages/Awards';
 import Works from './pages/Works';
 import Footer from './pages/Footer';
-import OtherPage from './pages/Other';
+import ChatBox from './components/Chat';
+// import OtherPage from './pages/Other';
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
 
@@ -227,8 +228,12 @@ function AppContent({
 
       {/* Home Section with Hero as the first component */}
       <section id="home" className="h-auto min-h-screen">
-        <Hero onFullyLoaded={onAssetsLoaded} /> 
-        <Apex />
+        <div className="hidden md:block">
+          <Hero onFullyLoaded={onAssetsLoaded} /> 
+        </div>
+        <div className="mt-16 md:mt-0">
+          <Apex />
+        </div>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
           <path 
             fill={theme === "dark" ? "#030712" : "#FFFFFF"} 
@@ -262,12 +267,13 @@ function AppContent({
       </Section>
 
       {/* Other Skills Section */}
-      <Section id="others" forceTheme="dark">
+     {/*  <Section id="others" forceTheme="dark">
         <OtherPage />
-      </Section>
+      </Section> */}
 
       
       <Footer/>
+      {!loading && <ChatBox />}
     </div>
     
   );

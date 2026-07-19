@@ -26,7 +26,7 @@
       "id": 4,
       "title": "PSCX Special Award",
       "issuer": "Huawei’s Special Award",
-      "date": "Dec4 GameDevelopment",
+      "date": "Dec4 GameDev.",
       "image": "/certs/GameDevelopment.jpg"
     },
     {
@@ -42,6 +42,13 @@
       "issuer": "DOST PHILIPPINES / LGU",
       "date": "Dec4 4thPlacer",
       "image": "/certs/4th.jpg"
+    },
+    {
+      "id":7,
+      "title": "National Contender Young Creatives Challenge s.3",
+      "issuer": "Department of Trade and Industry",
+      "date": "July19 6thPlacer",
+      "image":"/certs/bigkis.png"
     }
    
   ],
