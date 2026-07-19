@@ -19,6 +19,8 @@ import ChatBox from './components/Chat';
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
 
+const COUNTER_API_BASE = '/api/counterapi';
+
 // Section component for consistent styling
 const Section = ({ 
   id, 
@@ -101,11 +103,14 @@ function App() {
   const [activeTab, setActiveTab] = useState("home");
   const [loading, setLoading] = useState(true);
   const [assetsProgress, setAssetsProgress] = useState(0);
+  const [visitorCount, setVisitorCount] = useState<number | null>(null);
   
   // Protection flags to prevent infinite loops
   const loadingCompletedRef = useRef(false);
   const assetsLoadedRef = useRef(false);
   const completionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  
+  const initializedRef = useRef(false);
   
   // Cleanup effect to prevent memory leaks
   useEffect(() => {
@@ -114,6 +119,30 @@ function App() {
         clearTimeout(completionTimeoutRef.current);
       }
     };
+  }, []);
+  
+  // Fetch visitor count once on app startup
+  useEffect(() => {
+    const fetchVisitorCount = async () => {
+      if (initializedRef.current) return;
+      initializedRef.current = true;
+
+      try {
+        const initRes = await fetch(`${COUNTER_API_BASE}/d-strongest-algorithms-team-4777/first-counter-4777/up`, {
+          headers: {
+            Authorization: `Bearer ${import.meta.env.VITE_COUNTER_API_TOKEN}`,
+          },
+        });
+        const initData = await initRes.json();
+        const value = (initData?.data?.up_count ?? 0) + 342;
+        setVisitorCount(value);
+      } catch (error) {
+        console.error('Failed to fetch visitor count:', error);
+        setVisitorCount(342);
+      }
+    };
+
+    fetchVisitorCount();
   }, []);
   
   // Handle the completion of loading
@@ -159,6 +188,7 @@ function App() {
           setActiveTab={setActiveTab} 
           loading={loading}
           onAssetsLoaded={handleAssetsLoaded}
+          visitorCount={visitorCount}
         />
       </ThreeLoaderProvider>
     </ThemeProvider>
@@ -170,12 +200,14 @@ function AppContent({
   activeTab, 
   setActiveTab,
   loading,
-  onAssetsLoaded
+  onAssetsLoaded,
+  visitorCount,
 }: { 
   activeTab: string; 
   setActiveTab: (tab: string) => void;
   loading: boolean;
   onAssetsLoaded: () => void;
+  visitorCount: number | null;
 }) {
   const { theme } = useTheme();
   const sectionsRef = useRef<HTMLElement[]>([]);
@@ -229,7 +261,7 @@ function AppContent({
       {/* Home Section with Hero as the first component */}
       <section id="home" className="h-auto min-h-screen">
         <div className="hidden md:block">
-          <Hero onFullyLoaded={onAssetsLoaded} /> 
+          <Hero onFullyLoaded={onAssetsLoaded} visitorCount={visitorCount} /> 
         </div>
         <div className="mt-16 md:mt-0">
           <Apex />

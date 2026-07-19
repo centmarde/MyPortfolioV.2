@@ -42,4 +42,13 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  server: {
+    proxy: {
+      '/api/counterapi': {
+        target: 'https://api.counterapi.dev',
+        changeOrigin: true,
+        rewrite: (path) => `/v2${path.replace(/^\/api\/counterapi/, '')}`,
+      },
+    },
+  },
 });
