@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/counterapi/:match*",
+      "destination": "https://api.counterapi.dev/v2/:match*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/"
+    }
+  ]
+}
