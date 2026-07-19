@@ -8,6 +8,7 @@ interface ScrollDownProps {
   size?: number;
   showText?: boolean;
   techStack?: { src: string; alt: string }[];
+  visitorCount?: number | null;
 }
 
 const ScrollDownContainer = styled.div<{ color: string; size: number }>`
@@ -147,21 +148,41 @@ const ScrollDown: React.FC<ScrollDownProps> = ({
     { src: '/logo/three.png', alt: 'Three' },
     { src: '/logo/Tailwind CSS.png', alt: 'tailwind' },
     { src: '/logo/typescript.png', alt: 'typescript' },
-  ] 
+  ],
+  visitorCount,
 }) => {
   // Create tech names for "Built With" text
   const techNames = techStack.map(tech => tech.alt).join(' · ');
   
+  const displayCount = visitorCount ?? 342;
+  
   return (
     <div className="flex flex-col items-center">
-      <Title 
-        color={color}
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3, duration: 0.7 }}
-      >
-        THE APEX PREDATOR
-      </Title>
+      <div className="flex items-center gap-2">
+        <Title 
+          color={color}
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, duration: 0.7 }}
+        >
+          PORTFOLIO VISITORS
+        </Title>
+        
+        <motion.div
+          style={{
+            color: color,
+            fontSize: '50px',
+            textAlign: 'center',
+            fontFamily: '"Metal Mania", system-ui',
+            marginBottom: '5px'
+          }}
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.5, duration: 0.6 }}
+        >
+          {displayCount.toLocaleString()}
+        </motion.div>
+      </div>
       
       <BuiltWith
         color={color}
@@ -244,13 +265,15 @@ export const ScrollReminder: React.FC<{
   hideAfter?: number;
   onReturn?: boolean;
   showText?: boolean;
+  visitorCount?: number | null;
 }> = ({ 
   threshold = 100, 
   color = 'skyblue', 
   size = 22, // Even smaller size
   hideAfter = 5000,
   onReturn = false,
-  showText = true
+  showText = true,
+  visitorCount,
 }) => {
   const [visible, setVisible] = useState(true);
   
@@ -304,6 +327,7 @@ export const ScrollReminder: React.FC<{
           { src: '/logo/Tailwind CSS.png', alt: 'tailwind' },
           { src: '/logo/typescript.png', alt: 'typescript' },
         ]}
+        visitorCount={visitorCount}
       />
     </motion.div>
   ) : null;

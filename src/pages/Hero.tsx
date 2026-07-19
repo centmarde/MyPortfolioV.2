@@ -174,9 +174,10 @@ const AssetsLoader = ({
 
 interface HeroProps {
   onFullyLoaded?: () => void;
+  visitorCount?: number | null;
 }
 
-export default function Hero({ onFullyLoaded }: HeroProps) {
+export default function Hero({ onFullyLoaded, visitorCount }: HeroProps) {
   const [modelPosition, setModelPosition] = useState<[number, number, number]>([
     -20, 0, 0,
   ]);
@@ -446,6 +447,7 @@ export default function Hero({ onFullyLoaded }: HeroProps) {
                 size={40}
                 hideAfter={10000}
                 onReturn={true}
+                visitorCount={visitorCount}
               />
             </div>
           </div>
