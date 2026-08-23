@@ -200,7 +200,7 @@ export default function Github({ username = "centmarde" }: GithubProps) {
           </div>
 
           {/* GitHub Trophies - With better mobile handling */}
-          <div
+          {/*   <div
             className={`col-span-2 lg:col-span-4 ${bgColor} p-2 sm:p-3  ${borderColor} overflow-hidden mt-3 flex justify-center`}
           >
             <div className="w-full overflow-x-auto pb-1 -mx-1 px-1">
@@ -212,7 +212,7 @@ export default function Github({ username = "centmarde" }: GithubProps) {
                 />
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
 
         {/* Bottom link */}
