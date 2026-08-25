@@ -27,7 +27,6 @@
     "lucide-react": "^0.485.0",
     "motion": "^12.6.3",
     "react": "^19.0.0",
-    "react-dev-inspector": "^2.0.1",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.18.2",
     "styled-components": "^6.1.17",

@@ -32,7 +32,7 @@ export default function Shark({
 
   // Set up animation on load
   useEffect(() => {
-    if (!scene || Object.keys(actions).length === 0) return;
+    if (!scene || !actions || Object.keys(actions).length === 0) return;
 
     const animationName = Object.keys(actions)[0];
 
