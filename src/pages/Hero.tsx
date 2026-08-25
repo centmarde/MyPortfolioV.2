@@ -40,7 +40,7 @@ const Model = ({
   const actionRef = useRef<THREE.AnimationAction | null>(null);
 
   useEffect(() => {
-    if (actions["rig.001|rig.001Action"]) {
+    if (actions && actions["rig.001|rig.001Action"]) {
       actionRef.current = actions["rig.001|rig.001Action"];
       actionRef.current.reset().play();
       actionRef.current.timeScale = 0;

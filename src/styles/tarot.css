@@ -1,0 +1,66 @@
+.tarot-shell {
+  position: relative;
+  isolation: isolate;
+}
+
+.tarot-backdrop,
+.tarot-vignette {
+  position: absolute;
+  inset: 0;
+}
+
+.tarot-backdrop {
+  z-index: -2;
+  /* The tarot-night background is now rendered by the ChromaticImage
+     WebGL component, so the ChromaticImage container must stay
+     interactive (receive pointer events) to drive the distortion. */
+}
+
+.tarot-vignette {
+  z-index: -1;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      90deg,
+      color-mix(in oklab, var(--background) 88%, transparent),
+      color-mix(in oklab, var(--background) 45%, transparent) 52%,
+      color-mix(in oklab, var(--background) 72%, transparent)
+    ),
+    linear-gradient(
+      0deg,
+      color-mix(in oklab, var(--background) 92%, transparent),
+      transparent 45%,
+      color-mix(in oklab, var(--background) 55%, transparent)
+    );
+}
+
+.tarot-reveal {
+  animation: tarot-rise 900ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.tarot-card {
+  box-shadow:
+    0 25px 80px color-mix(in oklab, var(--background) 80%, transparent),
+    inset 0 0 0 1px color-mix(in oklab, var(--primary) 8%, transparent);
+}
+
+@keyframes tarot-rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tarot-reveal,
+  .tarot-card,
+  .tarot-button,
+  .tarot-button * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
