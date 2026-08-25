@@ -7,6 +7,7 @@ import type { TarotCardsWidgetProps } from "../types";
 import { useAnimationSequence } from "../hooks/useAnimationSequence";
 import { TarotHeader } from "./TarotHeader";
 import { TarotCardComponent } from "./TarotCardComponent";
+import { getMobileDeckLayout } from "../utils";
 
 /**
  * Main tarot cards widget component
@@ -27,7 +28,6 @@ function shuffleArray<T>(array: T[]): T[] {
 }
 
 const TarotCardsWidget: React.FC<TarotCardsWidgetProps> = ({
-  themeColor,
   isMobile,
   onNavigate,
   selectedCards: externalSelectedCards,
@@ -58,6 +58,10 @@ const TarotCardsWidget: React.FC<TarotCardsWidgetProps> = ({
     animationPhase === "selecting"
       ? compressedCards
       : shuffledCards;
+
+  // Mobile deck is a 7-column grid; size its container from the row count so
+  // the cards never spill over the surrounding view.
+  const mobileDeck = getMobileDeckLayout(currentCards.length, animationPhase);
 
   // Use external state for mobile, internal state for desktop
   const selectedCards =
@@ -102,8 +106,7 @@ const TarotCardsWidget: React.FC<TarotCardsWidgetProps> = ({
     return (
       <div className="flex items-center justify-center p-8">
         <div
-          className="animate-spin rounded-full h-12 w-12 border-b-2"
-          style={{ borderColor: themeColor }}
+          className="h-12 w-12 animate-spin rounded-full border-b-2 border-[#cd9943]"
         ></div>
       </div>
     );
@@ -114,7 +117,6 @@ const TarotCardsWidget: React.FC<TarotCardsWidgetProps> = ({
       {/* Header Section - Only show in desktop, mobile renders it separately */}
       {!isMobile && (
         <TarotHeader
-          themeColor={themeColor}
           animationPhase={animationPhase}
           selectedCards={selectedCards}
           isMobile={isMobile}
@@ -125,13 +127,13 @@ const TarotCardsWidget: React.FC<TarotCardsWidgetProps> = ({
       {/* Deck of Cards Layout */}
       <div
         className="flex justify-center items-center"
-        style={{ minHeight: isMobile ? "350px" : "400px" }}
+        style={{ minHeight: isMobile ? `${mobileDeck.height}px` : "400px" }}
       >
         <div
           className="relative"
           style={{
             width: isMobile ? "100%" : "min(1200px, 85vw)",
-            height: isMobile ? "300px" : "300px",
+            height: isMobile ? `${mobileDeck.height}px` : "300px",
             maxWidth: isMobile ? "400px" : "1200px",
           }}
         >
@@ -148,7 +150,6 @@ const TarotCardsWidget: React.FC<TarotCardsWidgetProps> = ({
                 key={`${card.name}-${animationPhase}`} // Include phase in key to trigger re-render on reshuffle
                 card={card}
                 index={index}
-                themeColor={themeColor}
                 isRevealed={isRevealed}
                 isFlipped={isFlipped}
                 isSelected={isSelected}
