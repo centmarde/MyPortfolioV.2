@@ -11,8 +11,8 @@ interface LoadingOverlayProps {
 const LoadingOverlay: React.FC<LoadingOverlayProps> = ({
   isOpen,
   themeColor = "#F2A6A6",
-  title = "Loading…",
-  description,
+  title = "Preparing your reading…",
+  description = "Please wait while we prepare your personalized readings.",
 }) => {
   if (!isOpen) return null;
 

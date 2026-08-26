@@ -195,8 +195,8 @@ export const TarotReading: React.FC<TarotReadingProps> = ({
           <LoadingOverlay
             isOpen={isGenerating}
             themeColor={accentColor}
-            title="Generating your reading…"
-            description="Interpreting the cards"
+            title="Preparing your reading…"
+            description="Please wait while we prepare your personalized readings. This usually takes a few seconds…"
           />
 
           <CardHeader>
