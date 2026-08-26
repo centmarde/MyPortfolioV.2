@@ -203,7 +203,7 @@ export function useResponse() {
           content: query,
         },
       ],
-      model: "meta-llama/llama-prompt-guard-2-22m",
+      model: "openai/gpt-oss-120b",
       temperature: 0.6,
       max_completion_tokens: 600,
       top_p: 0.95,

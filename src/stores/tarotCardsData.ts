@@ -11,6 +11,22 @@ import {
 // -----------------------------------------------------------------------------
 const STORAGE_KEY = "tarot_decks_cache";
 
+// Key used to persist the current user's email (the email decks are filtered
+// by in getMyDecks). Shared with the tarot selection store.
+export const CURRENT_USER_EMAIL_KEY = "tarot_user_email";
+
+/** Read the current user's email from localStorage (or null if not set). */
+export function getUserEmail(): string | null {
+  try {
+    if (typeof window === "undefined") return null;
+    const email = window.localStorage.getItem(CURRENT_USER_EMAIL_KEY);
+    return email && email.trim() !== "" ? email.trim() : null;
+  } catch (error) {
+    console.warn("🔮 Failed to read current user email:", error);
+    return null;
+  }
+}
+
 function loadDecksFromCache(): TarotCardsDeck[] {
   try {
     if (typeof window === "undefined") return [];
@@ -51,7 +67,7 @@ export interface TarotCardData {
 export interface TarotCardsDeck {
   id: number;
   created_at: string;
-  is_gf: boolean | null;
+  email: string | null;
   end_date: string | null;
   card1: TarotCardData | null;
   card2: TarotCardData | null;
@@ -62,7 +78,7 @@ export interface TarotCardsDeck {
 }
 
 export interface CreateTarotCardsDeckInput {
-  is_gf?: boolean | null;
+  email?: string | null;
   end_date?: string | null;
   card1?: TarotCardData | null;
   card2?: TarotCardData | null;
@@ -106,7 +122,7 @@ interface TarotCardsDataState {
   // AI Reading Integration
   saveFromAiReading: (
     session: TarotReadingSession,
-    isGf?: boolean,
+    email?: string | null,
   ) => Promise<TarotCardsDeck | null>;
 }
 
@@ -127,8 +143,9 @@ export const useTarotCardsDataStore = create<TarotCardsDataState>(
         const deck: TarotCardsDeck = {
           id: nextDeckId(get().decks),
           created_at: createdAt,
-          // IMPORTANT: use nullish coalescing so `false` is preserved (not turned into null)
-          is_gf: deckData.is_gf ?? null,
+          // IMPORTANT: keep the email exactly as provided so it can be compared
+          // against the current user's email when filtering "my" decks.
+          email: deckData.email ?? null,
           end_date: deckData.end_date || calculateEndDate(createdAt),
           card1: deckData.card1 || null,
           card2: deckData.card2 || null,
@@ -189,7 +206,8 @@ export const useTarotCardsDataStore = create<TarotCardsDataState>(
         const current = currentDecks[index];
         const updated: TarotCardsDeck = {
           ...current,
-          is_gf: deckData.is_gf !== undefined ? deckData.is_gf : current.is_gf,
+          email:
+            deckData.email !== undefined ? deckData.email : current.email,
           end_date:
             deckData.end_date !== undefined
               ? deckData.end_date
@@ -266,8 +284,13 @@ export const useTarotCardsDataStore = create<TarotCardsDataState>(
       set({ isLoading: true, error: null });
 
       try {
+        // "My" decks are those owned by the current user's email. When no email
+        // is configured yet, fall back to decks that were saved without an email.
+        const currentEmail = getUserEmail();
         const decks = get()
-          .decks.filter((deck) => deck.is_gf === null || deck.is_gf === false)
+          .decks.filter((deck) =>
+            currentEmail ? deck.email === currentEmail : !deck.email,
+          )
           .sort(sortByCreatedAtDesc);
 
         set({ isLoading: false });
@@ -303,7 +326,7 @@ export const useTarotCardsDataStore = create<TarotCardsDataState>(
     // AI Reading Integration
     saveFromAiReading: async (
       session: TarotReadingSession,
-      isGf: boolean = false,
+      email: string | null = null,
     ) => {
       set({ isLoading: true, error: null });
 
@@ -330,7 +353,7 @@ export const useTarotCardsDataStore = create<TarotCardsDataState>(
 
         // Create deck data
         const deckData: CreateTarotCardsDeckInput = {
-          is_gf: isGf,
+          email,
           end_date: endDate,
           card1: cards[0],
           card2: cards[1],
@@ -370,15 +393,18 @@ export const useTarotCardsHelpers = () => {
     // Save AI reading session to local state/cache
     saveAiReadingToDatabase: async (
       session: TarotReadingSession,
-      isGf?: boolean,
+      email?: string | null,
     ) => {
-      return await store.saveFromAiReading(session, isGf);
+      return await store.saveFromAiReading(session, email);
     },
 
     // Save current tarot reading to local state/cache (legacy support)
-    saveCurrentReading: async (cards: TarotCardData[], isGf?: boolean) => {
+    saveCurrentReading: async (
+      cards: TarotCardData[],
+      email?: string | null,
+    ) => {
       const deckData: CreateTarotCardsDeckInput = {
-        is_gf: isGf || false,
+        email: email || null,
         card1: cards[0] || null,
         card2: cards[1] || null,
         card3: cards[2] || null,
@@ -420,7 +446,7 @@ export const useTarotCardsHelpers = () => {
       date: formatDisplayDate(deck.created_at),
       time: formatDisplayTime(deck.created_at),
       endDate: deck.end_date ? formatDisplayDate(deck.end_date) : null,
-      isGf: deck.is_gf,
+      email: deck.email,
       cardCount: [
         deck.card1,
         deck.card2,

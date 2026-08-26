@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { Sparkles, ArrowRight } from "lucide-react";
 import {
   tarotCards,
   type TarotCard,
 } from "@/components/composables/tarotConstant";
 import type { TarotCardsWidgetProps } from "../types";
 import { useAnimationSequence } from "../hooks/useAnimationSequence";
+import { useTarotSelectionStore } from "../../../stores/tarotSelectionData";
 import { TarotHeader } from "./TarotHeader";
 import { TarotCardComponent } from "./TarotCardComponent";
 import { getMobileDeckLayout } from "../utils";
@@ -38,6 +40,10 @@ const TarotCardsWidget: React.FC<TarotCardsWidgetProps> = ({
     TarotCard[]
   >([]);
   const [animatingCard, setAnimatingCard] = useState<string | null>(null);
+
+  // Store the selection into the zustand store (and localStorage) so the
+  // reading view at /tarot-cards/continue can retrieve it on any device.
+  const { setSelectedCardsForReading } = useTarotSelectionStore();
 
   // Create shuffled cards array once on component mount
   const [shuffledCards] = useState<TarotCard[]>(() => shuffleArray(tarotCards));
@@ -164,6 +170,38 @@ const TarotCardsWidget: React.FC<TarotCardsWidgetProps> = ({
           })}
         </div>
       </div>
+
+      {/* Reveal reading - large screens only, styled like the title font */}
+      {!isMobile &&
+        animationPhase === "selecting" &&
+        selectedCards.length === 6 && (
+          <div className="flex justify-center">
+            <button
+              type="button"
+              onClick={() => {
+                // Persist the selection to the zustand store (and localStorage)
+                // before navigating, so the reading view can retrieve it.
+                setSelectedCardsForReading(selectedCards);
+                onNavigate?.("/tarot-cards/continue");
+              }}
+              className="group inline-flex cursor-pointer items-center gap-3 font-serif text-2xl italic text-[#cd9943] transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d4af37] focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            >
+              <Sparkles
+                size={22}
+                className="animate-pulse"
+                aria-hidden="true"
+              />
+              <span className="underline-offset-8 group-hover:underline">
+                Reveal Reading
+              </span>
+              <ArrowRight
+                size={22}
+                className="transition-transform group-hover:translate-x-1"
+                aria-hidden="true"
+              />
+            </button>
+          </div>
+        )}
 
       {/* Tarot Reading now handled in separate route */}
     </div>

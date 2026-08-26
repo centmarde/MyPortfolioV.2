@@ -1,14 +1,18 @@
 import { create } from "zustand";
 import type { TarotCard } from "@/components/composables/tarotConstant";
 import type { TarotReadingSession } from "@/lib/AiTarotReading";
-import { useTarotCardsDataStore } from "./tarotCardsData";
+import {
+  useTarotCardsDataStore,
+  getUserEmail,
+  CURRENT_USER_EMAIL_KEY,
+} from "./tarotCardsData";
 
 interface TarotSelectionData {
   selectedCards: TarotCard[];
   selectionTimestamp: number | null;
   isReadingGenerated: boolean;
   aiReadingSession: TarotReadingSession | null;
-  isGfReading: boolean;
+  userEmail: string | null;
   lastSavedSessionId: string | null; // Track last saved session to prevent duplicates
 }
 
@@ -26,12 +30,15 @@ interface TarotSelectionStore {
   getSelectionAge: () => number | null;
 
   // AI Reading Management
-  setAiReadingSession: (session: TarotReadingSession, isGf?: boolean) => void;
+  setAiReadingSession: (
+    session: TarotReadingSession,
+    email?: string | null,
+  ) => void;
   getAiReadingSession: () => TarotReadingSession | null;
   clearAiReading: () => void;
   hasAiReading: () => boolean;
-  setReadingContext: (isGf: boolean) => void;
-  getReadingContext: () => boolean;
+  setUserEmail: (email: string) => void;
+  getUserEmail: () => string | null;
 
   // Cache validation
   isSelectionExpired: (maxAgeMinutes?: number) => boolean;
@@ -46,7 +53,7 @@ export const useTarotSelectionStore = create<TarotSelectionStore>(
       selectionTimestamp: null,
       isReadingGenerated: false,
       aiReadingSession: null,
-      isGfReading: false,
+      userEmail: getUserEmail(),
       lastSavedSessionId: null,
     },
     isLoading: false,
@@ -62,7 +69,7 @@ export const useTarotSelectionStore = create<TarotSelectionStore>(
             selectionTimestamp,
             isReadingGenerated: false,
             aiReadingSession: null, // Clear previous AI reading when new cards selected
-            isGfReading: currentData.isGfReading,
+            userEmail: currentData.userEmail,
             lastSavedSessionId: null, // Reset when selecting new cards
           },
           isLoading: false,
@@ -77,7 +84,7 @@ export const useTarotSelectionStore = create<TarotSelectionStore>(
               selectionTimestamp,
               isReadingGenerated: false,
               aiReadingSession: null,
-              isGfReading: currentData.isGfReading,
+              userEmail: currentData.userEmail,
               lastSavedSessionId: null,
             }),
           );
@@ -91,7 +98,7 @@ export const useTarotSelectionStore = create<TarotSelectionStore>(
     },
 
     setSelectedCardsForReading: (cards: TarotCard[]) => {
-      // Preserve current reading context (gf vs user)
+      // Preserve the current email context across selections
       const currentData = get().selectionData;
 
       // Set the new selection for reading
@@ -104,7 +111,7 @@ export const useTarotSelectionStore = create<TarotSelectionStore>(
             selectionTimestamp,
             isReadingGenerated: false,
             aiReadingSession: null, // Clear previous AI reading when new cards selected
-            isGfReading: currentData.isGfReading,
+            userEmail: currentData.userEmail,
             lastSavedSessionId: null,
           },
           isLoading: false,
@@ -119,7 +126,7 @@ export const useTarotSelectionStore = create<TarotSelectionStore>(
               selectionTimestamp,
               isReadingGenerated: false,
               aiReadingSession: null,
-              isGfReading: currentData.isGfReading,
+              userEmail: currentData.userEmail,
               lastSavedSessionId: null,
             }),
           );
@@ -139,7 +146,7 @@ export const useTarotSelectionStore = create<TarotSelectionStore>(
           selectionTimestamp: null,
           isReadingGenerated: false,
           aiReadingSession: null,
-          isGfReading: false,
+          userEmail: null,
           lastSavedSessionId: null,
         },
       });
@@ -190,7 +197,7 @@ export const useTarotSelectionStore = create<TarotSelectionStore>(
                     selectionTimestamp: parsedCache.selectionTimestamp,
                     isReadingGenerated: parsedCache.isReadingGenerated || false,
                     aiReadingSession: parsedCache.aiReadingSession || null, // Default to null for backward compatibility
-                    isGfReading: parsedCache.isGfReading || false,
+                    userEmail: parsedCache.userEmail || getUserEmail(),
                     lastSavedSessionId: parsedCache.lastSavedSessionId || null,
                   },
                 });
@@ -223,7 +230,10 @@ export const useTarotSelectionStore = create<TarotSelectionStore>(
       return Date.now() - selectionData.selectionTimestamp;
     },
 
-    setAiReadingSession: (session: TarotReadingSession, isGf?: boolean) => {
+    setAiReadingSession: (
+      session: TarotReadingSession,
+      email?: string | null,
+    ) => {
       console.log("🔮 Storing AI tarot reading session:", session.sessionId);
       const currentData = get().selectionData;
 
@@ -248,15 +258,15 @@ export const useTarotSelectionStore = create<TarotSelectionStore>(
         return;
       }
 
-      // Determine if this is a girlfriend's reading
-      const isGfReading = isGf !== undefined ? isGf : currentData.isGfReading;
+      // Determine the email this reading belongs to
+      const userEmail = email !== undefined ? email : currentData.userEmail;
 
       set((state) => ({
         selectionData: {
           ...state.selectionData,
           aiReadingSession: session,
           isReadingGenerated: true, // Mark reading as generated when AI session is stored
-          isGfReading: isGfReading,
+          userEmail,
         },
       }));
 
@@ -270,7 +280,7 @@ export const useTarotSelectionStore = create<TarotSelectionStore>(
             selectionTimestamp: updatedData.selectionTimestamp,
             isReadingGenerated: true,
             aiReadingSession: session,
-            isGfReading: isGfReading,
+            userEmail,
             lastSavedSessionId: updatedData.lastSavedSessionId,
           }),
         );
@@ -287,13 +297,13 @@ export const useTarotSelectionStore = create<TarotSelectionStore>(
         currentData.lastSavedSessionId !== session.sessionId
       ) {
         console.log(
-          `🔮 Automatically saving complete AI reading to database (isGf: ${isGfReading})`,
+          `🔮 Automatically saving complete AI reading (email: ${userEmail ?? "none"})`,
         );
 
         // Get tarot cards data store and save the reading
         const tarotCardsStore = useTarotCardsDataStore.getState();
         tarotCardsStore
-          .saveFromAiReading(session, isGfReading)
+          .saveFromAiReading(session, userEmail)
           .then((savedDeck) => {
             if (savedDeck) {
               console.log(
@@ -345,7 +355,7 @@ export const useTarotSelectionStore = create<TarotSelectionStore>(
             selectionTimestamp: currentData.selectionTimestamp,
             isReadingGenerated: false,
             aiReadingSession: null,
-            isGfReading: currentData.isGfReading,
+            userEmail: currentData.userEmail,
             lastSavedSessionId: null,
           }),
         );
@@ -354,20 +364,31 @@ export const useTarotSelectionStore = create<TarotSelectionStore>(
       }
     },
 
-    setReadingContext: (isGf: boolean) => {
-      console.log(
-        `🔮 Setting reading context: ${isGf ? "girlfriend" : "user"}`,
-      );
+    setUserEmail: (email: string) => {
+      const trimmed = email.trim();
+      console.log(`🔮 Setting current user email: ${trimmed}`);
       set((state) => ({
         selectionData: {
           ...state.selectionData,
-          isGfReading: isGf,
+          userEmail: trimmed || null,
         },
       }));
+
+      // Persist so decks can be filtered by the current email later
+      try {
+        if (trimmed) {
+          localStorage.setItem(CURRENT_USER_EMAIL_KEY, trimmed);
+        } else {
+          localStorage.removeItem(CURRENT_USER_EMAIL_KEY);
+        }
+      } catch (error) {
+        console.warn("Failed to persist user email to localStorage:", error);
+      }
     },
 
-    getReadingContext: () => {
-      return get().selectionData.isGfReading;
+    getUserEmail: () => {
+      const stored = get().selectionData.userEmail;
+      return stored || getUserEmail();
     },
 
     hasAiReading: () => {

@@ -154,8 +154,7 @@ class AiTarotReadingService {
           { role: "system", content: systemPrompt },
           { role: "user", content: userPrompt },
         ],
-        model: "llama-3.3-70b-versatile",
-        /* meta-llama/llama-prompt-guard-2-86m */
+        model: "openai/gpt-oss-120b",
         temperature: 0.8,
         max_tokens: 400,
         top_p: 0.9,

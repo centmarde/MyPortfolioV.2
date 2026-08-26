@@ -14,17 +14,17 @@ const TarotReadingView: React.FC<TarotReadingViewProps> = ({ onNavigate }) => {
     getSelectedCards,
     hasValidSelection,
     markReadingGenerated,
-    getReadingContext,
+    getUserEmail,
   } = useTarotSelectionStore();
 
   const [isLoading, setIsLoading] = useState(true);
   const [selectedCards, setSelectedCards] = useState<TarotCard[]>([]);
 
   useEffect(() => {
-    // Reading context is already set in store when "Create Reading" was clicked
-    const isGfReading = getReadingContext();
+    // The reader's email is available from the store
+    const userEmail = getUserEmail();
     console.log(
-      `🔮 TarotReadingView initialized for: ${isGfReading ? "girlfriend" : "user"}`,
+      `🔮 TarotReadingView initialized for: ${userEmail || "guest"}`,
     );
 
     // Get selected cards from the store
@@ -35,7 +35,7 @@ const TarotReadingView: React.FC<TarotReadingViewProps> = ({ onNavigate }) => {
     }
 
     setIsLoading(false);
-  }, [getReadingContext, getSelectedCards, hasValidSelection, markReadingGenerated]);
+  }, [getUserEmail, getSelectedCards, hasValidSelection, markReadingGenerated]);
 
   if (isLoading) {
     return (

@@ -14,16 +14,14 @@ export const TarotHeader: React.FC<TarotHeaderProps> = ({
   isMobile,
   onNavigate,
 }) => {
-  const { setSelectedCardsForReading, getReadingContext } =
+  const { setSelectedCardsForReading, getUserEmail } =
     useTarotSelectionStore();
   const accentColor = "#cd9943";
 
   const handleRevealReading = () => {
-    // Get current reading context from store (set when "Create Reading" was clicked)
-    const isGfReading = getReadingContext();
-    console.log(
-      `🔮 Revealing reading for: ${isGfReading ? "girlfriend" : "user"}`,
-    );
+    // Get the current reader's email from the store
+    const userEmail = getUserEmail();
+    console.log(`🔮 Revealing reading for: ${userEmail || "guest"}`);
 
     // Clear any existing cache and save current selection for reading
     setSelectedCardsForReading(selectedCards);
@@ -112,7 +110,9 @@ export const TarotHeader: React.FC<TarotHeaderProps> = ({
           <div
             className={`flex items-center justify-center ${isMobile ? "gap-2" : "gap-4"}`}
           >
-            {selectedCards.length === 6 && (
+            {/* Reveal button on mobile only - large screens use the serif
+                link rendered below the card deck in TarotCardsWidget */}
+            {isMobile && selectedCards.length === 6 && (
               <Button
                 onClick={handleRevealReading}
                 size={isMobile ? "sm" : "sm"}
