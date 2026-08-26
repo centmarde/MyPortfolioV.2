@@ -12,6 +12,7 @@ export type AnimationPhase =
 export interface TarotCardsWidgetProps {
   isMobile: boolean;
   onNavigate?: (path: string) => void;
+  onReveal?: (cards: TarotCard[]) => void;
   // Optional props for mobile view when TarotHeader is rendered externally
   selectedCards?: TarotCard[];
   setSelectedCards?: (cards: TarotCard[]) => void;
@@ -24,6 +25,7 @@ export interface TarotHeaderProps {
   selectedCards: TarotCard[];
   isMobile: boolean;
   onNavigate: (path: string) => void;
+  onReveal?: (cards: TarotCard[]) => void;
 }
 
 export interface TarotCardProps {

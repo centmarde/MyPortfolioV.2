@@ -13,12 +13,21 @@ export const TarotHeader: React.FC<TarotHeaderProps> = ({
   selectedCards,
   isMobile,
   onNavigate,
+  onReveal,
 }) => {
   const { setSelectedCardsForReading, getUserEmail } =
     useTarotSelectionStore();
   const accentColor = "#cd9943";
 
   const handleRevealReading = () => {
+    // When a parent provides onReveal (e.g. to open the intake dialog), pass the
+    // selected cards up so the parent can save/use them. Otherwise keep the
+    // existing direct-navigate behaviour.
+    if (onReveal) {
+      onReveal(selectedCards);
+      return;
+    }
+
     // Get the current reader's email from the store
     const userEmail = getUserEmail();
     console.log(`🔮 Revealing reading for: ${userEmail || "guest"}`);

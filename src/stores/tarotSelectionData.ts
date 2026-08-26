@@ -7,12 +7,27 @@ import {
   CURRENT_USER_EMAIL_KEY,
 } from "./tarotCardsData";
 
+// Key used to persist the reading context (career/school, relationship,
+// happenings) so it can be fed into the AI reading generation.
+const READING_CONTEXT_KEY = "tarot_reading_context";
+
+/** Structured info the user shares before a reading, used to personalise AI. */
+export interface ReadingContextInfo {
+  email: string | null;
+  careerReality: string | null;
+  relationshipStatus: string | null;
+  specialHappenings: string | null;
+}
+
 interface TarotSelectionData {
   selectedCards: TarotCard[];
   selectionTimestamp: number | null;
   isReadingGenerated: boolean;
   aiReadingSession: TarotReadingSession | null;
   userEmail: string | null;
+  careerReality: string | null;
+  relationshipStatus: string | null;
+  specialHappenings: string | null;
   lastSavedSessionId: string | null; // Track last saved session to prevent duplicates
 }
 
@@ -39,6 +54,13 @@ interface TarotSelectionStore {
   hasAiReading: () => boolean;
   setUserEmail: (email: string) => void;
   getUserEmail: () => string | null;
+  setReadingContext: (
+    email: string | null,
+    careerReality: string | null,
+    relationshipStatus: string | null,
+    specialHappenings: string | null,
+  ) => void;
+  getReadingContextInfo: () => ReadingContextInfo;
 
   // Cache validation
   isSelectionExpired: (maxAgeMinutes?: number) => boolean;
@@ -54,6 +76,9 @@ export const useTarotSelectionStore = create<TarotSelectionStore>(
       isReadingGenerated: false,
       aiReadingSession: null,
       userEmail: getUserEmail(),
+      careerReality: null,
+      relationshipStatus: null,
+      specialHappenings: null,
       lastSavedSessionId: null,
     },
     isLoading: false,
@@ -70,6 +95,9 @@ export const useTarotSelectionStore = create<TarotSelectionStore>(
             isReadingGenerated: false,
             aiReadingSession: null, // Clear previous AI reading when new cards selected
             userEmail: currentData.userEmail,
+            careerReality: currentData.careerReality,
+            relationshipStatus: currentData.relationshipStatus,
+            specialHappenings: currentData.specialHappenings,
             lastSavedSessionId: null, // Reset when selecting new cards
           },
           isLoading: false,
@@ -112,6 +140,9 @@ export const useTarotSelectionStore = create<TarotSelectionStore>(
             isReadingGenerated: false,
             aiReadingSession: null, // Clear previous AI reading when new cards selected
             userEmail: currentData.userEmail,
+            careerReality: currentData.careerReality,
+            relationshipStatus: currentData.relationshipStatus,
+            specialHappenings: currentData.specialHappenings,
             lastSavedSessionId: null,
           },
           isLoading: false,
@@ -147,6 +178,9 @@ export const useTarotSelectionStore = create<TarotSelectionStore>(
           isReadingGenerated: false,
           aiReadingSession: null,
           userEmail: null,
+          careerReality: null,
+          relationshipStatus: null,
+          specialHappenings: null,
           lastSavedSessionId: null,
         },
       });
@@ -198,6 +232,9 @@ export const useTarotSelectionStore = create<TarotSelectionStore>(
                     isReadingGenerated: parsedCache.isReadingGenerated || false,
                     aiReadingSession: parsedCache.aiReadingSession || null, // Default to null for backward compatibility
                     userEmail: parsedCache.userEmail || getUserEmail(),
+                    careerReality: parsedCache.careerReality || null,
+                    relationshipStatus: parsedCache.relationshipStatus || null,
+                    specialHappenings: parsedCache.specialHappenings || null,
                     lastSavedSessionId: parsedCache.lastSavedSessionId || null,
                   },
                 });
@@ -389,6 +426,72 @@ export const useTarotSelectionStore = create<TarotSelectionStore>(
     getUserEmail: () => {
       const stored = get().selectionData.userEmail;
       return stored || getUserEmail();
+    },
+
+    setReadingContext: (
+      email: string | null,
+      careerReality: string | null,
+      relationshipStatus: string | null,
+      specialHappenings: string | null,
+    ) => {
+      const trimmedEmail = email?.trim() || null;
+
+      set((state) => ({
+        selectionData: {
+          ...state.selectionData,
+          userEmail: trimmedEmail,
+          careerReality: careerReality?.trim() || null,
+          relationshipStatus: relationshipStatus?.trim() || null,
+          specialHappenings: specialHappenings?.trim() || null,
+        },
+      }));
+
+      // Persist email + context so it survives reloads and the /continue route
+      try {
+        if (trimmedEmail) {
+          localStorage.setItem(CURRENT_USER_EMAIL_KEY, trimmedEmail);
+        } else {
+          localStorage.removeItem(CURRENT_USER_EMAIL_KEY);
+        }
+        localStorage.setItem(
+          READING_CONTEXT_KEY,
+          JSON.stringify({
+            careerReality: careerReality?.trim() || null,
+            relationshipStatus: relationshipStatus?.trim() || null,
+            specialHappenings: specialHappenings?.trim() || null,
+          }),
+        );
+      } catch (error) {
+        console.warn("Failed to persist reading context:", error);
+      }
+    },
+
+    getReadingContextInfo: (): ReadingContextInfo => {
+      const data = get().selectionData;
+      const email = data.userEmail || getUserEmail();
+
+      let careerReality = data.careerReality;
+      let relationshipStatus = data.relationshipStatus;
+      let specialHappenings = data.specialHappenings;
+
+      // Fall back to anything persisted earlier (e.g. after a reload)
+      if (!careerReality || !relationshipStatus || !specialHappenings) {
+        try {
+          const raw = localStorage.getItem(READING_CONTEXT_KEY);
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            careerReality = careerReality || parsed.careerReality || null;
+            relationshipStatus =
+              relationshipStatus || parsed.relationshipStatus || null;
+            specialHappenings =
+              specialHappenings || parsed.specialHappenings || null;
+          }
+        } catch (error) {
+          console.warn("Failed to read persisted reading context:", error);
+        }
+      }
+
+      return { email, careerReality, relationshipStatus, specialHappenings };
     },
 
     hasAiReading: () => {

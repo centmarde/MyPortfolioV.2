@@ -3,7 +3,9 @@ import React, { useState } from "react";
 import { Moon } from "lucide-react";
 import TarotCardsWidget from "./components/TarotCardsWidget";
 import { TarotHeader } from "./components/TarotHeader";
+import ReadingContextDialog from "./dialogs/ReadingContextDialog";
 import { useIsMobile } from "../../hooks/use-mobile";
+import { useTarotSelectionStore } from "../../stores/tarotSelectionData";
 import type { TarotCard } from "@/components/composables/tarotConstant";
 import type { AnimationPhase } from "./types";
 import { ChromaticImage } from "../ui/chromatic-image";
@@ -17,15 +19,45 @@ const TarotCardsWidgetView: React.FC<TarotCardsWidgetViewProps> = ({
   onNavigate,
 }) => {
   const isMobile = useIsMobile();
+  const { setSelectedCardsForReading, setReadingContext } =
+    useTarotSelectionStore();
 
   const [selectedCards, setSelectedCards] = useState<TarotCard[]>([]);
   const [animationPhase, setAnimationPhase] =
     useState<AnimationPhase>("loading");
+  const [contextOpen, setContextOpen] = useState(false);
 
   // Handle selected cards changes (no automatic store saving)
   const handleSetSelectedCards = (cards: TarotCard[]) => {
     setSelectedCards(cards);
     // Store saving now happens only when "Reveal Reading" is clicked
+  };
+
+  // Reveal Reading: save the actual selected cards (passed up from the widget,
+  // which may keep them in internal state on desktop), then ask for context.
+  const handleRevealReading = (cards: TarotCard[]) => {
+    setSelectedCardsForReading(cards);
+    setContextOpen(true);
+  };
+
+  // All 4 context steps are answered: save the context, then go to the reading.
+  // The deck row is persisted to Supabase by the tarotCardsData store when the
+  // reading deck is created.
+  const handleContextComplete = (answers: {
+    email: string;
+    careerReality: string;
+    relationshipStatus: string;
+    specialHappenings: string;
+  }) => {
+    setReadingContext(
+      answers.email,
+      answers.careerReality,
+      answers.relationshipStatus,
+      answers.specialHappenings,
+    );
+
+    setContextOpen(false);
+    onNavigate?.("/tarot-cards/continue");
   };
 
   return (
@@ -103,6 +135,7 @@ const TarotCardsWidgetView: React.FC<TarotCardsWidgetViewProps> = ({
               selectedCards={selectedCards}
               isMobile={isMobile}
               onNavigate={onNavigate || (() => {})}
+              onReveal={handleRevealReading}
             />
           )}
 
@@ -112,6 +145,7 @@ const TarotCardsWidgetView: React.FC<TarotCardsWidgetViewProps> = ({
               <TarotCardsWidget
                 isMobile={isMobile}
                 onNavigate={onNavigate}
+                onReveal={handleRevealReading}
                 selectedCards={selectedCards}
                 setSelectedCards={handleSetSelectedCards}
                 setAnimationPhase={setAnimationPhase}
@@ -121,6 +155,7 @@ const TarotCardsWidgetView: React.FC<TarotCardsWidgetViewProps> = ({
             <TarotCardsWidget
               isMobile={isMobile}
               onNavigate={onNavigate}
+              onReveal={handleRevealReading}
               selectedCards={selectedCards}
               setSelectedCards={handleSetSelectedCards}
               setAnimationPhase={setAnimationPhase}
@@ -128,6 +163,13 @@ const TarotCardsWidgetView: React.FC<TarotCardsWidgetViewProps> = ({
           )}
         </div>
       </div>
+
+      {/* Intake dialog: email + life context fed to the AI before reading */}
+      <ReadingContextDialog
+        isOpen={contextOpen}
+        onOpenChange={setContextOpen}
+        onComplete={handleContextComplete}
+      />
     </main>
   );
 };

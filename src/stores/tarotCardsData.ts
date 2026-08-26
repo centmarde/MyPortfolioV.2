@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import type { TarotReadingSession } from "@/lib/AiTarotReading";
+import { supabase } from "@/lib/supabase";
 import {
   calculateEndDate,
   formatDisplayDate,
@@ -159,6 +160,32 @@ export const useTarotCardsDataStore = create<TarotCardsDataState>(
         const decks = [...get().decks, deck];
         set({ decks, currentDeck: deck, isLoading: false });
         saveDecksToCache(decks);
+
+        // Persist to Supabase (best-effort secondary storage). The row mirrors
+        // the local deck: email + end_date (now + 30 days) + 6 JSONB card slots.
+        try {
+          const { error } = await supabase
+            .from("tarot_cards_decks")
+            .insert({
+              email: deck.email,
+              end_date: deck.end_date,
+              card1: deck.card1,
+              card2: deck.card2,
+              card3: deck.card3,
+              card4: deck.card4,
+              card5: deck.card5,
+              card6: deck.card6,
+            })
+            .select("*")
+            .single();
+
+          if (error) {
+            throw error;
+          }
+          console.log("🔮 Inserted tarot deck to Supabase:", deck.id);
+        } catch (dbError) {
+          console.error("🔮 Failed to persist tarot deck to Supabase:", dbError);
+        }
 
         console.log("🔮 Created tarot deck:", deck.id);
         return deck;

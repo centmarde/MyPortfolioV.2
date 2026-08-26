@@ -32,6 +32,7 @@ function shuffleArray<T>(array: T[]): T[] {
 const TarotCardsWidget: React.FC<TarotCardsWidgetProps> = ({
   isMobile,
   onNavigate,
+  onReveal,
   selectedCards: externalSelectedCards,
   setSelectedCards: externalSetSelectedCards,
   setAnimationPhase: externalSetAnimationPhase,
@@ -179,8 +180,16 @@ const TarotCardsWidget: React.FC<TarotCardsWidgetProps> = ({
             <button
               type="button"
               onClick={() => {
-                // Persist the selection to the zustand store (and localStorage)
-                // before navigating, so the reading view can retrieve it.
+                // When a parent provides onReveal (intake dialog), pass this
+                // widget's selected cards up so the parent saves the correct
+                // selection (desktop keeps cards in internal state).
+                if (onReveal) {
+                  onReveal(selectedCards);
+                  return;
+                }
+                // Otherwise persist the selection to the zustand store (and
+                // localStorage) before navigating, so the reading view can
+                // retrieve it.
                 setSelectedCardsForReading(selectedCards);
                 onNavigate?.("/tarot-cards/continue");
               }}

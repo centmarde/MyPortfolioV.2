@@ -36,6 +36,7 @@ export const TarotReading: React.FC<TarotReadingProps> = ({
     setAiReadingSession,
     hasAiReading,
     getUserEmail,
+    getReadingContextInfo,
   } = useTarotSelectionStore();
 
   // Get AI reading session if exists
@@ -89,9 +90,17 @@ export const TarotReading: React.FC<TarotReadingProps> = ({
     console.log("🔮 Auto-generating AI tarot reading...");
 
     try {
+      // Gather the reader context (email + life happenings) so the AI bases its
+      // reading on what the reader shared during the intake dialog.
+      const contextInfo = getReadingContextInfo();
+
       const response = await aiTarotReadingService.generateTarotReading({
         selectedCards,
         cardTitles,
+        readerEmail: contextInfo.email,
+        careerReality: contextInfo.careerReality,
+        relationshipStatus: contextInfo.relationshipStatus,
+        specialHappenings: contextInfo.specialHappenings,
       });
 
       if (response.success && response.session) {
@@ -122,6 +131,7 @@ export const TarotReading: React.FC<TarotReadingProps> = ({
     hasAttemptedGeneration,
     setAiReadingSession,
     getUserEmail,
+    getReadingContextInfo,
     shouldGenerateKey,
   ]);
 
