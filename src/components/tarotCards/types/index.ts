@@ -10,9 +10,9 @@ export type AnimationPhase =
 
 // Main widget props
 export interface TarotCardsWidgetProps {
-  themeColor: string;
   isMobile: boolean;
   onNavigate?: (path: string) => void;
+  onReveal?: (cards: TarotCard[]) => void;
   // Optional props for mobile view when TarotHeader is rendered externally
   selectedCards?: TarotCard[];
   setSelectedCards?: (cards: TarotCard[]) => void;
@@ -21,17 +21,16 @@ export interface TarotCardsWidgetProps {
 
 // Component props interfaces
 export interface TarotHeaderProps {
-  themeColor: string;
   animationPhase: AnimationPhase;
   selectedCards: TarotCard[];
   isMobile: boolean;
   onNavigate: (path: string) => void;
+  onReveal?: (cards: TarotCard[]) => void;
 }
 
 export interface TarotCardProps {
   card: TarotCard;
   index: number;
-  themeColor: string;
   isRevealed: boolean;
   isFlipped: boolean;
   isSelected: boolean;
@@ -45,6 +44,5 @@ export interface TarotCardProps {
 
 export interface TarotReadingProps {
   selectedCards: TarotCard[];
-  themeColor: string;
   showReading: boolean;
 }

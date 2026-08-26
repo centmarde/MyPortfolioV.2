@@ -11,7 +11,6 @@ import { getImagePath, calculateCardPosition } from "../utils";
 export const TarotCardComponent: React.FC<TarotCardProps> = ({
   card,
   index,
-  themeColor,
   isRevealed,
   isFlipped,
   isSelected,
@@ -24,6 +23,7 @@ export const TarotCardComponent: React.FC<TarotCardProps> = ({
 }) => {
   const canSelect = (animationPhase === 'selecting') && (selectedCards.length < 6 || isSelected);
   const { leftPosition, topPosition, rotation, isMobileLayout } = calculateCardPosition(index, totalCards, isMobile, animationPhase);
+  const accentColor = '#cd9943';
   
   // Add slight rotation variation during compression for visual reshuffling effect
   const compressionRotation = animationPhase === 'compressing' 
@@ -43,7 +43,7 @@ export const TarotCardComponent: React.FC<TarotCardProps> = ({
           rotate(${compressionRotation}deg)
           ${animationPhase === 'compressing' ? 'scale(0.85) rotateY(10deg)' : ''}
           ${isAnimating ? (isMobileLayout ? 'scale(1.1)' : 'translateY(-20px) scale(1.1)') : ''}
-          ${isSelected ? (isMobileLayout ? 'translateY(-55px) scale(1.15)' : 'translateY(-90px) scale(1.12)') : ''}
+          ${isSelected ? (isMobileLayout ? 'translateY(-40px) scale(1.15)' : 'translateY(-90px) scale(1.12)') : ''}
         `,
         transformOrigin: 'center center',
         zIndex: isSelected ? 1000 : isAnimating ? 999 : 100 + index,
@@ -61,12 +61,12 @@ export const TarotCardComponent: React.FC<TarotCardProps> = ({
           animationPhase === 'compressing' ? 'animate-pulse' : ''
         }`}
         style={{
-          width: isMobileLayout ? '70px' : '100px',
-          height: isMobileLayout ? '105px' : '150px',
-          borderColor: isSelected ? themeColor : '#e5e7eb',
-          '--tw-ring-color': isSelected ? themeColor : 'transparent',
-          boxShadow: isSelected ? `0 0 40px ${themeColor}60` : 
-                     animationPhase === 'compressing' ? `0 0 20px ${themeColor}40` : 
+          width: isMobileLayout ? '48px' : '100px',
+          height: isMobileLayout ? '72px' : '150px',
+          borderColor: isSelected ? accentColor : '#e5e7eb',
+          '--tw-ring-color': isSelected ? accentColor : 'transparent',
+          boxShadow: isSelected ? `0 0 40px ${accentColor}60` : 
+                     animationPhase === 'compressing' ? `0 0 20px ${accentColor}40` : 
                      '0 4px 8px rgba(0,0,0,0.1)',
           background: isFlipped && !isSelected ? '#4a5568' : 'white',
         } as React.CSSProperties}
@@ -78,11 +78,11 @@ export const TarotCardComponent: React.FC<TarotCardProps> = ({
               <div 
                 className="w-full h-full flex items-center justify-center"
                 style={{
-                  background: `linear-gradient(45deg, ${themeColor}40, ${themeColor}60)`,
+                  background: `linear-gradient(45deg, ${accentColor}40, ${accentColor}60)`,
                 }}
               >
                 <Sparkles 
-                  size={20} 
+                  size={isMobileLayout ? 12 : 20} 
                   color="white" 
                   className="animate-pulse" 
                 />
@@ -109,7 +109,7 @@ export const TarotCardComponent: React.FC<TarotCardProps> = ({
             {isSelected && (
               <div 
                 className="absolute inset-0 flex items-center justify-center"
-                style={{ backgroundColor: `${themeColor}20` }}
+                style={{ backgroundColor: `${accentColor}20` }}
               >
                 <div className="text-center">
                   <Sparkles 

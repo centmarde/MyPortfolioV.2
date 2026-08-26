@@ -8,25 +8,44 @@ export const getImagePath = (imagePath: string): string => {
 };
 
 /**
+ * Shared mobile deck layout metrics so the container height always matches
+ * the grid produced by calculateCardPosition (prevents cards overlapping
+ * the surrounding view).
+ */
+export const getMobileDeckLayout = (
+  totalCards: number,
+  animationPhase: string = 'selecting',
+) => {
+  const columns = 7;
+  const totalRows = Math.ceil(totalCards / columns);
+  const rowHeight = animationPhase === 'compressing' ? 52 : 88;
+  return {
+    columns,
+    totalRows,
+    // Extra padding so lifted/selected cards don't clip at the edges
+    height: totalRows * rowHeight + 60,
+  };
+};
+
+/**
  * Calculates position and rotation for card in deck spread layout
  * Supports compressed positioning for animation phases
  */
 export const calculateCardPosition = (index: number, totalCards: number, isMobile: boolean = false, animationPhase: string = 'selecting') => {
   if (isMobile) {
-    // Mobile layout: Dynamic rows to prevent horizontal scroll with compression support
-    let cardSpacing = 75; // Reduced spacing between cards (70px card + 5px margin)
-    let containerMaxWidth = 380; // Max usable width (400px - padding)
-    let rowHeight = 110; // Reduced height between rows for compactness
-    
+    // Mobile layout: fixed 7-column grid, sized to fit the screen width
+    const maxCardsPerRow = 7;
+    const containerMaxWidth = 380; // Max usable width (400px - padding)
+    // ~54px per column so seven 50px-wide cards fit without overlap
+    let cardSpacing = containerMaxWidth / maxCardsPerRow;
+    let rowHeight = 88;
+
     // Compress cards during compression animation phase - center them more tightly
     if (animationPhase === 'compressing') {
-      cardSpacing = 35; // Even tighter spacing for better centering
-      containerMaxWidth = 200; // Much smaller container
-      rowHeight = 60; // Tighter row spacing
+      cardSpacing = 200 / maxCardsPerRow;
+      rowHeight = 52;
     }
-    
-    const maxCardsPerRow = Math.floor(containerMaxWidth / cardSpacing);
-    
+
     // Calculate actual cards per row and number of rows needed
     const cardsPerRow = Math.min(maxCardsPerRow, totalCards);
     const totalRows = Math.ceil(totalCards / cardsPerRow);

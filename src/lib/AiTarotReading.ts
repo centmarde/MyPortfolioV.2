@@ -26,6 +26,22 @@ export interface TarotReadingSession {
 export interface TarotReadingRequest {
   selectedCards: TarotCard[];
   cardTitles: string[];
+  readerEmail?: string | null;
+  careerReality?: string | null;
+  relationshipStatus?: string | null;
+  specialHappenings?: string | null;
+}
+
+/**
+ * Optional context about the reader gathered before the reading
+ * (email, recent month at career/school, relationship status, special
+ * happenings). Fed to the AI so the reading is grounded in real life.
+ */
+export interface ReaderContext {
+  email?: string | null;
+  careerReality?: string | null;
+  relationshipStatus?: string | null;
+  specialHappenings?: string | null;
 }
 
 export interface TarotReadingResponse {
@@ -101,6 +117,12 @@ class AiTarotReadingService {
           card,
           question,
           cardIndex: i,
+          readerContext: {
+            email: request.readerEmail,
+            careerReality: request.careerReality,
+            relationshipStatus: request.relationshipStatus,
+            specialHappenings: request.specialHappenings,
+          },
         });
 
         if (cardReading) {
@@ -144,6 +166,7 @@ class AiTarotReadingService {
     card: TarotCard;
     question: string;
     cardIndex: number;
+    readerContext?: ReaderContext;
   }): Promise<TarotCardReading | null> {
     try {
       const systemPrompt = this.buildTarotSystemPrompt();
@@ -154,7 +177,7 @@ class AiTarotReadingService {
           { role: "system", content: systemPrompt },
           { role: "user", content: userPrompt },
         ],
-        model: "llama-3.3-70b-versatile",
+        model: "openai/gpt-oss-120b",
         temperature: 0.8,
         max_tokens: 400,
         top_p: 0.9,
@@ -213,6 +236,7 @@ Write each interpretation as a flowing, personalized reading that directly answe
     card: TarotCard;
     question: string;
     cardIndex: number;
+    readerContext?: ReaderContext;
   }): string {
     const cardPosition = params.cardIndex + 1;
 
@@ -222,6 +246,32 @@ Write each interpretation as a flowing, personalized reading that directly answe
     prompt += `Question: "${params.question}"\n\n`;
 
     prompt += `Traditional Card Meaning:\n${params.card.description}\n\n`;
+
+    // Inject the reader's real-life context so the reading is grounded in
+    // what the reader shared before the AI responds.
+    const ctx = params.readerContext;
+    if (ctx) {
+      const contextLines: string[] = [];
+      if (ctx.careerReality) {
+        contextLines.push(`Recent month at career/school: ${ctx.careerReality}`);
+      }
+      if (ctx.relationshipStatus) {
+        contextLines.push(`Relationship status: ${ctx.relationshipStatus}`);
+      }
+      if (ctx.specialHappenings) {
+        contextLines.push(`Special happenings: ${ctx.specialHappenings}`);
+      }
+
+      if (contextLines.length > 0) {
+        prompt += `Context about the reader (their actual life situation):\n`;
+        contextLines.forEach((line) => {
+          prompt += `- ${line}\n`;
+        });
+        prompt += `Use this context as the real-life situation to base your interpretation on. `;
+        prompt += `Connect the card's meaning to the reader's actual circumstances, challenges, and feelings. `;
+        prompt += `Do not invent facts beyond what is shared here.\n\n`;
+      }
+    }
 
     prompt += `Instructions:\n`;
     prompt += `Create a personalized interpretation that directly addresses the question "${params.question}" `;

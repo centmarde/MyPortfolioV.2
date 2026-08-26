@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useTarotSelectionStore } from "../../stores/tarotSelectionData";
-import { useIsMobile } from "../../hooks/use-mobile";
 import { TarotReading } from "./components/TarotReading";
 import LoadingOverlay from "@/components/LoadingOverlay";
 import { Button } from "@/components/ui/button";
@@ -10,28 +9,22 @@ interface TarotReadingViewProps {
   onNavigate?: (path: string) => void;
 }
 
-// Default brand/theme color (matches the app's LoadingOverlay default)
-const DEFAULT_THEME_COLOR = "#F2A6A6";
-
 const TarotReadingView: React.FC<TarotReadingViewProps> = ({ onNavigate }) => {
   const {
     getSelectedCards,
     hasValidSelection,
     markReadingGenerated,
-    getReadingContext,
+    getUserEmail,
   } = useTarotSelectionStore();
-  const isMobile = useIsMobile();
-
-  const themeColor = DEFAULT_THEME_COLOR;
 
   const [isLoading, setIsLoading] = useState(true);
   const [selectedCards, setSelectedCards] = useState<TarotCard[]>([]);
 
   useEffect(() => {
-    // Reading context is already set in store when "Create Reading" was clicked
-    const isGfReading = getReadingContext();
+    // The reader's email is available from the store
+    const userEmail = getUserEmail();
     console.log(
-      `🔮 TarotReadingView initialized for: ${isGfReading ? "girlfriend" : "user"}`,
+      `🔮 TarotReadingView initialized for: ${userEmail || "guest"}`,
     );
 
     // Get selected cards from the store
@@ -42,13 +35,13 @@ const TarotReadingView: React.FC<TarotReadingViewProps> = ({ onNavigate }) => {
     }
 
     setIsLoading(false);
-  }, [getReadingContext, getSelectedCards, hasValidSelection, markReadingGenerated]);
+  }, [getUserEmail, getSelectedCards, hasValidSelection, markReadingGenerated]);
 
   if (isLoading) {
     return (
       <LoadingOverlay
         isOpen={true}
-        themeColor={themeColor}
+        themeColor="#cd9943"
         title="Preparing your mystical reading…"
         description="Just a moment"
       />
@@ -56,22 +49,16 @@ const TarotReadingView: React.FC<TarotReadingViewProps> = ({ onNavigate }) => {
   }
 
   return (
-    <div
-      className={`min-h-screen transition-colors duration-500 ${isMobile ? "px-2 py-2" : "px-16 py-4"}`}
-      style={{
-        background: `linear-gradient(135deg, ${themeColor}08, ${themeColor}15, #ffffff)`,
-      }}
-    >
-      <div className={`w-full ${isMobile ? "space-y-2" : "space-y-4"}`}>
+    <div className="w-full">
+      <div className="w-full">
         <TarotReading
           selectedCards={selectedCards}
-          themeColor={themeColor}
           showReading={selectedCards.length === 6}
         />
 
         {selectedCards.length !== 6 && (
-          <div className="text-center py-4">
-            <p className="text-gray-600 text-base">
+          <div className="relative z-10 px-4 pb-12 pt-6 text-center">
+            <p className="text-muted-foreground text-base">
               No reading available. Please select 6 cards from the tarot deck
               first.
             </p>
@@ -81,10 +68,11 @@ const TarotReadingView: React.FC<TarotReadingViewProps> = ({ onNavigate }) => {
                   ? onNavigate("/tarot-cards")
                   : (window.location.href = "/tarot-cards")
               }
-              className="inline-block mt-3 px-6 py-2 rounded-lg font-medium hover:scale-105 transition-all duration-200"
+              className="inline-block mt-3 px-6 py-2 rounded-lg font-medium hover:scale-105 transition-all duration-200 text-[#1a1202]"
               style={{
-                backgroundColor: themeColor,
-                color: "white",
+                backgroundColor: "#d4af37",
+                borderColor: "#d4af37",
+                color: "#1a1202",
               }}
             >
               Select Your Cards
