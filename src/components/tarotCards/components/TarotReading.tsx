@@ -149,6 +149,15 @@ export const TarotReading: React.FC<TarotReadingProps> = ({
 
   return (
     <main className="tarot-shell min-h-screen overflow-hidden bg-background text-foreground">
+      {/* Topmost full-viewport loading overlay (kept outside any backdrop-filter
+          container so its fixed positioning covers the whole screen) */}
+      <LoadingOverlay
+        isOpen={isGenerating}
+        themeColor={accentColor}
+        title="Preparing your reading…"
+        description="Please wait while we prepare your personalized readings. This usually takes a few seconds…"
+      />
+
       <div className="tarot-backdrop" aria-hidden="true">
         <ChromaticImage
           src="/tarot-night.png"
@@ -192,13 +201,6 @@ export const TarotReading: React.FC<TarotReadingProps> = ({
       {/* Fluid container - full width on large screens */}
       <div id="top" className="relative z-10 w-full px-4 py-8 sm:px-6 lg:px-10">
         <Card className="w-full animate-in fade-in duration-700 border-[#cd9943]/40 bg-card/60 backdrop-blur-md">
-          <LoadingOverlay
-            isOpen={isGenerating}
-            themeColor={accentColor}
-            title="Preparing your reading…"
-            description="Please wait while we prepare your personalized readings. This usually takes a few seconds…"
-          />
-
           <CardHeader>
             <CardTitle
               className={`text-center flex items-center justify-center font-serif font-bold text-[#cd9943] ${
