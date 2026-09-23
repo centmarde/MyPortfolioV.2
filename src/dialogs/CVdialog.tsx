@@ -58,7 +58,7 @@ export default function CVdialog({ isOpen, onClose }: CVDialogProps) {
           <div className="rounded-lg border border-border p-4">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="font-semibold">Simple CV</p>
+                <p className="font-semibold">Personal Data Sheet</p>
                 <p className="text-sm text-muted-foreground">
                   Quick overview for fast screening.
                 </p>
@@ -72,21 +72,25 @@ export default function CVdialog({ isOpen, onClose }: CVDialogProps) {
             </div>
           </div>
 
-          <div className="rounded-lg border border-border p-4">
+          <div className="rounded-lg border border-dashed border-muted p-4 opacity-60">
             <div className="flex items-start justify-between gap-4">
               <div>
                 <p className="font-semibold">Detailed CV</p>
                 <p className="text-sm text-muted-foreground">
                   Full experience, projects, and details.
                 </p>
+                <p className="mt-2 inline-flex items-center gap-1.5 rounded-md bg-muted px-2 py-1 text-xs font-medium text-muted-foreground">
+                  No longer available
+                </p>
               </div>
-              <Button asChild variant="outline" className="shrink-0">
-                <a href="/CV/CV.pdf" download="CV.pdf">
-                  <FileDown />
-                  Download
-                </a>
+              <Button disabled variant="outline" className="shrink-0">
+                Unavailable
               </Button>
             </div>
+            <p className="mt-3 text-sm text-muted-foreground">
+              Note: The Detailed CV is no longer offered. Kindly use the{" "}
+              <span className="font-medium">Personal Data Sheet</span> above instead.
+            </p>
           </div>
         </div>
       </div>
