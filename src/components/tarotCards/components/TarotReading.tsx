@@ -7,6 +7,7 @@ import { useTarotSelectionStore } from "../../../stores/tarotSelectionData";
 import { aiTarotReadingService } from "@/lib/AiTarotReading";
 import LoadingOverlay from "@/components/LoadingOverlay";
 import { Button } from "@/components/customUi/button";
+import UnderDevelopmentDialog from "../dialogs/UnderDevelopmentDialog";
 import { ChromaticImage } from "../../ui/chromatic-image";
 import type { TarotReadingProps } from "../types";
 import { getImagePath } from "../utils";
@@ -29,6 +30,8 @@ export const TarotReading: React.FC<TarotReadingProps> = ({
   const navigate = useNavigate();
   const [isGenerating, setIsGenerating] = useState(false);
   const [hasAttemptedGeneration, setHasAttemptedGeneration] = useState(false);
+  const [showUnderDevelopmentDialog, setShowUnderDevelopmentDialog] =
+    useState(false);
 
   // Store access
   const {
@@ -267,7 +270,7 @@ export const TarotReading: React.FC<TarotReadingProps> = ({
                     <div className={isMobile ? "text-center" : "flex-1"}>
                       <h4
                         className={`font-mono uppercase tracking-[0.2em] text-[#cd9943] ${
-                          isMobile ? "mb-2 text-xs" : "mb-3 text-xs sm:text-sm"
+                          isMobile ? "mb-2 text-lg" : "mb-3 text-2xl sm:text-3xl"
                         }`}
                       >
                         Card {index + 1}: {cardTitles[index]} »
@@ -330,9 +333,7 @@ export const TarotReading: React.FC<TarotReadingProps> = ({
                   isMobile ? "w-full" : ""
                 }`}
                 style={{ backgroundColor: "#d4af37", borderColor: "#d4af37" }}
-                onClick={() => {
-                  // TODO: implement PDF export for the reading
-                }}
+                onClick={() => setShowUnderDevelopmentDialog(true)}
               >
                 <Printer size={16} />
                 Print as PDF
@@ -350,6 +351,13 @@ export const TarotReading: React.FC<TarotReadingProps> = ({
           </CardContent>
         </Card>
       </div>
+
+      {/* Under development dialog for the Print as PDF feature */}
+      <UnderDevelopmentDialog
+        isOpen={showUnderDevelopmentDialog}
+        onOpenChange={setShowUnderDevelopmentDialog}
+        accentColor={accentColor}
+      />
     </main>
   );
 };
