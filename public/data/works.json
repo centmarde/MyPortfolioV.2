@@ -463,5 +463,29 @@
     "demoLink": "https://drive.google.com/drive/folders/1fjsiJ9qq8R7OM15OnEnqxBuST834ot3x",
     "codeLink": "https://github.com/centmarde/GameDevYC3Entry",
     "techStack": ["/logo/unity-icon.png"]
+  },
+  {
+    "id": 20,
+    "tag": "Freelance Project",
+    "title": "Vincare-Pharma",
+    "description": "Vincare Pharma and Exelmed Pharma Trade supply medicines and medical goods to government health facilities, private clinics and retail pharmacies across Agusan del Norte.",
+    "image": "/works/Vincare/v1.png",
+    "images": [
+      "/works/Vincare/v2.png",
+      "/works/Vincare/v3.png",
+      "/works/Vincare/v4.png",
+      "/works/Vincare/v5.png",
+      "/works/Vincare/v6.png",
+      "/works/Vincare/v7.png",
+      "/works/Vincare/v8.png",
+      "/works/Vincare/v9.png"
+    ],
+    "demoLink": "https://vincare-pharma.vercel.app/",
+    "codeLink": "https://github.com/centmarde/Vincare-pharma",
+    "techStack": [  "/logo/Vue.js.png",
+      "/logo/Veutify.png",
+      "/logo/supabase.svg",
+      "/logo/pinia.png",
+      "/logo/typescript.png"]
   }
 ]
